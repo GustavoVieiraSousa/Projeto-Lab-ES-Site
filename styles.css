@@ -55,12 +55,14 @@
     border-bottom: 1px solid rgba(30, 174, 219, 0.2);
     padding: 1rem 0;
     z-index: 100;
+    width: 100vw; 
   }
   
   .navbar .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 20px;
   }
   
   .logo {
@@ -91,6 +93,14 @@
     background-color: var(--pokeblue);
     color: white;
   }
+
+  .place-holder {
+    min-wdth: 200px;
+    visibility: hidden;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+
+  }
   
   .search-bar input {
     background-color: var(--pokedark-light);
@@ -113,11 +123,7 @@
     color: white;
   }
 
-body {
-    background-color: var(--pokedark-dark);
-    color: white;
-    font-family: Arial, sans-serif;
-}
+
 main {
     margin-top: 5rem;
     padding: 2rem 0;
@@ -219,31 +225,6 @@ main {
   font-size: 1.2rem;
 }
 
-/* Paginação */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 2rem 0;
-}
-
-.pagination-btn {
-  background-color: var(--pokedark);
-  color: white;
-  border: 1px solid rgba(30, 174, 219, 0.2);
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.pagination-btn:hover {
-  background-color: var(--pokeblue);
-}
-
-.pagination-btn.active {
-  background-color: var(--pokeblue);
-}
 
 ::-webkit-scrollbar {
     width: 8px;
