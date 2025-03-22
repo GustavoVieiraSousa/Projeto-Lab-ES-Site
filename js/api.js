@@ -4,10 +4,8 @@ class PokeAPI {
     }
   
     /**
-     * Busca um Pokémon por ID ou nome
-     * @param {string|number} idOrName - ID ou nome do Pokémon
-     * @returns {Promise<Object>} Dados do Pokémon
-     */
+     * Busca um Pokémon por ID ou nome*/
+
     async getPokemon(idOrName) {
       try {
         const response = await fetch(`${this.baseUrl}/pokemon/${idOrName}`);
@@ -41,10 +39,8 @@ class PokeAPI {
     }
     
     /**
-     * Busca informações da espécie de um Pokémon
-     * @param {number} id - ID do Pokémon
-     * @returns {Promise<Object>} Dados da espécie
-     */
+     * Busca informações da espécie de um Pokémon*/
+    
     async getPokemonSpecies(id) {
       try {
         const response = await fetch(`${this.baseUrl}/pokemon-species/${id}`);
@@ -86,10 +82,7 @@ class PokeAPI {
       }
     }
   
-    /**
-     * Busca todos os 151 Pokémon originais
-     * @returns {Promise<Object>} Lista completa dos 151 Pokémon originais
-     */
+    
     async getPokemonList() {
       try {
         // Busca todos os 151 Pokémon originais de uma vez
