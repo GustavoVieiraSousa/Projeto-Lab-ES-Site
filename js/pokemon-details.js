@@ -17,13 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       pokemonDetails.innerHTML = '<div class="loading">Carregando detalhes do Pokémon...</div>';
       
       // Buscar dados do Pokémon e da espécie
+
       const pokemon = await pokeApi.getPokemon(id);
       const species = await pokeApi.getPokemonSpecies(id);
   
       // Atualizar o título da página
+
       document.title = `${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} - PokéParty`;
       
       // Calcular estatísticas para nível 100
+
       const calculateLv100Stat = (baseStat) => {
         return Math.floor(((2 * baseStat + 31 + 63) * 100) / 100 + 5);
       };
@@ -33,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       };
       
       // Estrutura HTML dos detalhes
+
       const detailsHTML = `
         <div class="pokemon-details-card">
           <div class="pokemon-header">
@@ -134,6 +138,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
       
       // Exibir os detalhes
+
       pokemonDetails.innerHTML = detailsHTML;
       
     } catch (error) {
@@ -143,5 +148,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   // Carregar detalhes do Pokémon
+  
   loadPokemonDetails(pokemonId);
 });
