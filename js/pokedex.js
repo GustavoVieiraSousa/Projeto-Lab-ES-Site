@@ -28,16 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     /**
-     * Cria um card de Pokémon
-     * @param {Object} pokemon - Dados básicos do Pokémon
-     * @returns {HTMLElement} Elemento do card
-     */
+     * Cria um card de Pokémon*/
+    
     function createPokemonCard(pokemon) {
       const card = document.createElement('div');
       card.className = 'pokemon-card';
       card.setAttribute('data-id', pokemon.id);
       
       // Inicialmente, só adicionamos a imagem e o nome
+
       card.innerHTML = `
         <span class="pokemon-number">#${pokemon.id.toString().padStart(3, '0')}</span>
         <img src="${pokemon.image}" alt="${pokemon.name}" loading="lazy">
@@ -50,16 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       
       // Carregar detalhes do Pokémon em segundo plano
+
       loadPokemonDetails(pokemon.id, card);
       
       return card;
     }
     
     /**
-     * Carrega detalhes adicionais de um Pokémon
-     * @param {number} pokemonId - ID do Pokémon
-     * @param {HTMLElement} card - Elemento do card
-     */
+     * Carrega detalhes adicionais de um Pokémon*/
+
     async function loadPokemonDetails(pokemonId, card) {
       try {
         const pokemonData = await pokeApi.getPokemon(pokemonId);
@@ -77,14 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     /**
-     * Filtra a lista de Pokémon com base no termo de busca
-     * @param {string} searchTerm - Termo de busca
-     */
+     * Filtra a lista de Pokémon com base no termo de busca*/
+
     async function searchPokemon(searchTerm) {
       pokemonList.innerHTML = '<div class="loading">Buscando Pokémon...</div>';
       
       try {
         // Busca todos os Pokémon e filtra no cliente
+
         const data = await pokeApi.getPokemonList(totalPokemon, 0);
         
         const filteredPokemon = data.results.filter(pokemon => 
@@ -109,9 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Erro ao buscar Pokémon:', error);
       }
     }
-    
-    // Event Listeners
-    
     // Pesquisa
     searchInput.addEventListener('input', e => {
       const searchTerm = e.target.value.trim();
