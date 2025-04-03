@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       
       card.addEventListener('click', () => {
-        window.location.href = `/pokemon.html?id=${pokemon.id}`;
+        window.location.href = `pokemon.html?id=${pokemon.id}`;
       });
       
       // Carregar detalhes do Pokémon em segundo plano
