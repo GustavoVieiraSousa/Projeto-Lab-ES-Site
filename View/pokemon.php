@@ -15,9 +15,9 @@
           <a href="/" class="logo">PokéParty</a>
           <div class="nav-links">
             <a href="/">Home</a>
-            <a href="pokedex.html">Pokédex</a>
-            <a href="teams.html">Times</a>
-            <a href="battle.html">Batalha</a>
+            <a href="pokedex.php">Pokédex</a>
+            <a href="teams.php">Times</a>
+            <a href="battle.php">Batalha</a>
           </div>
           <div class="place-holder">
             <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">

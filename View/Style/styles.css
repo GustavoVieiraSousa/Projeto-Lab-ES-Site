@@ -471,3 +471,122 @@ main {
       grid-template-columns: 1fr;
     }
   }
+
+  /* Estilos específicos para a grid de times */
+.teams-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Sempre 3 colunas */
+  gap: 20px; /* Espaçamento entre os times */
+  justify-content: center; /* Centraliza os times horizontalmente */
+  padding: 20px; /* Espaçamento interno para evitar que encoste na borda */
+}
+
+.teams-container .team-grid {
+  border: 2px solid rgba(30, 174, 219, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  background-color: var(--pokedark);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 300px; /* Define uma altura mínima para manter o tamanho consistente */
+}
+
+.teams-container .team-grid h3 {
+  font-size: 1.5em;
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.teams-container .pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+  gap: 15px;
+  justify-items: center;
+  margin-bottom: 15px;
+}
+
+.teams-container .pokemon-slot {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #2d0080;
+  border-radius: 10px;
+  background-color: #3f3f3f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.teams-container .pokemon-slot img {
+  width: 80%;
+  height: auto;
+}
+
+.teams-container .pokemon-slot:hover {
+  transform: scale(1.1);
+  border-color: var(--pokeblue);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.teams-container .action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.teams-container .team-grid button {
+  padding: 10px 15px;
+  gap:20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.teams-container .team-grid button:hover {
+  background-color: #0056b3;
+}
+
+.teams-container .team-grid button.delete {
+  background-color: #dc3545;
+}
+
+.teams-container .team-grid button.delete:hover {
+  background-color: #a71d2a;
+}
+
+/* Responsividade para a grid de times */
+@media (max-width: 768px) {
+  .teams-container {
+      grid-template-columns: repeat(2, 1fr); /* 2 colunas em telas menores */
+  }
+
+  .teams-container .pokemon-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 colunas para Pokémon */
+  }
+
+  .teams-container .pokemon-slot {
+      width: 80px;
+      height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .teams-container {
+      grid-template-columns: 1fr; /* 1 coluna em telas muito pequenas */
+  }
+
+  .teams-container .pokemon-grid {
+      grid-template-columns: 1fr; /* 1 coluna para Pokémon */
+  }
+
+  .teams-container .pokemon-slot {
+      width: 70px;
+      height: 70px;
+  }
+}
+
+  

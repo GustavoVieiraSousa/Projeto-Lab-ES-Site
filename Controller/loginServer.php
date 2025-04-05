@@ -40,6 +40,7 @@
         exit();
     }
     $_SESSION['user'] = $user;
+    $_SESSION['plaCode'] = $user['plaCode'];
     header("Location: ../View/pokedex.php");
     exit();
 ?>
