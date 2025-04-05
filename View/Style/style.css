@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('../Images/login2.jpg') no-repeat center center/cover;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.title {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+}
+
+.title img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+.container {
+    position: relative;
+    width: 380px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 4px solid rgb(12, 62, 202);
+    border-radius: 12px;
+    color: #fff;
+    padding: 20px 25px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 2;
+}
+
+.container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    margin: 15px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 45px;
+    background-color: transparent;
+    border: 2px solid rgb(12, 62, 202);
+    outline: none;
+    border-radius: 25px;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 15px;
+}
+
+.input-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #fff;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    margin: -10px 0 15px;
+    font-size: 14px;
+}
+
+.remember-forgot label {
+    display: flex;
+    align-items: center;
+}
+
+.remember-forgot label input {
+    accent-color: #fff;
+    margin-right: 5px;
+}
+
+.remember-forgot a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.login {
+    width: 100%;
+    height: 50px;
+    background-color: rgb(202, 202, 202);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    transition: 0.4s;
+}
+
+.login:hover {
+    background-color: rgb(100, 100, 100);
+    transform: scale(1.08);
+}
+
+.register-link {
+    font-size: 14px;
+    text-align: center;
+    margin: 20px 0 15px;
+}
+
+.register-link a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Imagens de fundo decorativas */
+.bg-img {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.pikachu {
+    bottom: 10px;
+    left: 10px;
+    width: 120px;
+}
+
+.pokebola {
+    top: 10px;
+    right: 10px;
+    width: 100px;
+}

@@ -9,6 +9,14 @@
   </head>
 
   <body>
+  <?php
+    session_start();
+    if (!isset($_SESSION['user']) == true) {
+        header('Location: login.php');
+        exit();
+    }
+  ?>
+
     <div id="app">
       <nav class="navbar">
         <div class="container">
@@ -36,8 +44,21 @@
         </div>
       </main>
     </div>
+
+    <!-- Destroys the session created -->
+    <form method="POST" action="../Controller/loginServer.php" class="login-form">
+      <button  type="sair" value="sair" name="sair">
+        Sair da Conta 
+        <?php 
+          if(isset($_POST['sair'])){
+            session_destroy(); 
+            header ("location: login.php");
+          }
+        ?>
+      </button>
+    </form>
     
-    <script src="/Model/js/api.js"></script>
-    <script src="/Model/js/pokedex.js"></script>
+    <script src="../Model/js/api.js"></script>
+    <script src="../Model/js/pokedex.js"></script>
   </body>
 </html>
