@@ -1,11 +1,14 @@
 <?php
+    //database connection & session start
     require_once('connection.php');
     session_start();
     session_regenerate_id(true);
 
     //login using pdo
     if (!isset($_POST['login'])) {
-        echo "<script>alert('Por favor, realize o Login antes.');</script>";
+        $_SESSION['error'] = 'Por Favor, faça login.';
+        echo "<script>alert('" . $_SESSION['error'] . "');</script>";
+        unset($_SESSION["error"]);
         header("Location: ../View/login.php");
         exit();
     }
@@ -35,8 +38,8 @@
 
     //if the user is not found, redirect to login page with an error message
     if (!$user) {
+        $_SESSION['error'] = 'Email ou senha incorretos.';
         header("Location: ../View/login.php");
-        echo "<script>alert('Senha ou email incorretos.');</script>";
         exit();
     }
     $_SESSION['user'] = $user;
