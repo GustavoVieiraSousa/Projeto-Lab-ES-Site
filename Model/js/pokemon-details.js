@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pokemonId = urlParams.get('id');
   
   if (!pokemonId) {
-    window.location.href = 'pokedex.html';
+    window.location.href = 'pokedex.php';
     return;
   }
   
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
           
           <div class="pokemon-actions">
-            <button class="btn back-to-pokedex" onclick="location.href='pokedex.html'">Voltar para Pokédex</button>
+            <button class="btn back-to-pokedex" onclick="location.href='pokedex.php'">Voltar para Pokédex</button>
           </div>
         </div>
       `;
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       
     } catch (error) {
       console.error('Erro ao carregar detalhes do Pokémon:', error);
-      pokemonDetails.innerHTML = '<div class="error">Erro ao carregar detalhes do Pokémon. <a href="/View/pokedex.html">Voltar para Pokédex</a></div>';
+      pokemonDetails.innerHTML = '<div class="error">Erro ao carregar detalhes do Pokémon. <a href="/View/pokedex.php">Voltar para Pokédex</a></div>';
     }
   }
   
