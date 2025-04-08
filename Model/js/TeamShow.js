@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const pokemonSlots = document.querySelectorAll('.pokemon-slot');
 
     pokemonSlots.forEach(slot => {
-        const pokeId = slot.dataset.pokemonId; // Certifique-se de que o atributo data-pokemon-id está definido no HTML
+        const pokeId = slot.dataset.pokemonId; 
 
         if (pokeId) {
             fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)

@@ -14,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $plaCode = $_SESSION['plaCode']; // ID do jogador
-    $teamName = $data['teamName']; // Nome do time
-    $pokemons = $data['pokemons']; // Array com os pokId dos 6 Pokémon
-    $attacks = $data['attacks']; // Array com os ataques de cada Pokémon
+    $plaCode = $_SESSION['plaCode']; 
+    $teamName = $data['teamName']; 
+    $pokemons = $data['pokemons']; 
+    $attacks = $data['attacks']; 
 
     // Verifica se exatamente 6 Pokémon foram enviados
     if (count($pokemons) !== 6 || count($attacks) !== 6) {
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (PDOException $e) {
         // Reverte a transação em caso de erro
         $conn->rollBack();
-        error_log('Erro ao criar time: ' . $e->getMessage()); // Log do erro no servidor
+        error_log('Erro ao criar time: ' . $e->getMessage()); 
         echo json_encode(['error' => 'Erro ao criar time: ' . $e->getMessage()]);
     }
 }

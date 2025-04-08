@@ -18,8 +18,8 @@ class PokeAPI {
           image: data.sprites.front_default,
           officialArtwork: data.sprites.other['official-artwork']?.front_default,
           types: data.types.map(type => type.type.name),
-          height: data.height / 10, // Convertendo para metros
-          weight: data.weight / 10, // Convertendo para kg
+          height: data.height / 10, 
+          weight: data.weight / 10, 
           abilities: data.abilities.map(ability => ability.ability.name),
           stats: {
             hp: data.stats[0].base_stat,
@@ -66,7 +66,7 @@ class PokeAPI {
               return {
                   id: move.move.url.split('/').filter(Boolean).pop(),
                   name: move.move.name,
-                  type: moveData.type.name // Obtém o tipo do ataque
+                  type: moveData.type.name 
               };
           })
       );
@@ -77,7 +77,7 @@ class PokeAPI {
       try {
         const response = await fetch(`${this.baseUrl}/move/${attackId}`);
         const data = await response.json();
-        return data.type.name; // Retorna o tipo do ataque
+        return data.type.name; 
     } catch (error) {
         console.error(`Erro ao buscar o tipo do ataque ${attackId}:`, error);
         throw error;

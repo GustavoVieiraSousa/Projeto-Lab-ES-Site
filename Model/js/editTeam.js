@@ -3,20 +3,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const createTeamButton = document.getElementById('create-team-button');
     const teamNameInput = document.getElementById('team-name-input');
     const pokemonSlots = document.querySelectorAll('.team-pokemon-slot');
-    const modalTitle = modal.querySelector('h2.cnt-h2'); // Seleciona o título do modal
-    const pokemonPopup = document.getElementById('pokemon-popup'); // Popup de seleção de Pokémon
-    const pokemonList = document.getElementById('pokemon-list'); // Lista de Pokémon no popup
+    const modalTitle = modal.querySelector('h2.cnt-h2'); 
+    const pokemonPopup = document.getElementById('pokemon-popup'); 
+    const pokemonList = document.getElementById('pokemon-list'); 
     let editingTeamId = null;
-    let activeSlot = null; // Slot ativo para substituição
+    let activeSlot = null; 
 
     // Função para abrir o modal de edição
     document.querySelectorAll('.edit').forEach(button => {
         button.addEventListener('click', async (e) => {
             editingTeamId = e.target.dataset.teamId;
             modal.classList.remove('hidden');
-            createTeamButton.textContent = 'Salvar Time'; // Altera o texto do botão
-            createTeamButton.dataset.mode = 'edit'; // Define o modo como "edit"
-            modalTitle.textContent = 'Atualizar Time'; // Altera o título do modal
+            createTeamButton.textContent = 'Salvar Time';
+            createTeamButton.dataset.mode = 'edit'; 
+            modalTitle.textContent = 'Atualizar Time'; 
 
             try {
                 const response = await fetch(`../Controller/get_team.php?teamId=${editingTeamId}`);
@@ -56,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Adiciona evento de clique à imagem para abrir o popup
                             const pokemonImage = slot.querySelector('.pokemon-image');
                             pokemonImage.addEventListener('click', () => {
-                                activeSlot = slot; // Define o slot ativo
-                                pokemonPopup.classList.remove('hidden'); // Exibe o popup
-                                loadPokemonList(); // Carrega a lista de Pokémon no popup
+                                activeSlot = slot; 
+                                pokemonPopup.classList.remove('hidden'); 
+                                loadPokemonList(); 
                             });
 
                             // Busca os nomes e tipos dos ataques usando a PokéAPI
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             pokemonList.innerHTML = '<div class="loading">Carregando Pokémon...</div>';
             const data = await pokeApi.getPokemonList();
-            pokemonList.innerHTML = ''; // Limpa o estado de carregamento
+            pokemonList.innerHTML = ''; 
 
             for (const pokemon of data.results) {
                 const pokemonData = await pokeApi.getPokemon(pokemon.id);
@@ -153,24 +153,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="pokemon-types">${pokemonTypesHTML}</div>
                     </div>
                 `;
-                activeSlot.dataset.pokemonId = pokemonId; // Atualiza o ID do Pokémon no slot
+                activeSlot.dataset.pokemonId = pokemonId; 
 
                 // Reatribui o evento de clique à nova imagem
                 const pokemonImageElement = activeSlot.querySelector('.pokemon-image');
                 pokemonImageElement.addEventListener('click', () => {
-                    activeSlot = activeSlot; // Define o slot ativo novamente
-                    pokemonPopup.classList.remove('hidden'); // Exibe o popup
-                    loadPokemonList(); // Carrega a lista de Pokémon no popup
+                    activeSlot = activeSlot; 
+                    pokemonPopup.classList.remove('hidden'); 
+                    loadPokemonList(); 
                 });
 
-                pokemonPopup.classList.add('hidden'); // Fecha o popup
+                pokemonPopup.classList.add('hidden');
             });
         }
     }
 
     // Salvar alterações no time
     createTeamButton.addEventListener('click', async (e) => {
-        if (createTeamButton.dataset.mode === 'edit') { // Verifica se está no modo de edição
+        if (createTeamButton.dataset.mode === 'edit') { 
             e.preventDefault();
 
             const teamName = teamNameInput.value.trim();

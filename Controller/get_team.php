@@ -36,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $pokemon = $pokemonStmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($pokemon) {
-                        $pokemons[] = $pokemon; // Adiciona o pokCode, pokId e ataques ao array
+                        $pokemons[] = $pokemon; 
                     }
                 } else {
-                    $pokemons[] = null; // Slot vazio
+                    $pokemons[] = null; 
                 }
             }
 

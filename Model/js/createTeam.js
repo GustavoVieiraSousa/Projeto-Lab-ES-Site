@@ -29,15 +29,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.close-popup').forEach(button => {
         button.addEventListener('click', () => {
             const popup = button.closest('.popup');
-            popup.classList.add('hidden'); // Oculta o popup
+            popup.classList.add('hidden'); 
         });
     });
 
     addTeamButton.addEventListener('click', () => {
         modal.classList.remove('hidden');
-        createTeamButton.textContent = 'Criar Time'; // Define o texto do botão
-        createTeamButton.dataset.mode = 'create'; // Define o modo como "create"
-        resetSlots(); // Limpa os slots para um novo time
+        createTeamButton.textContent = 'Criar Time'; 
+        createTeamButton.dataset.mode = 'create'; 
+        resetSlots(); 
     });
 
     // Fecha o modal ao clicar no botão "Cancelar"
@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         button.addEventListener('click', (e) => {
             const slot = e.target.dataset.slot;
             const selectedPokemonDiv = document.getElementById(`selected-pokemon-${slot}`);
-            selectedPokemonDiv.classList.add('active'); // Marca o slot como ativo
-            pokemonPopup.classList.remove('hidden'); // Exibe o popup
+            selectedPokemonDiv.classList.add('active'); 
+            pokemonPopup.classList.remove('hidden'); 
         });
     });
 
@@ -129,9 +129,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 `;
 
-                activeSlot.classList.remove('active'); // Remove a classe ativa após selecionar
+                activeSlot.classList.remove('active'); 
                 const slot = activeSlot.closest('.team-pokemon-slot');
-                slot.dataset.pokemonId = pokemonId; // Salva o ID do Pokémon no slot
+                slot.dataset.pokemonId = pokemonId; 
 
                 // Esconde o botão "Selecionar Pokémon"
                 const selectButton = slot.querySelector('.team-select-pokemon');
@@ -141,11 +141,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Permite reabrir o popup ao clicar na imagem ou no slot
                 slot.querySelector('.pokemon-info').addEventListener('click', () => {
-                    activeSlot.classList.add('active'); // Marca o slot como ativo novamente
-                    pokemonPopup.classList.remove('hidden'); // Reabre o popup
+                    activeSlot.classList.add('active'); 
+                    pokemonPopup.classList.remove('hidden'); 
                 });
 
-                pokemonPopup.classList.add('hidden'); // Oculta o popup
+                pokemonPopup.classList.add('hidden'); 
             });
         }
     }
@@ -161,9 +161,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            activeAttackButton = e.target; // Define o botão ativo
-            attackPopup.classList.remove('hidden'); // Exibe o popup de ataques
-            await loadAttackList(pokemonId); // Carrega a lista de ataques
+            activeAttackButton = e.target; 
+            attackPopup.classList.remove('hidden'); 
+            await loadAttackList(pokemonId); 
         });
     });
 
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             attacks.forEach(attack => {
                 const attackItem = document.createElement('button');
-                attackItem.className = `attack-item type ${attack.type}`; // Adiciona a classe de tipo
+                attackItem.className = `attack-item type ${attack.type}`; 
                 attackItem.textContent = attack.name;
                 attackItem.dataset.attackId = attack.id;
 
@@ -202,8 +202,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             activeAttackButton.textContent = attackName;
             pokeApi.getAttackType(attackId).then(attackType => {
                 activeAttackButton.className = `team-select-attack type ${attackType}`;
-                activeAttackButton.dataset.attackId = attackId; // Salva o ID do ataque no botão
-                attackPopup.classList.add('hidden'); // Oculta o popup
+                activeAttackButton.dataset.attackId = attackId; 
+                attackPopup.classList.add('hidden'); 
             }).catch(error => {
                 console.error('Erro ao buscar o tipo do ataque:', error);
                 alert('Erro ao selecionar o ataque. Tente novamente.');
@@ -214,15 +214,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Habilita ou desabilita o botão "Criar Time"
     function updateCreateTeamButtonState() {
         const allSlotsFilled = Array.from(document.querySelectorAll('.team-pokemon-slot')).every(slot => {
-            return slot.dataset.pokemonId; // Verifica se todos os slots têm um Pokémon selecionado
+            return slot.dataset.pokemonId; 
         });
 
         const allAttacksSelected = Array.from(document.querySelectorAll('.team-pokemon-slot')).every(slot => {
             const attackButtons = slot.querySelectorAll('.team-select-attack');
-            return Array.from(attackButtons).every(button => button.dataset.attackId); // Verifica se todos os ataques foram selecionados
+            return Array.from(attackButtons).every(button => button.dataset.attackId); 
         });
 
-        const teamName = document.getElementById('team-name-input').value.trim(); // Verifica se o nome do time foi preenchido
+        const teamName = document.getElementById('team-name-input').value.trim(); 
 
         // Habilita o botão apenas se todos os slots, ataques e o nome do time estiverem preenchidos
         createTeamButton.disabled = !(allSlotsFilled && allAttacksSelected && teamName.length > 0);
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const slotAttacks = [];
                 slot.querySelectorAll('.team-select-attack').forEach(button => {
                     const attackId = button.dataset.attackId;
-                    slotAttacks.push(attackId || null); // Adiciona o ID do ataque ou null
+                    slotAttacks.push(attackId || null); 
                 });
 
                 attacks.push(slotAttacks);
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const result = await response.json();
             if (result.success) {
                 alert('Time criado com sucesso!');
-                location.reload(); // Recarrega a página
+                location.reload(); 
             } else {
                 console.error('Erro do servidor:', result.error);
                 alert(result.error || 'Erro ao criar time.');
