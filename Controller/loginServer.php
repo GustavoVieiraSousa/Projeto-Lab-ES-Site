@@ -7,8 +7,6 @@
     //login using pdo
     if (!isset($_POST['login'])) {
         $_SESSION['error'] = 'Por Favor, faça login.';
-        echo "<script>alert('" . $_SESSION['error'] . "');</script>";
-        unset($_SESSION["error"]);
         header("Location: ../View/login.php");
         exit();
     }
@@ -26,7 +24,7 @@
     $passStmt->execute([$email]);
     $passwordGETv = $passStmt->fetch(PDO::FETCH_ASSOC);
     
-    //clean the password from the database
+    //clean the password variable
     $passwordGET = trim(implode(",", $passwordGETv));
 
     //verify stored hash against plain-text password
@@ -43,6 +41,8 @@
         exit();
     }
     $_SESSION['user'] = $user;
+    $_SESSION['user']['plaPhoto'] = $user['plaPhoto']; //store the profile picture path in the session
+    $_SESSION['success'] = 'Login realizado com sucesso!';
     header("Location: ../View/pokedex.php");
     exit();
 ?>
