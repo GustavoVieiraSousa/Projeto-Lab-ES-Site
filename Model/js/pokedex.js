@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const pokemonList = document.getElementById('pokemon-list');
+    const pokemonList = document.getElementById('pokemon-list2');
     const searchInput = document.getElementById('pokemon-search');
     
     const totalPokemon = 151; // Limitando aos 151 originais
