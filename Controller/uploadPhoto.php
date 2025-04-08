@@ -6,8 +6,8 @@ $tamanho = $_FILES['imagem']['size'];
 $email = $_SESSION['user']['plaEmail'];
 
 echo "VAR DUMP: ",var_dump($tamanho);
-if ($tamanho > 15728641) { // 15MB
-    $_SESSION['error'] = 'Imagem muito grande (Máx: 15MB)';
+if ($tamanho > 26214400) { // 25MB
+    $_SESSION['error'] = 'Imagem muito grande (Máx: 25MB)';
     header('Location: ../View/profile.php');
     exit();
 }

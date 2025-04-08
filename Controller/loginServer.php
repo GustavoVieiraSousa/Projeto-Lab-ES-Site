@@ -41,7 +41,7 @@
         exit();
     }
     $_SESSION['user'] = $user;
-    $_SESSION['user']['plaPhoto'] = $user['plaPhoto']; //store the profile picture path in the session
+    $_SESSION['user']['plaPhoto'] = base64_encode($user['plaPhotoBlob']); //store the profile picture path in the session
     $_SESSION['success'] = 'Login realizado com sucesso!';
     header("Location: ../View/pokedex.php");
     exit();
