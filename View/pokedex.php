@@ -23,9 +23,9 @@
           <a href="/" class="logo">PokéParty</a>
           <div class="nav-links">
             <a href="/">Home</a> 
-            <a href="pokedex.html" class="active">Pokédex</a>
-            <a href="teams.html">Times</a>
-            <a href="battle.html">Batalha</a>
+            <a href="pokedex.php" class="active">Pokédex</a>
+            <a href="teams.php">Times</a>
+            <a href="battle.php">Batalha</a>
           </div>
           <div class="search-bar">
             <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">
@@ -35,7 +35,7 @@
 
       <main class="container">
         <h2 class="page-title">Pokédex</h2>
-        <div class="pokemon-grid" id="pokemon-list">
+        <div class="pokemon-grid" id="pokemon-list2">
           <!-- Pokémon cards serão inseridos aqui via JavaScript -->
           <div class="loading">Carregando Pokémon...</div>
         </div>

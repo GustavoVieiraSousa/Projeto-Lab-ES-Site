@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
 
     } catch (PDOException $e) {
-        if ($e->errorInfo[1] == 1062) { // Duplicate entry error code
+        if ($e->errorInfo[1] == 1062) { 
             echo "Email já está registrado.";
         } else {
             echo "Error: " . $e->getMessage();
