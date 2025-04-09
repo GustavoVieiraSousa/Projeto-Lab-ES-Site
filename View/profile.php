@@ -22,14 +22,18 @@
         $name = $_SESSION['user']['plaName'];
         $email = $_SESSION['user']['plaEmail'];
 
+        $photo = $_SESSION['user']['plaPhoto'];
+
         //define a foto do usuario
-        if($_SESSION['user']['plaPhoto'] != null){
-            $profilePicture = $_SESSION['user']['plaPhoto']; // Substitua pelo caminho da imagem de perfil do usuário
+        if($photo != null){
+            $profilePicture = $photo; // Substitua pelo caminho da imagem de perfil do usuário
             $fileType = $_SESSION['user']['plaPhotoType']; // Tipo de arquivo da imagem
         } else {
             $profilePicture = "./Images/user-profile-default.png"; // Substitua pelo caminho padrão da imagem de perfil
-            $fileType = "image/png"; // Tipo de arquivo padrão
+            $fileType = "image/jpeg"; // Tipo de arquivo padrão
         }
+
+        echo "<img src='data=image/jpeg;base64;./Images/user-profile-default.png'>";
     ?>
 
     <h1>Perfil</h1>
@@ -43,7 +47,7 @@
                     <a href="index.php">Home</a> 
                     <a href="pokedex.php">Pokédex</a>
                     <a href="teams.php">Times</a>
-                    <a href="battle.php">Batalha</a>
+                    <!-- <a href="battle.php">Batalha</a> -->
                     <a href="profile.php" class="active">Perfil</a>
                 </div>
                 <div class="search-bar">
@@ -57,7 +61,7 @@
             <input type="hidden" name="MAX_FILE_SIZE" value="999999999"/>
 
             <div class="profile-image">
-                <a onmouseover="" class="img-button"><img data-tooltip="Editar Foto de Perfil" src="data:<?php echo $fileType ?>;base64,<?php echo $profilePicture; ?>" alt="Imagem" class="profile-image"></a> <!-- Perfil Usuario -->
+                <a onmouseover="" class="img-button"><img name="imagemCorreta" data-tooltip="Editar Foto de Perfil" src="data:<?php echo $fileType ?>;base64,<?php echo $profilePicture; ?>" alt="Imagem" class="profile-image"></a> <!-- Perfil Usuario -->
                 <div class="profile-popup hidden">sadzxc</div> <!-- div oculta para o botão de upload -->
             </div>
 
@@ -75,7 +79,7 @@
             <br>
             <label for="senha">Senha:</label>
             <input type="password" id="senha" oninput="inputDetect()" placeholder="Digite AQUI caso queira alterar a sua senha." name="senha">
-            <button type="button" onclick="showPassword()">see senha</button>
+            <button type="button" onclick="showPassword()">Ver Senha</button>
             <br>
             <label id="confirmar-senha" style="display: none" for="confirmar-senha">Confirmar Senha:</label>
             <input id="confirmar-senha-input" style="display: none" type="password" placeholder="Confirme sua nova senha." name="confirmarSenha">
@@ -86,6 +90,7 @@
 </body>
 
 <script>
+    //mostra e esconde a senha
     function showPassword() {
         let senha = document.getElementById("senha").type;
         if(senha == "text"){
@@ -95,6 +100,7 @@
         }
     };
 
+    //botao para mostrar e esconder a senha de confirmacao (so vai mostrar se ela comecar a digitar a senha)
     function inputDetect() {
         let text = document.getElementById("senha").value;
         if(text == ""){
@@ -106,9 +112,22 @@
         }
     }
 
+    //faz surgir o popup que vai ser utilizado para o envio da imagem
     document.querySelector('.profile-image').addEventListener('click', function() {
         document.querySelector('.profile-popup').classList.toggle('hidden');
     });
+
+    //conserta a imagem Default de perfil
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileImageInput = document.querySelector('img[name="imagemCorreta"]');
+        const profileImageSrc = profileImageInput.getAttribute('src');
+
+        if (profileImageSrc.includes('base64') && profileImageSrc.includes('./Images/user-profile-default.png')) {
+            const updatedSrc = '<?php echo $profilePicture ?>';
+            profileImageInput.setAttribute('src', updatedSrc);
+        }
+    });
+
 </script>
 
 </html>
