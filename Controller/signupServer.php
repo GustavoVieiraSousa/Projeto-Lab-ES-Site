@@ -52,5 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+else{
+    $_SESSION['error'] = "Erro ao cadastrar.";
+    header("Location: ../View/signup.php");
+    exit();
+}
 
 ?>
