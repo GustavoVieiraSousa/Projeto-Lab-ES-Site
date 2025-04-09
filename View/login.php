@@ -12,10 +12,18 @@
 <body>
 
     <?php
-        session_start(); // Inicia a sessão para usar mensagens de erro
+        session_start(); //inicia a sessão para usar mensagens de erro
+        
+        //verifica se tem mensagens de erro e mostra
         if (isset($_SESSION['error'])) {
             echo "<script>alert('" . $_SESSION['error'] . "');</script>";
             unset($_SESSION['error']); // Limpa a mensagem depois de mostrar
+        }
+
+        //verifica se tem mensagens de sucesso e mostra
+        if (isset($_SESSION['success'])) {
+            echo "<script>alert('" . $_SESSION['success'] . "');</script>";
+            unset($_SESSION['success']); // Limpa a mensagem depois de mostrar
         }
     ?>
 

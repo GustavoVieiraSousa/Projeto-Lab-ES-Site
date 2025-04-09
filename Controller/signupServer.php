@@ -1,4 +1,5 @@
 <?php
+//database connection & session start
 require_once('connection.php');
 session_start();
 
@@ -50,6 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Error: " . $e->getMessage();
         }
     }
+}
+else{
+    $_SESSION['error'] = "Erro ao cadastrar.";
+    header("Location: ../View/signup.php");
+    exit();
 }
 
 ?>

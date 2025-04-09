@@ -1,0 +1,121 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(90deg, #000000 40%, #ffffff 60%);
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.corpo {
+margin-top: 10%;
+margin-bottom: 5%;
+width: 600px;
+background-color: rgb(5, 5, 5);
+border: 5px solid #6b6969;
+border-radius: 10px;
+color: #ffffff;
+padding: 40px 40px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--pokedark);
+    border-bottom: 1px solid rgba(30, 174, 219, 0.2);
+    padding: 1rem 0;
+    z-index: 100;
+  }
+
+  .navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    color: var(--pokeblue);
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .place-holder {
+    min-width: 200px;
+    visibility: hidden;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+  }
+
+  .nav-links a:hover {
+    color: var(--pokeblue);
+  }
+
+  .nav-links a.active {
+    background-color: var(--pokeblue);
+    color: white;
+  }
+
+  .search-bar input {
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    min-width: 200px;
+  }
+  :root {
+    --pokeblue: #1EAEDB;
+    --pokedark: #222222;
+    --pokedark-light: #333333;
+    --pokedark-dark: #111111;
+
+    /* Tipos de Pokémon */
+    --normal: #A8A878;
+    --fire: #F08030;
+    --water: #6890F0;
+    --grass: #78C850;
+    --electric: #F8D030;
+    --ice: #98D8D8;
+    --fighting: #C03028;
+    --poison: #A040A0;
+    --ground: #E0C068;
+    --flying: #A890F0;
+    --psychic: #F85888;
+    --bug: #A8B820;
+    --rock: #B8A038;
+    --ghost: #705898;
+    --dark: #705848;
+    --dragon: #7038F8;
+    --steel: #B8B8D0;
+    --fairy: #F0B6BC;
+  }
+
+
+
