@@ -3,9 +3,11 @@ require("connection.php");
 session_start();
 $imagem = $_FILES['imagem']['tmp_name'];
 $tamanho = $_FILES['imagem']['size'];
+$tipo = $_FILES['imagem']['type'];
 $email = $_SESSION['user']['plaEmail'];
 
-echo "VAR DUMP: ",var_dump($tamanho);
+// echo "VAR DUMP: ",var_dump($tipo);
+// $getPhotoBlob = $conn->query("SELECT plaPhotoBlob FROM player WHERE plaEmail = ?");
 if ($tamanho > 26214400) { // 25MB
     $_SESSION['error'] = 'Imagem muito grande (Máx: 25MB)';
     header('Location: ../View/profile.php');
@@ -20,11 +22,11 @@ if ( $imagem != null ){
     fclose($fp);
 
     //updates the user's profile picture in the database
-    $stmt = $conn->prepare("UPDATE player SET plaPhotoBlob = ? WHERE plaEmail = ?");
-    $stmt->execute([$conteudo, $email]);
+    $stmt = $conn->prepare("UPDATE player SET plaPhotoBlob = ?, plaPhotoBlobType = ? WHERE plaEmail = ?");
+    $stmt->execute([$conteudo, $tipo, $email]);
 
     //fetch the image from the database again to display it on the screen
-    $getPhotoBlob = $conn->prepare("SELECT plaPhotoBlob FROM player WHERE plaEmail = ?");
+    $getPhotoBlob = $conn->prepare("SELECT plaPhotoBlob, plaPhotoBlobType FROM player WHERE plaEmail = ?");
     $getPhotoBlob->execute([$email]);
     $photoBlob = $getPhotoBlob->fetch(PDO::FETCH_ASSOC);
 
@@ -32,6 +34,7 @@ if ( $imagem != null ){
     if($photoBlob != null){
         $base64 = base64_encode($photoBlob['plaPhotoBlob']); //convert the binary data to base64
         $_SESSION['user']['plaPhoto'] = $base64; //base64 saved on the session
+        $_SESSION['user']['plaPhotoType'] = $photoBlob['plaPhotoBlobType']; //image type saved on the session
         //var_dump($_SESSION['user']['plaPhoto']);
         //echo "<img src='data:image/jpeg;base64,".$_SESSION['user']['plaPhoto']."' alt='Imagem' class='profile-image'>";
         //$getPhotoBlob = $conn->query("SELECT plaPhotoBlob FROM player WHERE plaEmail = ?");
