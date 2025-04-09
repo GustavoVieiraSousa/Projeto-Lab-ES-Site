@@ -18,8 +18,8 @@ class PokeAPI {
           image: data.sprites.front_default,
           officialArtwork: data.sprites.other['official-artwork']?.front_default,
           types: data.types.map(type => type.type.name),
-          height: data.height / 10, // Convertendo para metros
-          weight: data.weight / 10, // Convertendo para kg
+          height: data.height / 10, 
+          weight: data.weight / 10, 
           abilities: data.abilities.map(ability => ability.ability.name),
           stats: {
             hp: data.stats[0].base_stat,
@@ -37,6 +37,52 @@ class PokeAPI {
         throw error;
       }
     }
+    
+    async getAllpokemon(){ const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+      if (!response.ok) {
+          throw new Error('Erro ao carregar os Pokémon');
+      }
+      const data = await response.json();
+      return data.results.map((pokemon, index) => ({
+          id: index + 1,
+          name: pokemon.name
+      }));
+    }
+
+    
+
+    async getPokemonMoves(pokemonId) {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+      if (!response.ok) {
+          throw new Error('Erro ao carregar os ataques do Pokémon');
+      }
+      const data = await response.json();
+  
+      // Busca os detalhes de cada ataque para obter o tipo
+      const moves = await Promise.all(
+          data.moves.map(async move => {
+              const moveResponse = await fetch(move.move.url);
+              const moveData = await moveResponse.json();
+              return {
+                  id: move.move.url.split('/').filter(Boolean).pop(),
+                  name: move.move.name,
+                  type: moveData.type.name 
+              };
+          })
+      );
+  
+      return moves;
+  }
+    async getAttackType(attackId) {
+      try {
+        const response = await fetch(`${this.baseUrl}/move/${attackId}`);
+        const data = await response.json();
+        return data.type.name; 
+    } catch (error) {
+        console.error(`Erro ao buscar o tipo do ataque ${attackId}:`, error);
+        throw error;
+    }
+  }
     
     /**
      * Busca informações da espécie de um Pokémon*/
@@ -108,6 +154,9 @@ class PokeAPI {
         throw error;
       }
     }
+
+    
+    
   }
   
   // Exporta uma instância única da API

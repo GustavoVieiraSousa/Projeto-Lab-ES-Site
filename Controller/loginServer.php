@@ -41,14 +41,17 @@
         exit();
     }
     $_SESSION['user'] = $user;
+
     $_SESSION['user']['plaPhoto'] = base64_encode($user['plaPhotoBlob']);//store the profile picture path in the session
     $_SESSION['user']['plaPhotoType'] = $user['plaPhotoBlobType']; 
     $_SESSION['user']['plaEmail'] = $user['plaEmail']; //store the email in the session (for security reasons, this should be avoided)
     $_SESSION['user']['plaName'] = $user['plaName']; //store the name in the session (for security reasons, this should be avoided)
     $_SESSION['user']['plaPassword'] = $user['plaPassword']; //store the password in the session (for security reasons, this should be avoided)
     
-    
     $_SESSION['success'] = 'Login realizado com sucesso!';
+
+    $_SESSION['plaCode'] = $user['plaCode'];
+
     header("Location: ../View/pokedex.php");
     exit();
 ?>

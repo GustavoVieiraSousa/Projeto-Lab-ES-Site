@@ -40,7 +40,7 @@
 
       <main class="container">
         <h2 class="page-title">Pokédex</h2>
-        <div class="pokemon-grid" id="pokemon-list">
+        <div class="pokemon-grid" id="pokemon-list2">
           <!-- Pokémon cards serão inseridos aqui via JavaScript -->
           <div class="loading">Carregando Pokémon...</div>
         </div>
