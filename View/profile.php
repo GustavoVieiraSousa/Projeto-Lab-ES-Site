@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style/styleProfile.css">
+    <link rel="stylesheet" href="Style/styles.css">
     <title>Perfil</title>
 </head>
 <body>
@@ -12,14 +13,6 @@
         if (!isset($_SESSION['user']) == true) {
             header('Location: login.php');
             exit();
-        }
-        if (isset($_SESSION['success']) == true) {
-            echo "<script>alert('" . $_SESSION['success'] . "');</script>";
-            unset($_SESSION['success']); // Limpa a mensagem depois de mostrar
-        }
-        if (isset($_SESSION['error']) == true) {
-            echo "<script>alert('" . $_SESSION['error'] . "');</script>";
-            unset($_SESSION['error']); // Limpa a mensagem depois de mostrar
         }
         if (isset($_SESSION['message']) == true) {
             echo "<script>alert('" . $_SESSION['message'] . "');</script>";
@@ -42,7 +35,23 @@
     <h1>Perfil</h1>
 
     <!-- Formulário de upload de imagem de perfil -->
-    <div class="container">
+    <div id="app" class="container">
+        <nav class="navbar">
+            <div class="container">
+                <a href="/" class="logo">PokéParty</a>
+                <div class="nav-links">
+                    <a href="index.php">Home</a> 
+                    <a href="pokedex.php" class="active">Pokédex</a>
+                    <a href="teams.php">Times</a>
+                    <a href="battle.php">Batalha</a>
+                    <a href="profile.php">Perfil</a>
+                </div>
+                <div class="search-bar">
+                    <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">
+                </div>
+            </div>
+        </nav>
+        <br><br>
         <!-- Imagem de perfil -->
         <form enctype="multipart/form-data" action="../Controller/uploadPhoto.php" method="post">
             <input type="hidden" name="MAX_FILE_SIZE" value="999999999"/>

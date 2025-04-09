@@ -9,7 +9,7 @@ $email = $_SESSION['user']['plaEmail'];
 // echo "VAR DUMP: ",var_dump($tipo);
 // $getPhotoBlob = $conn->query("SELECT plaPhotoBlob FROM player WHERE plaEmail = ?");
 if ($tamanho > 26214400) { // 25MB
-    $_SESSION['error'] = 'Imagem muito grande (Máx: 25MB)';
+    $_SESSION['message'] = 'Imagem muito grande (Máx: 25MB)';
     header('Location: ../View/profile.php');
     exit();
 }
@@ -38,16 +38,16 @@ if ( $imagem != null ){
         //var_dump($_SESSION['user']['plaPhoto']);
         //echo "<img src='data:image/jpeg;base64,".$_SESSION['user']['plaPhoto']."' alt='Imagem' class='profile-image'>";
         //$getPhotoBlob = $conn->query("SELECT plaPhotoBlob FROM player WHERE plaEmail = ?");
-        $_SESSION['success'] = 'Imagem carregada com sucesso!';
+        $_SESSION['message'] = 'Imagem carregada com sucesso!';
         header('Location: ../View/profile.php');
     } else {
-        $_SESSION['error'] = "Erro ao atualizar a imagem de perfil.";
+        $_SESSION['message'] = "Erro ao atualizar a imagem de perfil.";
         header('Location: ../View/profile.php');
     }
     exit();
 }
 else{
-    $_SESSION['error'] = 'Nenhuma imagem foi inserida! (Server Timeout)';
+    $_SESSION['message'] = 'Nenhuma imagem foi inserida! (Server Timeout)';
     header('Location: ../View/profile.php');
-}    
+}
 ?>
