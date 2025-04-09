@@ -40,10 +40,17 @@
         header("Location: ../View/login.php");
         exit();
     }
+
     $_SESSION['user'] = $user;
 
-    $_SESSION['user']['plaPhoto'] = base64_encode($user['plaPhotoBlob']);//store the profile picture path in the session
-    $_SESSION['user']['plaPhotoType'] = $user['plaPhotoBlobType']; 
+    if($user['plaPhotoBlob'] != null){
+        $_SESSION['user']['plaPhoto'] = base64_encode($user['plaPhotoBlob']); //convert the binary data to base64
+        $_SESSION['user']['plaPhotoType'] = $user['plaPhotoBlobType']; //image type saved on the session
+    } else {
+        $_SESSION['user']['plaPhoto'] = null; // Substitua pelo caminho padrão da imagem de perfil
+        $_SESSION['user']['plaPhotoType'] = null; // Tipo de arquivo padrão
+    }
+
     $_SESSION['user']['plaEmail'] = $user['plaEmail']; //store the email in the session (for security reasons, this should be avoided)
     $_SESSION['user']['plaName'] = $user['plaName']; //store the name in the session (for security reasons, this should be avoided)
     $_SESSION['user']['plaPassword'] = $user['plaPassword']; //store the password in the session (for security reasons, this should be avoided)
