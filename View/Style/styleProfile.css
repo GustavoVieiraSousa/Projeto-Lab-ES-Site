@@ -7,14 +7,6 @@ body {
     color: #333;
 }
 
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
 h1 {
     text-align: center;
@@ -35,6 +27,7 @@ label {
 
 input[type="text"],
 input[type="email"],
+input[type="password"],
 input[type="password"],
 textarea,
 select {

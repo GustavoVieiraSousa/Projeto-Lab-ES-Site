@@ -30,10 +30,11 @@ $teams = $teamController->getTeams($plaCode);
             <div class="container">
                 <a href="/" class="logo">PokéParty</a>
                 <div class="nav-links">
-                    <a href="/">Home</a>
+                    <a href="index.php">Home</a> 
                     <a href="pokedex.php">Pokédex</a>
                     <a href="teams.php" class="active">Times</a>
-                    <a href="battle.php">Batalha</a>
+                    <!-- <a href="battle.php">Batalha</a> -->
+                    <a href="profile.php">Perfil</a>
                 </div>
                 <div class="place-holder">
                     <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">

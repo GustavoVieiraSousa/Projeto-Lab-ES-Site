@@ -29,7 +29,7 @@
             <a href="index.php">Home</a> 
             <a href="pokedex.php" class="active">Pokédex</a>
             <a href="teams.php">Times</a>
-            <a href="battle.php">Batalha</a>
+            <!-- <a href="battle.php">Batalha</a> -->
             <a href="profile.php">Perfil</a>
           </div>
           <div class="search-bar">

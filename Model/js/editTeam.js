@@ -3,20 +3,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const createTeamButton = document.getElementById('create-team-button');
     const teamNameInput = document.getElementById('team-name-input');
     const pokemonSlots = document.querySelectorAll('.team-pokemon-slot');
-    const modalTitle = modal.querySelector('h2.cnt-h2'); 
-    const pokemonPopup = document.getElementById('pokemon-popup'); 
-    const pokemonList = document.getElementById('pokemon-list'); 
+    const modalTitle = modal.querySelector('h2.cnt-h2');
+    const pokemonPopup = document.getElementById('pokemon-popup'); // Popup de seleção de Pokémon
+    const pokemonList = document.getElementById('pokemon-list'); // Lista de Pokémon no popup
     let editingTeamId = null;
-    let activeSlot = null; 
+    let activeSlot = null; // Slot ativo para substituição
+
+    // Função para limpar os slots e redefinir o formulário
+    function resetForm() {
+        teamNameInput.value = ''; // Limpa o nome do time
+        pokemonSlots.forEach(slot => {
+            slot.dataset.pokemonId = null; // Remove o ID do Pokémon do slot
+            slot.querySelector('.team-select-pokemon').style.display = 'block'; // Mostra o botão "Selecionar Pokémon"
+            const selectedPokemonDiv = slot.querySelector('.team-selected-pokemon');
+            selectedPokemonDiv.innerHTML = ''; // Limpa o conteúdo do slot
+            slot.querySelectorAll('.team-select-attack').forEach(button => {
+                button.textContent = 'Selecionar Ataque'; // Redefine o texto do botão de ataque
+                button.dataset.attackId = null; // Remove o ID do ataque
+                button.className = 'team-select-attack'; // Remove classes de tipo
+            });
+        });
+        createTeamButton.disabled = true; // Desabilita o botão "Criar Time"
+    }
 
     // Função para abrir o modal de edição
     document.querySelectorAll('.edit').forEach(button => {
         button.addEventListener('click', async (e) => {
             editingTeamId = e.target.dataset.teamId;
             modal.classList.remove('hidden');
-            createTeamButton.textContent = 'Salvar Time';
-            createTeamButton.dataset.mode = 'edit'; 
-            modalTitle.textContent = 'Atualizar Time'; 
+            createTeamButton.textContent = 'Salvar Time'; // Altera o texto do botão
+            createTeamButton.dataset.mode = 'edit'; // Define o modo como "edit"
+            modalTitle.textContent = 'Atualizar Time'; // Altera o título do modal
 
             try {
                 const response = await fetch(`../Controller/get_team.php?teamId=${editingTeamId}`);
@@ -56,9 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Adiciona evento de clique à imagem para abrir o popup
                             const pokemonImage = slot.querySelector('.pokemon-image');
                             pokemonImage.addEventListener('click', () => {
-                                activeSlot = slot; 
-                                pokemonPopup.classList.remove('hidden'); 
-                                loadPokemonList(); 
+                                activeSlot = slot; // Define o slot ativo
+                                pokemonPopup.classList.remove('hidden'); // Exibe o popup
+                                loadPokemonList(); // Carrega a lista de Pokémon no popup
                             });
 
                             // Busca os nomes e tipos dos ataques usando a PokéAPI
@@ -101,12 +118,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    async function loadAttackList(pokemonId) {
+        try {
+            attackList.innerHTML = '<div class="loading">Carregando Ataques...</div>';
+    
+            // Busca os ataques do Pokémon
+            const attacks = await pokeApi.getPokemonMoves(pokemonId);
+            attackList.innerHTML = ''; // Limpa o estado de carregamento
+    
+            // Obtém os ataques já selecionados para este Pokémon
+            const selectedAttacks = Array.from(document.querySelectorAll('.team-select-attack'))
+                .map(button => button.dataset.attackId)
+                .filter(attackId => attackId !== null);
+    
+            // Filtra os ataques disponíveis, removendo os já selecionados
+            const availableAttacks = attacks.filter(attack => !selectedAttacks.includes(attack.id));
+    
+            availableAttacks.forEach(attack => {
+                const attackItem = document.createElement('button');
+                attackItem.className = `attack-item type ${attack.type}`;
+                attackItem.textContent = attack.name;
+                attackItem.dataset.attackId = attack.id;
+    
+                // Adiciona evento de clique para selecionar o ataque
+                attackItem.addEventListener('click', () => {
+                    selectAttack(attack.name, attack.id);
+                });
+    
+                attackList.appendChild(attackItem);
+            });
+    
+            if (availableAttacks.length === 0) {
+                attackList.innerHTML = '<div class="no-results">Nenhum ataque disponível.</div>';
+            }
+        } catch (error) {
+            attackList.innerHTML = '<div class="error">Erro ao carregar ataques. Tente novamente.</div>';
+            console.error('Erro ao carregar a lista de ataques:', error);
+        }
+    }
+
     // Função para carregar a lista de Pokémon no popup
     async function loadPokemonList() {
         try {
             pokemonList.innerHTML = '<div class="loading">Carregando Pokémon...</div>';
             const data = await pokeApi.getPokemonList();
-            pokemonList.innerHTML = ''; 
+            pokemonList.innerHTML = ''; // Limpa o estado de carregamento
 
             for (const pokemon of data.results) {
                 const pokemonData = await pokeApi.getPokemon(pokemon.id);
@@ -154,6 +210,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 activeSlot.dataset.pokemonId = pokemonId; 
+
+                // Reseta os ataques para "Selecionar Ataque"
+                const slot = activeSlot.closest('.team-pokemon-slot');
+                slot.querySelectorAll('.team-select-attack').forEach(button => {
+                    button.textContent = 'Selecionar Ataque';
+                    button.dataset.attackId = null;
+                    button.className = 'team-select-attack'; // Remove classes de tipo
+                });
 
                 // Reatribui o evento de clique à nova imagem
                 const pokemonImageElement = activeSlot.querySelector('.pokemon-image');

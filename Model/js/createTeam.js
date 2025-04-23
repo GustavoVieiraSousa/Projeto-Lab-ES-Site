@@ -14,15 +14,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     function resetSlots() {
         selectedPokemons.fill(null);
         document.querySelectorAll('.team-pokemon-slot').forEach(slot => {
-            slot.querySelector('.team-select-pokemon').style.display = 'block';
+            slot.dataset.pokemonId = null; // Remove o ID do Pokémon do slot
+            slot.querySelector('.team-select-pokemon').style.display = 'block'; // Mostra o botão "Selecionar Pokémon"
             const selectedPokemonDiv = slot.querySelector('.team-selected-pokemon');
-            selectedPokemonDiv.innerHTML = '';
+            selectedPokemonDiv.innerHTML = ''; // Limpa o conteúdo do slot
             slot.querySelectorAll('.team-select-attack').forEach(button => {
-                button.textContent = 'Selecionar Ataque';
-                button.dataset.attackId = null;
+                button.textContent = 'Selecionar Ataque'; // Redefine o texto do botão de ataque
+                button.dataset.attackId = null; // Remove o ID do ataque
+                button.className = 'team-select-attack'; // Remove classes de tipo
             });
         });
-        updateCreateTeamButtonState();
+        updateCreateTeamButtonState(); // Atualiza o estado do botão "Criar Time"
     }
 
     // Fecha o popup ao clicar no botão de sair
@@ -35,9 +37,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     addTeamButton.addEventListener('click', () => {
         modal.classList.remove('hidden');
-        createTeamButton.textContent = 'Criar Time'; 
-        createTeamButton.dataset.mode = 'create'; 
-        resetSlots(); 
+        createTeamButton.textContent = 'Criar Time'; // Altera o texto do botão
+        createTeamButton.dataset.mode = 'create'; // Define o modo como "create"
+        modal.querySelector('h2.cnt-h2').textContent = 'Criar Novo Time'; // Redefine o título do modal
+        createTeamButton.disabled = true; // Desabilita o botão "Criar Time" inicialmente
+    
+        // Limpa o nome do time
+        document.getElementById('team-name-input').value = '';
+    
+        // Reseta os slots de Pokémon e ataques
+        resetSlots();
     });
 
     // Fecha o modal ao clicar no botão "Cancelar"
@@ -107,6 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
         return card;
     }
+
     // Seleciona um Pokémon e adiciona ao slot
     function selectPokemon(pokemonId, pokemonName, pokemonImage) {
         const activeSlot = document.querySelector('.team-selected-pokemon.active');
@@ -116,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const typesHTML = pokemonData.types
                     .map(type => `<span class="type ${type}">${type}</span>`)
                     .join('');
-
+    
                 // Atualizar o slot com os tipos e informações do Pokémon
                 activeSlot.innerHTML = `
                     <div class="pokemon-info">
@@ -128,23 +138,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     </div>
                 `;
-
+    
                 activeSlot.classList.remove('active'); 
                 const slot = activeSlot.closest('.team-pokemon-slot');
                 slot.dataset.pokemonId = pokemonId; 
-
+    
+                // Reseta os ataques para "Selecionar Ataque"
+                slot.querySelectorAll('.team-select-attack').forEach(button => {
+                    button.textContent = 'Selecionar Ataque';
+                    button.dataset.attackId = null;
+                    button.className = 'team-select-attack'; // Remove classes de tipo
+                });
+    
                 // Esconde o botão "Selecionar Pokémon"
                 const selectButton = slot.querySelector('.team-select-pokemon');
                 if (selectButton) {
-                    selectButton.style.display = 'none';
+                    selectButton.style.display = 'none'; // Oculta o botão
                 }
-
+    
                 // Permite reabrir o popup ao clicar na imagem ou no slot
                 slot.querySelector('.pokemon-info').addEventListener('click', () => {
                     activeSlot.classList.add('active'); 
                     pokemonPopup.classList.remove('hidden'); 
                 });
-
+    
                 pokemonPopup.classList.add('hidden'); 
             });
         }
@@ -171,25 +188,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function loadAttackList(pokemonId) {
         try {
             attackList.innerHTML = '<div class="loading">Carregando Ataques...</div>';
-
+    
             // Busca os ataques do Pokémon
             const attacks = await pokeApi.getPokemonMoves(pokemonId);
             attackList.innerHTML = ''; // Limpa o estado de carregamento
-
-            attacks.forEach(attack => {
+    
+            // Obtém os ataques já selecionados para este Pokémon
+            const selectedAttacks = Array.from(document.querySelectorAll('.team-select-attack'))
+                .map(button => button.dataset.attackId)
+                .filter(attackId => attackId !== null);
+    
+            // Filtra os ataques disponíveis, removendo os já selecionados
+            const availableAttacks = attacks.filter(attack => !selectedAttacks.includes(attack.id));
+    
+            availableAttacks.forEach(attack => {
                 const attackItem = document.createElement('button');
-                attackItem.className = `attack-item type ${attack.type}`; 
+                attackItem.className = `attack-item type ${attack.type}`;
                 attackItem.textContent = attack.name;
                 attackItem.dataset.attackId = attack.id;
-
+    
                 // Adiciona evento de clique para selecionar o ataque
                 attackItem.addEventListener('click', () => {
                     selectAttack(attack.name, attack.id);
                     updateCreateTeamButtonState();
                 });
-
+    
                 attackList.appendChild(attackItem);
             });
+    
+            if (availableAttacks.length === 0) {
+                attackList.innerHTML = '<div class="no-results">Nenhum ataque disponível.</div>';
+            }
         } catch (error) {
             attackList.innerHTML = '<div class="error">Erro ao carregar ataques. Tente novamente.</div>';
             console.error('Erro ao carregar a lista de ataques:', error);
