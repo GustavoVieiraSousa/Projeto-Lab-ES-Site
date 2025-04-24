@@ -19,7 +19,6 @@ $roomCheckStmt = $conn->prepare("SELECT * FROM room WHERE rooPlaCode1 = ? OR roo
 $roomCheckStmt->execute([$plaCode, $plaCode]);
 $roomCheck = $roomCheckStmt->fetch(PDO::FETCH_ASSOC);
 
-var_dump($roomCheck);
 
 if(!$roomCheck == null){
     header("Location: /PageOfShameEditRoom.php");
