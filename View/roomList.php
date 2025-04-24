@@ -44,6 +44,10 @@
         <form method="POST" action="../Controller/addRoom.php">
             <input type="submit" name="addRoom"/>
         </form>
+        <form method="POST" action="../Controller/editRoom.php">
+            <input type="text" name="roomCode" placeholder="Código da Sala"></input>
+            <input type="submit" name="addRoom"/>
+        </form>
     </div>
 
     <?php unset($_SESSION['roomCode']) ?>

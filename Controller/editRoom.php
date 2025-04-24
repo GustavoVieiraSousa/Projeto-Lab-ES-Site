@@ -5,27 +5,38 @@ session_start();
 if(!isset($_SESSION['plaCode'])){
     exit();
 }
-if(!isset($_POST["addRoom"])){
+if(!isset($_SESSION['roomCode'])){
+    exit();
+}
+if(!isset($_POST['editRoom'])){
     exit();
 }
 
 $plaCode = $_SESSION['plaCode'];
+$roomCode = $_SESSION['roomCode'];
 
 $roomCheckStmt = $conn->prepare("SELECT * FROM room WHERE rooPlaCode1 = ? OR rooPlaCode2 = ?");
 $roomCheckStmt->execute([$plaCode, $plaCode]);
 $roomCheck = $roomCheckStmt->fetch(PDO::FETCH_ASSOC);
 
+var_dump($roomCheck);
+
 if(!$roomCheck == null){
-    header("Location: /PageOfShameAddRoom.php");
+    header("Location: /PageOfShameEditRoom.php");
     exit();
 }
 
-//criando a Room
-$stmt = $conn->prepare("INSERT INTO room (rooPlaCode1) VALUES (?)");
-$stmt->execute([$plaCode]);
-$roomCode = $conn->lastInsertId();
+//adicionando player 2 na sala
+try{
+    $stmt = $conn->prepare("ALTER room SET rooPlaCode2 = ? WHERE rooCode = ?");
+    $stmt = $conn->execute($plaCode, $roomCode);
+}
+catch(PDOException $e){
+    $conn->rollBack();
+    error_log('Erro ao criar time: ' . $e->getMessage());
+}
 
 $_SESSION['roomCode'] = $roomCode;
 header("Location: ../View/roomList.php");
 exit();
-?>
+?>''
