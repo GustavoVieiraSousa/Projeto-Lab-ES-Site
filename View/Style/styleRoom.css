@@ -85,7 +85,7 @@ body {
 }
 
 .nav-links a:hover {
-    olor: var(--pokeblue);
+    color: var(--pokeblue);
 }
 
 .nav-links a.active {
@@ -109,7 +109,9 @@ body {
     min-width: 200px;
 }
 
+/* ============================ */
 /* Inicio do Conteudo Principal */
+/* ============================ */
 content{
     display: inline-block;
     margin-left: 10%;
@@ -117,24 +119,62 @@ content{
     max-width: 75%;
     margin-top: 7rem; /* Para evitar que o conteúdo fique atrás da navbar */
     padding: 2rem;
-    border-color: red;
+    border-color: var(--pokeblue);
     border-style: solid;
+    border-radius: 0.75rem;
+    border-width: 1px;
 }
 
+/* Conteudo 1 - Título | Barra de pesquisa de ID */
 .content-search{
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
 }
+.content-search input{ /* Barra onde coloca o ID para entrar na sala */
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: white;
+    width: 100px;
+    
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    min-width: 50px;
+}
+.content-search form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.content-search input.search-bar{ /* Barra onde coloca o ID para entrar na sala */
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: white;
+    /* padding: 0.25rem 1rem; */
+    border-radius: 0.25rem;
+    min-width: 50px;
+}
+.content-search input.search-bar-button{ /* botao da barra onde coloca o ID para entrar na sala */
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: white;
+    width: 5%;
+    border-radius: 0.25rem;
+    min-width: 50px;
+}
 
+/* Content 2 - Lista de Salas */
 .content-list{
+    padding: 2rem;
+    border-color: var(--pokeblue);
+    border-style: solid;
+    border-radius: 0.75rem;
+    border-width: 1px;
     display: flex;
     flex-direction: column;
 }
-
-/* listas */
-
 table.room-list-header{
     width: 100%;
     background-color: var(--pokedark-light);
@@ -146,19 +186,16 @@ table.room-list-header{
     border-color: var(--pokeblue);
     border-width: 1px;
 }
-
 table.room-list-header th{
     width: 25%;
     color: var(--pokeblue);
     font-weight: bold;
 }
-
 table.room-list-content{
     width: 100%;
     color: white;
     font-weight: lighter;
 }
-
 table.room-list-content tr{
     display: flex;
     background-color: var(--pokedark-light);
@@ -166,13 +203,11 @@ table.room-list-content tr{
     padding: 0.5rem;
     border-radius: 0.25rem;
 }
-
 table.room-list-content th{
     border-color: var(--pokeblue);
     width: 25%;
     font-weight: lighter;
 }
-
 table.room-list-content input{
     width: 75%;
     color: white;
@@ -182,7 +217,6 @@ table.room-list-content input{
     background-color: var(--pokedark-dark);
     font-weight: lighter;
 }
-
 table.room-list-content input:hover{
     border-color: var(--pokeblue);
     background-color: var(--pokedark-light);

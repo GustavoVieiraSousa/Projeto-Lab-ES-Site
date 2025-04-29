@@ -55,8 +55,9 @@
                 <p>Criar Sala: <input type="submit" name="addRoom"/></p>
             </form>
             <form method="POST" action="../Controller/editRoom.php">
-                Entrar na Sala (por ID): <input type="text" name="roomCode" placeholder="Código da Sala" required></input>
-                <input type="submit" name="editRoom"/>
+                <p>Entrar na Sala:</p>
+                <input type="text" class="search-bar" name="roomCode" placeholder="Código da Sala" required></input>
+                <input type="submit" class="search-bar-button" name="editRoom"/>
             </form>
         </div>
 
