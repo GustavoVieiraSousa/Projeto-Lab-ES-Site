@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Style/styles.css">
+    <link rel="stylesheet" href="Style/styleRoom.css">
     <title>Salas</title>
 </head>
     <?php
@@ -46,32 +46,43 @@
         </nav>
     </div>
 
-    <br><br><br><br>
+    <!-- <br><br><br><br> -->
 
-    <div>
-        <h1>Sala de Batalha</h1>
-        <form method="POST" action="../Controller/addRoom.php">
-            <p>Criar Sala: <input type="submit" name="addRoom"/></p>
-        </form>
-        <form method="POST" action="../Controller/editRoom.php">
-            Entrar na Sala (por ID): <input type="text" name="roomCode" placeholder="Código da Sala" required></input>
-            <input type="submit" name="editRoom"/>
-        </form>
-    </div>
+    <content>
+        <div class="content-search">
+            <h1>Sala de Batalha</h1>
+            <form method="POST" action="../Controller/addRoom.php">
+                <p>Criar Sala: <input type="submit" name="addRoom"/></p>
+            </form>
+            <form method="POST" action="../Controller/editRoom.php">
+                Entrar na Sala (por ID): <input type="text" name="roomCode" placeholder="Código da Sala" required></input>
+                <input type="submit" name="editRoom"/>
+            </form>
+        </div>
 
-    <div>
-        <h1>Salas</h1>
-        <ul id="room-list"></ul>
-        <form method="POST" action="../Controller/roomListServer.php">
-            <p>Atualizar Lista: <input type="submit" name="roomList"/></p>
-        </form>
-    </div>
+        <div class="content-list">
+            <h1>Salas</h1>
+            <table class="room-list-header">
+                <tr class="room-list">
+                    <th class="room-id">Room ID</th>
+                    <th class="room-player1">Player 1 ID</th>
+                    <th class="room-player2">Player 2 ID</th>
+                    <th class="room-action">Entrar na Sala</th>
+                </tr>
+            </table>
+            
+            <table id="room-list" class="room-list-content"></table> <!-- Mostra as salas do Banco de Dados -->
+        </div>
 
-    <div>
-        <form method="POST" action="../Controller/deleteRoom.php">
-            <p>Sair/Deletar Sala: <input type="submit" name="roomList"/></p>
-        </form>
-    </div>
+        <div class="">
+            <form method="POST" action="../Controller/roomListServer.php">
+                <p>Atualizar Lista: <input type="submit" name="roomList"/></p>
+            </form>
+            <form method="POST" action="../Controller/deleteRoom.php">
+                <p>Sair/Deletar Sala: <input type="submit" name="roomList"/></p>
+            </form>
+        </div>
+    </content>
 
     <!-- Atualiza a Lista a cada 500ms -->
     <script src="../Model/js/room/roomListUpdate.js"></script>

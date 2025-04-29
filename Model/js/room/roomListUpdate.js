@@ -6,12 +6,12 @@ function fetchRoomList() {
             roomList.innerHTML = ''; // Clear the current list
 
             data.forEach(room => {
-                const roomItem = document.createElement('li');
+                const roomItem = document.createElement('tr');
                 roomItem.innerHTML = `
-                    <strong>Room ID:</strong> ${room.rooCode}<br>
-                    <strong>Player 1 ID:</strong> ${room.rooPlaCode1}<br>
-                    <strong>Player 2 ID:</strong> ${room.rooPlaCode2}<br>
-                    <input type="submit" id="enterRoom" name="editRoom" value="Entrar na Sala"/><br><br>
+                    <th class="room-id">${room.rooCode}</th>
+                    <th class="room-player1">${room.rooPlaCode1}</th>
+                    <th class="room-player2">${room.rooPlaCode2}</th>
+                    <th><input type="submit" class="room-input" id="enterRoom" name="editRoom" value="Entrar na Sala"/></th>
                 `;
                 const enterRoomButton = roomItem.querySelector('input[id="enterRoom"]');
                 enterRoomButton.addEventListener('click', function() {
