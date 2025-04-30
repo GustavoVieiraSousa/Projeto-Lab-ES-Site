@@ -8,6 +8,28 @@
 </head>
 <!-- filepath: c:\xampp\htdocs\Projeto-Lab-ES-Site\View\battle.php -->
 <body>
+
+<?php
+    session_start();
+    require_once '../Controller/connection.php';
+    require_once '../Controller/TeamController.php';
+
+    if (!isset($_SESSION['user']) || !$_SESSION['user']) {
+        header('Location: login.php');
+        exit();
+    }
+
+    if (!isset($_SESSION['roomCode'])){
+        header('Location: roomList.php');
+        exit();
+    }
+    
+    if (isset($_SESSION['message'])) {
+        echo "<script>alert('" . $_SESSION['message'] . "');</script>";
+        unset($_SESSION['message']); // Limpa a mensagem depois de mostrar
+    }
+?>
+
 <div class="container">
     <div class="screen">
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="Pokémon Player 1">

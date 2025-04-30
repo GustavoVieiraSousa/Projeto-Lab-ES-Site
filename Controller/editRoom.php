@@ -62,6 +62,22 @@ try{
     error_log('Erro ao criar Sala: ' . $e->getMessage());
 }
 
+//verifica se a sala ja está cheia
+try{
+    $roomCheckStmt = $conn->prepare("SELECT * FROM room WHERE rooCode = ? AND rooPlaCode2 IS NOT NULL");
+    $roomCheckStmt->execute([$roomCode]);
+    $roomCheck = $roomCheckStmt->fetch(PDO::FETCH_ASSOC);
+    if($roomCheck != null){
+        $_SESSION['message'] = 'Sala cheia!';
+        header("Location: ../View/roomList.php");
+        exit();
+    }
+}
+catch(PDOException $e){
+    $conn->rollBack();
+    error_log('Erro ao entrar na sala: ' . $e->getMessage());
+}
+
 //adicionando player 2 na sala
 try{
     $stmt = $conn->prepare("UPDATE room SET rooPlaCode2 = ? WHERE rooCode = ?");

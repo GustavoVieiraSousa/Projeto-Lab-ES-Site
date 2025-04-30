@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="Style/styleRoom.css">
     <title>Salas</title>
 </head>
+
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRoomList();
+        });
+</script>
     <?php
         session_start();
 
@@ -17,6 +24,11 @@
         if (isset($_SESSION['message'])) {
             echo "<script>alert('" . $_SESSION['message'] . "');</script>";
             unset($_SESSION['message']); // Limpa a mensagem depois de mostrar
+        }
+
+        if (isset($_SESSION['roomCode'])){
+            header('Location: lobby.php');
+            exit();
         }
 
         $roomCode = (isset($_SESSION['roomCode'])) ? $_SESSION['roomCode'] : "Nenhuma Sala";
@@ -39,28 +51,38 @@
                     <!-- <a href="battle.php">Batalha</a> -->
                     <a href="profile.php">Perfil</a>
                 </div>
-                <div class="search-bar">
+                <div class="place-holder">
                     <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">
                 </div>
             </div> 
         </nav>
     </div>
 
-    <!-- <br><br><br><br> -->
-
+    <!-- Search -->
     <content>
         <div class="content-search">
             <h1>Sala de Batalha</h1>
-            <form method="POST" action="../Controller/addRoom.php">
-                <p>Criar Sala: <input type="submit" name="addRoom"/></p>
-            </form>
-            <form method="POST" action="../Controller/editRoom.php">
+            
+            <form method="POST" class="search-id" action="../Controller/editRoom.php">
                 <p>Entrar na Sala:</p>
-                <input type="text" class="search-bar" name="roomCode" placeholder="Código da Sala" required></input>
-                <input type="submit" class="search-bar-button" name="editRoom"/>
+                <input type="text" class="search-bar" name="roomCode" placeholder="ID da Sala" required></input>
+                <input type="submit" class="search-bar-button" name="editRoom" value="Entrar na Sala"/>
             </form>
+
+            <updatelist>
+                <form method="POST" action="../Controller/addRoom.php">
+                    <input type="submit" onclick="togglePopup()" name="addRoom" value="Criar Sala"/>
+                </form>
+                <form method="POST" action="../Controller/roomListServer.php">
+                    <input type="submit" name="roomList" value="Atualizar"/>
+                </form>
+                <form method="POST" action="../Controller/deleteRoom.php">
+                    <input type="submit" name="roomList" value="Sair da Sala"/>
+                </form>
+            </updatelist>
         </div>
 
+        <!-- Lista -->
         <div class="content-list">
             <h1>Salas</h1>
             <table class="room-list-header">
@@ -71,17 +93,9 @@
                     <th class="room-action">Entrar na Sala</th>
                 </tr>
             </table>
-            
-            <table id="room-list" class="room-list-content"></table> <!-- Mostra as salas do Banco de Dados -->
-        </div>
 
-        <div class="">
-            <form method="POST" action="../Controller/roomListServer.php">
-                <p>Atualizar Lista: <input type="submit" name="roomList"/></p>
-            </form>
-            <form method="POST" action="../Controller/deleteRoom.php">
-                <p>Sair/Deletar Sala: <input type="submit" name="roomList"/></p>
-            </form>
+            <!-- Mostra as salas do Banco de Dados -->
+            <table id="room-list" class="room-list-content"></table> 
         </div>
     </content>
 

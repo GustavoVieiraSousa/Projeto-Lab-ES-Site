@@ -24,6 +24,12 @@
     $passStmt->execute([$email]);
     $passwordGETv = $passStmt->fetch(PDO::FETCH_ASSOC);
     
+    //if the user is not found, redirect to login page with an error message
+    if($passwordGETv == null){
+        $_SESSION['error'] = 'Este usuário não existe.';
+        header("Location: ../View/login.php");
+        exit();
+    }
     //clean the password variable
     $passwordGET = trim(implode(",", $passwordGETv));
 

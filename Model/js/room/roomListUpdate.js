@@ -40,5 +40,5 @@ function fetchRoomList() {
         .catch(error => console.error('Error fetching room list:', error));
 }
 
-setInterval(fetchRoomList, 500);
+setInterval(fetchRoomList, 1000);
 fetchRoomList();

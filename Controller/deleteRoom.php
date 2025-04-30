@@ -15,6 +15,25 @@ if(!isset($_SESSION['plaCode'])){
 }
 
 $plaCode = $_SESSION['plaCode'];
+$roomCode = $_SESSION['roomCode'];
+
+// sala ainda ativa
+try{
+    $existsRoomStmt = $conn->prepare("SELECT * FROM room WHERE rooCode = ?");
+    $existsRoomStmt->execute([$roomCode]);
+    $existsRoom = $existsRoomStmt->fetch(PDO::FETCH_ASSOC);
+}
+catch(PDOException $e){
+    error_log('Erro ao criar Sala: ' . $e->getMessage());
+    $_SESSION['message'] = 'Falha ao buscar sala: ' . $e->getMessage();
+    exit();
+}
+if($existsRoom == null){
+    $_SESSION['message'] = 'Sala não existe.';
+    unset($_SESSION['roomCode']);
+    header("Location: ../View/roomList.php");
+    exit();
+}
 
 //Verifica se o player é dono da sala
 try{
@@ -22,8 +41,9 @@ try{
     $roomCheckStmt->execute([$plaCode, $plaCode]);
     $roomCheck = $roomCheckStmt->fetch(PDO::FETCH_ASSOC);
 }catch(PDOException $e){
-    $conn->rollBack();
-    error_log('Erro ao criar Sala: ' . $e->getMessage());
+    error_log('Erro ao identificar player: ' . $e->getMessage());
+    $_SESSION['message'] = 'Falha ao identificar player: ' . $e->getMessage();
+    exit();
 }
 if($roomCheck == null){
     $_SESSION['message'] = 'Não está em uma sala.';
@@ -31,23 +51,47 @@ if($roomCheck == null){
     exit();
 }
 
+//verifica se tem alguma battle criada
+try{
+    $battleCheckStmt = $conn->prepare("SELECT * FROM battle WHERE batRooCode = ?");
+    $battleCheckStmt->execute([$roomCode]);
+    $battleCheck = $battleCheckStmt->fetch(PDO::FETCH_ASSOC);
+}
+catch(PDOException $e){
+    error_log('Erro ao criar Sala: ' . $e->getMessage());
+    $_SESSION['message'] = 'Falha ao buscar batalha: ' . $e->getMessage();
+    exit();
+}
+
 //Deletando a sala
 try{
+    //é o player criador da sala
     if($roomCheck['rooPlaCode1'] == $plaCode){
+        //caso battle criada
+        if($battleCheck != null){
+            $deleteBattle = $conn->prepare("DELETE FROM battle WHERE batRooCode = ?");
+            $deleteBattle->execute([$roomCheck['rooCode']]);
+        }
         $deleteRoom = $conn->prepare("DELETE FROM room WHERE rooPlaCode1 = ?");
         $deleteRoom->execute([$plaCode]);
-        $_SESSION['message'] = 'Sala deletada com sucesso!';
     }
     else{
         $stmt = $conn->prepare("UPDATE room SET rooPlaCode2 = NULL WHERE rooPlaCode2 = ?");
         $stmt->execute([$plaCode]);
-        $_SESSION['message'] = 'Saiu da sala com sucesso';
     }
 }
 catch(PDOException $e){
-    $conn->rollBack();
     error_log('Erro ao criar Sala: ' . $e->getMessage());
+    $_SESSION['message'] = $battleCheck['rooPlaCode1'] . 'Falha ao tentar apagar' . $e->getMessage();
+    exit();
 }
+
+//barrar id de sala
+
+//apagar battle quando player sair
+
+
+
 
 unset($_SESSION['roomCode']);
 header("Location: ../View/roomList.php");
