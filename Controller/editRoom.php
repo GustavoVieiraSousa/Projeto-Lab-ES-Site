@@ -27,8 +27,10 @@ if(!$roomCheck == null){
 
 //adicionando player 2 na sala
 try{
-    $stmt = $conn->prepare("ALTER room SET rooPlaCode2 = ? WHERE rooCode = ?");
-    $stmt = $conn->execute($plaCode, $roomCode);
+    $stmt = $conn->prepare("ALTER room SET rooPlaCode2 = :plaCode WHERE rooCode = :roomCode");
+    $stmt->bindParam(':plaCode', $plaCode, PDO::PARAM_INT);
+    $stmt->bindParam(':roomCode', $roomCode, PDO::PARAM_INT);
+    $stmt = $conn->execute();
 }
 catch(PDOException $e){
     $conn->rollBack();
