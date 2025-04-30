@@ -66,7 +66,7 @@
             <form method="POST" class="search-id" action="../Controller/editRoom.php">
                 <p>Entrar na Sala:</p>
                 <input type="text" class="search-bar" name="roomCode" placeholder="ID da Sala" required></input>
-                <input type="submit" class="search-bar-button" name="editRoom" value="Entrar na Sala"/>
+                <input type="submit" class="search-bar-button" name="editRoom" value="Entrar"/>
             </form>
 
             <updatelist>

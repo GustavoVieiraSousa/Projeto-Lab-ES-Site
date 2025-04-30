@@ -55,6 +55,20 @@
 
     <br><br><br><br>
 
+    <div class="content-search">
+        <h1>Escolha seu time:</h1>
+        
+        <updatelist>
+            <!-- BOTÃO QUE ENVIA O USUARIO PARA A TELA DE TIMES PARA CRIAR SEU TIME -->
+            <div class="create-team">
+                <a class="go" href="teams.php" class="create-team-button">Ir para tela de Times</a>
+            </div>
+            <form class="create-team" method="POST" action="../Controller/deleteRoom.php">
+                <input class="exit" type="submit" name="roomList" value="Sair da Sala"/>
+            </form>
+        </updatelist>
+    </div>
+
     <div class="teams-container">
         <?php if (!empty($teams)): ?>
             <?php foreach ($teams as $team): ?>
@@ -83,26 +97,8 @@
         <?php else: ?>
             <p class="no-teams">Nenhum time encontrado. Crie um novo time!</p>
         <?php endif; ?>
-
-        <!-- BOTÃO QUE ENVIA O USUARIO PARA A TELA DE TIMES PARA CRIAR SEU TIME -->
-        <div class="create-team">
-            <a href="teams.php" class="create-team-button">Ir para tela de Times</a>
-        </div>
     </div>
 
-    <div class="content-search">
-        <updatelist>
-            <form method="POST" action="../Controller/addRoom.php">
-                <input type="submit" name="addRoom" value="Criar Sala"/>
-            </form>
-            <form method="POST" action="../Controller/roomListServer.php">
-                <input type="submit" name="roomList" value="Atualizar"/>
-            </form>
-            <form method="POST" action="../Controller/deleteRoom.php">
-                <input type="submit" name="roomList" value="Sair da Sala"/>
-            </form>
-        </updatelist>
-    </div>
     <!-- <lobby>
         <main>
             <h1>Informações da Sala Atual</h1>

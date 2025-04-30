@@ -100,8 +100,6 @@ if ($plaCode == $ownerRoom['rooPlaCode1']) {
     try{
         $addTeamBattle = $conn->prepare("INSERT INTO battle (batRooCode, batTeaCode1) VALUES (?, ?)");
         $addTeamBattle->execute([$roomCode, $teamId]);
-
-        $_SESSION['message'] = "Time adicionado na batalha com sucesso.";
         header("Location: ../View/battle.php?roomCode=$roomCode&teamId=$teamId");
         exit();
     }
@@ -120,8 +118,6 @@ else if($plaCode == $ownerRoom['rooPlaCode2']){
     try{
         $addTeamBattle = $conn->prepare("UPDATE battle SET batTeaCode2 = ? WHERE batRooCode = ?");
         $addTeamBattle->execute([$teamId, $roomCode]);
-    
-        $_SESSION['message'] = 'Time atualizado.';
         header("Location: ../View/battle.php?roomCode=$roomCode&teamId=$teamId");
         exit();
     }

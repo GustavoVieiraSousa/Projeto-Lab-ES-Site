@@ -39,19 +39,8 @@
         </div>
       </nav>
 
-      <main class="container">
-        <h2 class="page-title">Pokédex</h2>
-        <div class="pokemon-grid" id="pokemon-list2">
-          <!-- Pokémon cards serão inseridos aqui via JavaScript -->
-          <div class="loading">Carregando Pokémon...</div>
-        </div>
-        <div class="pagination" id="pagination">
-          <!-- Paginação será inserida aqui -->
-        </div>
-      </main>
-    </div>
-
-    <!-- Destroys the session created -->
+      <br><br><br><br>
+      <!-- Destroys the session created -->
     <form method="POST" action="../Controller/loginServer.php" class="login-form">
       <button  type="sair" value="sair" name="sair">
         Sair da Conta 
@@ -64,6 +53,19 @@
       </button>
     </form>
     
+
+      <main class="container">
+        <h2 class="page-title">Pokédex</h2>
+        <div class="pokemon-grid" id="pokemon-list2">
+          <!-- Pokémon cards serão inseridos aqui via JavaScript -->
+          <div class="loading">Carregando Pokémon...</div>
+        </div>
+        <div class="pagination" id="pagination">
+          <!-- Paginação será inserida aqui -->
+        </div>
+      </main>
+    </div>
+
     <script src="../Model/js/api.js"></script>
     <script src="../Model/js/pokedex.js"></script>
   </body>
