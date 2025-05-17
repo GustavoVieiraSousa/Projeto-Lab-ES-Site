@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Atualiza os Pokémon e ataques
         for ($i = 0; $i < 6; $i++) {
             $pokCodeColumn = "teaPokCode" . ($i + 1);
+            $pokemon = $pokemons[$i];
 
             // Verifica se o Pokémon já existe no time
             $getPokemonSql = "SELECT $pokCodeColumn FROM team WHERE teaCode = :teamId";
@@ -43,19 +44,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($pokCode) {
                 // Atualiza o Pokémon existente
-                $updatePokemonSql = "UPDATE pokemon SET pokId = :pokId, pokAtk1 = :atk1, pokAtk2 = :atk2, pokAtk3 = :atk3, pokAtk4 = :atk4 WHERE pokCode = :pokCode";
+                $updatePokemonSql = "UPDATE pokemon SET pokId = :pokId, pokAtk1 = :atk1, pokAtk2 = :atk2, pokAtk3 = :atk3, pokAtk4 = :atk4, 
+                pokBasicAttack = :pokBasicAttack, pokSpecialAttack = :pokSpecialAttack, pokBasicDefense = :pokBasicDefense,
+                pokSpecialDefense = :pokSpecialDefense, pokHp = :pokHp, pokSpeed = :pokSpeed WHERE pokCode = :pokCode";
                 $updatePokemonStmt = $conn->prepare($updatePokemonSql);
                 $updatePokemonStmt->execute([
-                    ':pokId' => $pokemons[$i],
+                    ':pokId' => $pokemon['pokId'],
                     ':atk1' => $attacks[$i][0],
                     ':atk2' => $attacks[$i][1],
                     ':atk3' => $attacks[$i][2],
                     ':atk4' => $attacks[$i][3],
+                    ':pokBasicAttack' => $pokemon['pokBasicAttack'],
+                    ':pokSpecialAttack' => $pokemon['pokSpecialAttack'],
+                    ':pokBasicDefense' => $pokemon['pokBasicDefense'],
+                    ':pokSpecialDefense' => $pokemon['pokSpecialDefense'],
+                    ':pokHp' => $pokemon['pokHp'],
+                    ':pokSpeed' => $pokemon['pokSpeed'],
                     ':pokCode' => $pokCode,
                 ]);
             } else {
                 // Insere um novo Pokémon se não existir
-                $insertPokemonSql = "INSERT INTO pokemon (pokId, pokAtk1, pokAtk2, pokAtk3, pokAtk4) VALUES (:pokId, :atk1, :atk2, :atk3, :atk4)";
+                $insertPokemonSql = "INSERT INTO pokemon (pokId, pokAtk1, pokAtk2, pokAtk3, pokAtk4, pokBasicAttack, pokSpecialAttack, pokBasicDefense, pokSpecialDefense, pokHp, pokSpeed) 
+                VALUES (:pokId, :atk1, :atk2, :atk3, :atk4, :pokBasicAttack, :pokSpecialAttack, :pokBasicDefense, :pokSpecialDefense, :pokHp, :pokSpeed)";
                 $insertPokemonStmt = $conn->prepare($insertPokemonSql);
                 $insertPokemonStmt->execute([
                     ':pokId' => $pokemons[$i],
@@ -63,6 +73,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':atk2' => $attacks[$i][1],
                     ':atk3' => $attacks[$i][2],
                     ':atk4' => $attacks[$i][3],
+                    ':pokBasicAttack' => $pokemon['pokBasicAttack'],
+                    ':pokSpecialAttack' => $pokemon['pokSpecialAttack'],
+                    ':pokBasicDefense' => $pokemon['pokBasicDefense'],
+                    ':pokSpecialDefense' => $pokemon['pokSpecialDefense'],
+                    ':pokHp' => $pokemon['pokHp'],
+                    ':pokSpeed' => $pokemon['pokSpeed'],
                 ]);
 
                 // Atualiza o código do Pokémon no time

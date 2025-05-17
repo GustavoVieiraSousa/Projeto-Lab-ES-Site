@@ -84,15 +84,13 @@ class PokeAPI {
     }
   }
     
-    /**
-     * Busca informações da espécie de um Pokémon*/
+    //Busca informações da espécie de um pokemon
     
     async getPokemonSpecies(id) {
       try {
         const response = await fetch(`${this.baseUrl}/pokemon-species/${id}`);
         const data = await response.json();
         
-        // Encontra a descrição em português, se disponível
         let description = '';
         for (const entry of data.flavor_text_entries) {
           if (entry.language.name === 'pt-br' || entry.language.name === 'pt') {
@@ -135,7 +133,7 @@ class PokeAPI {
         const response = await fetch(`${this.baseUrl}/pokemon?limit=151&offset=0`);
         const data = await response.json();
         
-        // Adiciona a URL da imagem e o ID a cada Pokémon na lista
+        // Adiciona a URL da imagem e o id a cada pokemon na lista
         const enhancedResults = data.results.map(pokemon => {
           const id = pokemon.url.split('/').filter(Boolean).pop();
           return {

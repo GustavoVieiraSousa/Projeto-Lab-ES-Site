@@ -16,12 +16,12 @@ document.addEventListener('DOMContentLoaded', async () => {
      
       pokemonDetails.innerHTML = '<div class="loading">Carregando detalhes do Pokémon...</div>';
       
-      // Buscar dados do Pokémon e da espécie
+      // Buscar dados do pokemon e da espécie
 
       const pokemon = await pokeApi.getPokemon(id);
       const species = await pokeApi.getPokemonSpecies(id);
   
-      // Atualizar o título da página
+      // Atualizar o titulo da página
 
       document.title = `${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} - PokéParty`;
       
