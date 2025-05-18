@@ -43,7 +43,6 @@ try{
     }
 }
 catch(PDOException $e){
-    $conn->rollBack();
     error_log('Erro ao entrar na sala: ' . $e->getMessage());
 }
 
@@ -54,7 +53,7 @@ try{
     $playerCheck = $playerCheckStmt->fetch(PDO::FETCH_ASSOC);
     if(!$playerCheck == null){
         $_SESSION['message'] = 'Você já está em uma sala!';
-        header("Location: ../View/roomList.php");
+        header("Location: ../View/lobby.php");
         exit();
     }
 }catch(PDOException $e){

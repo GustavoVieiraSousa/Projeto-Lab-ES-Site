@@ -22,8 +22,9 @@ try{
     $roomCheckStmt->execute([$plaCode, $plaCode]);
     $roomCheck = $roomCheckStmt->fetch(PDO::FETCH_ASSOC);
     if(!$roomCheck == null){
+        $_SESSION['roomCode'] = $roomCheck['rooCode'];
         $_SESSION['message'] = 'Você já está em uma sala!';
-        header("Location: ../View/roomList.php");
+        header("Location: ../View/lobby.php");
         exit();
     }
 }catch(PDOException $e){

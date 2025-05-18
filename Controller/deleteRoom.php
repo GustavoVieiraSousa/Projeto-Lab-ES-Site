@@ -76,6 +76,9 @@ try{
         $deleteRoom->execute([$plaCode]);
     }
     else{
+        $stmt = $conn->prepare("UPDATE room SET rooIsReadyPlayer2 = NULL WHERE rooPlaCode2 = ?");
+        $stmt->execute([$plaCode]);
+
         $stmt = $conn->prepare("UPDATE room SET rooPlaCode2 = NULL WHERE rooPlaCode2 = ?");
         $stmt->execute([$plaCode]);
     }
@@ -90,9 +93,7 @@ catch(PDOException $e){
 
 //apagar battle quando player sair
 
-
-
-
+unset($_SESSION['battle']['ready']);
 unset($_SESSION['roomCode']);
 header("Location: ../View/roomList.php");
 exit();

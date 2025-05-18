@@ -99,7 +99,7 @@
         </div>
     </content>
 
-    <!-- Atualiza a Lista a cada 500ms -->
+    <!-- Atualiza a Lista a cada 1000ms -->
     <script src="../Model/js/room/roomListUpdate.js"></script>
 </body>
 </html>

@@ -76,6 +76,7 @@ if($existsRoom['rooCode'] == $battleCheck['batRooCode']){
     if($ownerRoom['rooPlaCode1'] == $plaCode){
         if($teamId != $battleCheck['batTeaCode1'] && $battleCheck['batTeaCode1'] != 0){
             $_SESSION['message'] = 'Detectado alteração no time. | Safadenho >:( |';
+            $_SESSION['battle']['teamId'] = $battleCheck['batTeaCode1'];
             header("Location: ../View/battle.php?roomCode=$roomCode&teamId=$battleCheck[batTeaCode1]");
             exit();
         }
@@ -83,6 +84,7 @@ if($existsRoom['rooCode'] == $battleCheck['batRooCode']){
     if($ownerRoom['rooPlaCode2'] == $plaCode){
         if($teamId != $battleCheck['batTeaCode2'] && $battleCheck['batTeaCode2'] != 0){
             $_SESSION['message'] = 'Detectado alteração no time. | Safadenho >:( |';
+            $_SESSION['battle']['teamId'] = $battleCheck['batTeaCode2'];
             header("Location: ../View/battle.php?roomCode=$roomCode&teamId=$battleCheck[batTeaCode2]");
             exit();
         }
@@ -94,12 +96,16 @@ if($existsRoom['rooCode'] == $battleCheck['batRooCode']){
 if ($plaCode == $ownerRoom['rooPlaCode1']) {
     if($battleCheck != null){
         $_SESSION['message'] = 'Batalha já criada.';
+        $_SESSION['battle']['teamId'] = $teamId;
         header("Location: ../View/battle.php?roomCode=$roomCode&teamId=$teamId");
         exit();
     }
     try{
         $addTeamBattle = $conn->prepare("INSERT INTO battle (batRooCode, batTeaCode1) VALUES (?, ?)");
         $addTeamBattle->execute([$roomCode, $teamId]);
+        $updateStatusReady = $conn->prepare("UPDATE room SET rooIsReadyPlayer1 = TRUE WHERE rooCode = ?");
+        $updateStatusReady->execute([$roomCode]);
+        $_SESSION['battle']['teamId'] = $teamId;
         header("Location: ../View/battle.php?roomCode=$roomCode&teamId=$teamId");
         exit();
     }
@@ -111,13 +117,16 @@ if ($plaCode == $ownerRoom['rooPlaCode1']) {
 else if($plaCode == $ownerRoom['rooPlaCode2']){
     if($battleCheck == null){
         $_SESSION['message'] = 'Espere o anfitrião iniciar a batalha.';
-        header("Location: ../View/roomList.php");
+        header("Location: ../View/lobby.php");
         exit();
     }
 
     try{
         $addTeamBattle = $conn->prepare("UPDATE battle SET batTeaCode2 = ? WHERE batRooCode = ?");
         $addTeamBattle->execute([$teamId, $roomCode]);
+        $updateStatusReady = $conn->prepare("UPDATE room SET rooIsReadyPlayer2 = TRUE WHERE rooCode = ?");
+        $updateStatusReady->execute([$roomCode]);
+        $_SESSION['battle']['teamId'] = $teamId;
         header("Location: ../View/battle.php?roomCode=$roomCode&teamId=$teamId");
         exit();
     }

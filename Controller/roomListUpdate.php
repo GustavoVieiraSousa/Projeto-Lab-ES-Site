@@ -24,7 +24,6 @@ try{
     }
 }
 catch(PDOException $e){
-    $conn->rollBack();
     error_log('Erro ao criar Sala: ' . $e->getMessage());
 }
 
