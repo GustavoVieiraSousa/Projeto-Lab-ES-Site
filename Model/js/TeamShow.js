@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
                 .then(data => {
                     console.log(`Dados do Pokémon ${pokeId}:`, data);
-                    // Faça algo com os dados do Pokémon
                 })
                 .catch(error => {
                     console.error('Erro ao carregar os dados do Pokémon:', error);

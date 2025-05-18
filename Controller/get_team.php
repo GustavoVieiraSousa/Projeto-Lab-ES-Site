@@ -29,14 +29,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             for ($i = 1; $i <= 6; $i++) {
                 $pokCode = $team["teaPokCode{$i}"];
                 if ($pokCode) {
-                    $pokemonSql = "SELECT pokCode, pokId, pokAtk1, pokAtk2, pokAtk3, pokAtk4 FROM pokemon WHERE pokCode = :pokCode";
+                    $pokemonSql = "SELECT * FROM pokemon WHERE pokCode = :pokCode";
                     $pokemonStmt = $conn->prepare($pokemonSql);
                     $pokemonStmt->bindParam(':pokCode', $pokCode, PDO::PARAM_INT);
                     $pokemonStmt->execute();
                     $pokemon = $pokemonStmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($pokemon) {
-                        $pokemons[] = $pokemon; 
+                        $formatedPokemon = [
+                            'pokId' => $pokemon['pokId'],
+                            'pokAtk1' => $pokemon['pokAtk1'],
+                            'pokAtk2' => $pokemon['pokAtk2'],
+                            'pokAtk3' => $pokemon['pokAtk3'],
+                            'pokAtk4' => $pokemon['pokAtk4'],
+                            'stats' => [
+                                'pokBasicAttack' => $pokemon['pokBasicAttack'],
+                                'pokSpecialAttack' => $pokemon['pokSpecialAttack'],
+                                'pokBasicDefense' => $pokemon['pokBasicDefense'],
+                                'pokSpecialDefense' => $pokemon['pokSpecialDefense'],
+                                'pokHp' => $pokemon['pokHp'],
+                                'pokSpeed' => $pokemon['pokSpeed'],
+                            ],                            
+                        ];
+                        $pokemons[] = $formatedPokemon; 
                     }
                 } else {
                     $pokemons[] = null; 

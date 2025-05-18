@@ -4,26 +4,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamNameInput = document.getElementById('team-name-input');
     const pokemonSlots = document.querySelectorAll('.team-pokemon-slot');
     const modalTitle = modal.querySelector('h2.cnt-h2');
-    const pokemonPopup = document.getElementById('pokemon-popup'); // Popup de seleção de Pokémon
-    const pokemonList = document.getElementById('pokemon-list'); // Lista de Pokémon no popup
+    const pokemonPopup = document.getElementById('pokemon-popup');
+    const pokemonList = document.getElementById('pokemon-list'); 
     let editingTeamId = null;
-    let activeSlot = null; // Slot ativo para substituição
+    let activeSlot = null; 
 
-    // Função para limpar os slots e redefinir o formulário
+    // Função limpar pokemons
     function resetForm() {
-        teamNameInput.value = ''; // Limpa o nome do time
+        teamNameInput.value = ''; 
         pokemonSlots.forEach(slot => {
-            slot.dataset.pokemonId = null; // Remove o ID do Pokémon do slot
-            slot.querySelector('.team-select-pokemon').style.display = 'block'; // Mostra o botão "Selecionar Pokémon"
+            slot.dataset.pokemonId = null; 
+            slot.querySelector('.team-select-pokemon').style.display = 'block'; 
             const selectedPokemonDiv = slot.querySelector('.team-selected-pokemon');
-            selectedPokemonDiv.innerHTML = ''; // Limpa o conteúdo do slot
+            selectedPokemonDiv.innerHTML = ''; 
             slot.querySelectorAll('.team-select-attack').forEach(button => {
-                button.textContent = 'Selecionar Ataque'; // Redefine o texto do botão de ataque
-                button.dataset.attackId = null; // Remove o ID do ataque
-                button.className = 'team-select-attack'; // Remove classes de tipo
+                button.textContent = 'Selecionar Ataque'; 
+                button.dataset.attackId = null; 
+                button.className = 'team-select-attack'; 
             });
         });
-        createTeamButton.disabled = true; // Desabilita o botão "Criar Time"
+        createTeamButton.disabled = true; 
     }
 
     // Função para abrir o modal de edição
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', async (e) => {
             editingTeamId = e.target.dataset.teamId;
             modal.classList.remove('hidden');
-            createTeamButton.textContent = 'Salvar Time'; // Altera o texto do botão
-            createTeamButton.dataset.mode = 'edit'; // Define o modo como "edit"
-            modalTitle.textContent = 'Atualizar Time'; // Altera o título do modal
+            createTeamButton.textContent = 'Salvar Time'; 
+            createTeamButton.dataset.mode = 'edit';
+            modalTitle.textContent = 'Atualizar Time'; 
 
             try {
                 const response = await fetch(`../Controller/get_team.php?teamId=${editingTeamId}`);
@@ -43,13 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Preenche o nome do time
                     teamNameInput.value = teamData.team.teaName;
 
-                    // Preenche os slots de Pokémon com os nomes, imagens, tipos e ataques
+                    // Preenche os slots 
                     teamData.team.pokemons.forEach(async (pokemon, index) => {
                         const slot = pokemonSlots[index];
                         if (pokemon) {
                             const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.pokId}.png`;
 
-                            // Busca o nome e os tipos do Pokémon usando a PokéAPI
+                            // Busca o nome e os tipos
                             const pokeApiResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.pokId}`);
                             const pokeApiData = await pokeApiResponse.json();
                             const pokemonName = pokeApiData.name.charAt(0).toUpperCase() + pokeApiData.name.slice(1);
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 .map(type => `<span class="type ${type.type.name}">${type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}</span>`)
                                 .join(' ');
 
-                            // Formata o ID da Pokédex no formato #000
+                            // Formata o ID 
                             const formattedId = `#${pokemon.pokId.toString().padStart(3, '0')}`;
 
                             slot.dataset.pokemonId = pokemon.pokId;
@@ -70,15 +70,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                             `;
 
-                            // Adiciona evento de clique à imagem para abrir o popup
+                            slot.pokemonData = {
+                                stats: {
+                                hp: pokeApiData.stats[0].base_stat,
+                                attack: pokeApiData.stats[1].base_stat,
+                                defense: pokeApiData.stats[2].base_stat,
+                                specialAttack: pokeApiData.stats[3].base_stat,
+                                specialDefense: pokeApiData.stats[4].base_stat,
+                                speed: pokeApiData.stats[5].base_stat
+                                }   
+                            };
+
+                            // Adiciona evento de clique na imagem para abrir o popup
                             const pokemonImage = slot.querySelector('.pokemon-image');
                             pokemonImage.addEventListener('click', () => {
-                                activeSlot = slot; // Define o slot ativo
-                                pokemonPopup.classList.remove('hidden'); // Exibe o popup
-                                loadPokemonList(); // Carrega a lista de Pokémon no popup
+                                activeSlot = slot; 
+                                pokemonPopup.classList.remove('hidden'); 
+                                loadPokemonList(); 
                             });
 
-                            // Busca os nomes e tipos dos ataques usando a PokéAPI
+                            // Busca os nomes e tipos dos ataques usando a API
                             const attackIds = [pokemon.pokAtk1, pokemon.pokAtk2, pokemon.pokAtk3, pokemon.pokAtk4];
                             const attackDetails = await Promise.all(
                                 attackIds.map(async (attackId) => {
@@ -122,16 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             attackList.innerHTML = '<div class="loading">Carregando Ataques...</div>';
     
-            // Busca os ataques do Pokémon
             const attacks = await pokeApi.getPokemonMoves(pokemonId);
-            attackList.innerHTML = ''; // Limpa o estado de carregamento
+            attackList.innerHTML = ''; 
     
-            // Obtém os ataques já selecionados para este Pokémon
+            // Obtém os ataques já selecionados para este pokemon
             const selectedAttacks = Array.from(document.querySelectorAll('.team-select-attack'))
                 .map(button => button.dataset.attackId)
                 .filter(attackId => attackId !== null);
     
-            // Filtra os ataques disponíveis, removendo os já selecionados
+            // Filtra os ataques disponíveis
             const availableAttacks = attacks.filter(attack => !selectedAttacks.includes(attack.id));
     
             availableAttacks.forEach(attack => {
@@ -140,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 attackItem.textContent = attack.name;
                 attackItem.dataset.attackId = attack.id;
     
-                // Adiciona evento de clique para selecionar o ataque
                 attackItem.addEventListener('click', () => {
                     selectAttack(attack.name, attack.id);
                 });
@@ -157,12 +166,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Função para carregar a lista de Pokémon no popup
+    // Função para carregar a lista de pokemon no popup
     async function loadPokemonList() {
         try {
             pokemonList.innerHTML = '<div class="loading">Carregando Pokémon...</div>';
             const data = await pokeApi.getPokemonList();
-            pokemonList.innerHTML = ''; // Limpa o estado de carregamento
+            pokemonList.innerHTML = ''; 
 
             for (const pokemon of data.results) {
                 const pokemonData = await pokeApi.getPokemon(pokemon.id);
@@ -193,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Função para selecionar um Pokémon no popup
+    // Função para selecionar um pomemon no popup
     function selectPokemon(pokemonId, pokemonName, pokemonImage) {
         if (activeSlot) {
             pokeApi.getPokemon(pokemonId).then(pokemonData => {
@@ -210,16 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 activeSlot.dataset.pokemonId = pokemonId; 
+                activeSlot.pokemonData = pokemonData;
 
-                // Reseta os ataques para "Selecionar Ataque"
+                // Reseta os ataques 
                 const slot = activeSlot.closest('.team-pokemon-slot');
                 slot.querySelectorAll('.team-select-attack').forEach(button => {
                     button.textContent = 'Selecionar Ataque';
                     button.dataset.attackId = null;
-                    button.className = 'team-select-attack'; // Remove classes de tipo
+                    button.className = 'team-select-attack'; 
                 });
 
-                // Reatribui o evento de clique à nova imagem
+                // Reatribui o evento de clique para a imagem
                 const pokemonImageElement = activeSlot.querySelector('.pokemon-image');
                 pokemonImageElement.addEventListener('click', () => {
                     activeSlot = activeSlot; 
@@ -232,55 +242,85 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Salvar alterações no time
-    createTeamButton.addEventListener('click', async (e) => {
-        if (createTeamButton.dataset.mode === 'edit') { 
-            e.preventDefault();
+   // Salvar alterações
+createTeamButton.addEventListener('click', async (e) => {
+    if (createTeamButton.dataset.mode === 'edit') { 
+        e.preventDefault();
 
-            const teamName = teamNameInput.value.trim();
-            const pokemons = [];
-            const attacks = [];
+        const teamName = teamNameInput.value.trim();
+        const pokemons = [];
+        const attacks = [];
 
-            pokemonSlots.forEach(slot => {
-                const pokemonId = slot.dataset.pokemonId;
-                if (pokemonId) {
-                    pokemons.push(pokemonId);
+        let formIsValid = true;
 
-                    const slotAttacks = [];
-                    slot.querySelectorAll('.team-select-attack').forEach(button => {
-                        const attackId = button.dataset.attackId;
-                        slotAttacks.push(attackId || null);
-                    });
+        pokemonSlots.forEach(slot => {
+            const pokemonId = slot.dataset.pokemonId;
+            const pokemonData = slot.pokemonData;
 
-                    attacks.push(slotAttacks);
-                }
-            });
-
-            if (pokemons.length !== 6 || attacks.some(a => a.length !== 4)) {
-                alert('Você deve selecionar exatamente 6 Pokémon e 4 ataques para cada um.');
+            if (!pokemonId || !pokemonData || !pokemonData.stats) {
+                formIsValid = false;
+                console.warn('Slot inválido ou incompleto:', slot);
                 return;
             }
 
-            try {
-                const response = await fetch('../Controller/edit_team.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ teamId: editingTeamId, teamName, pokemons, attacks })
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    alert('Time atualizado com sucesso!');
-                    location.reload();
+            function calcStat(base, iv = 31, ev = 252, level = 100, isHP = false) {
+                if (isHP) {
+                    return Math.floor(((base * 2 + iv + Math.floor(ev / 4)) * level) / 100) + level + 10;
                 } else {
-                    alert(result.error || 'Erro ao atualizar o time.');
+                    return Math.floor(((base * 2 + iv + Math.floor(ev / 4)) * level) / 100) + 5;
                 }
-            } catch (error) {
-                console.error('Erro ao salvar o time:', error);
-                alert('Erro ao salvar o time. Tente novamente.');
             }
+
+            pokemons.push({
+                pokId: pokemonId,
+                pokBasicAttack: calcStat(pokemonData.stats.attack, 31, 252, 100),
+                pokSpecialAttack: calcStat(pokemonData.stats.specialAttack, 31, 252, 100),
+                pokBasicDefense: calcStat(pokemonData.stats.defense, 31, 252, 100),
+                pokSpecialDefense: calcStat(pokemonData.stats.specialDefense, 31, 252, 100),
+                pokHp: calcStat(pokemonData.stats.hp, 31, 252, 100, true),
+                pokSpeed: calcStat(pokemonData.stats.speed, 31, 252, 100)
+            });
+
+            const slotAttacks = [];
+            slot.querySelectorAll('.team-select-attack').forEach(button => {
+                const attackId = button.dataset.attackId;
+                slotAttacks.push(attackId || null);
+            });
+
+            attacks.push(slotAttacks);
+        });
+
+        if (!formIsValid) {
+            alert('Todos os Pokémon e seus dados devem estar completos antes de salvar.');
+            return;
         }
-    });
+
+        if (pokemons.length !== 6 || attacks.some(a => a.length !== 4)) {
+            alert('Você deve selecionar exatamente 6 Pokémon e 4 ataques para cada um.');
+            return;
+        }
+
+        try {
+            const response = await fetch('../Controller/edit_team.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ teamId: editingTeamId, teamName, pokemons, attacks })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Time atualizado com sucesso!');
+                location.reload();
+            } else {
+                alert(result.error || 'Erro ao atualizar o time.');
+            }
+        } catch (error) {
+            console.error('Erro ao salvar o time:', error);
+            alert('Erro ao salvar o time. Tente novamente.');
+        }
+    }
+});
+
 
     // Fecha o popup ao clicar no botão de fechar
     document.querySelectorAll('.close-popup').forEach(button => {
