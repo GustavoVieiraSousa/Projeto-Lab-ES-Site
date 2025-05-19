@@ -181,7 +181,9 @@
               <p>It's not very effective...</p>
             </div>
           </div>
-          
+
+          <?php var_dump($_SESSION['battle']);
+          var_dump($_SESSION['plaCode']); ?>
           <div class="battle-controls">
             <form method="POST" action="../Controller/resignBattle.php">
                 <button type="resign" name="resign" class="battle-option-btn">Desistir</button>
@@ -191,7 +193,7 @@
         </div>
       </main>
     </div>
-    <screen class="wait-popup">Waiting for the second player...</screen>
+    <screen class="wait-popup">Waiting for the second player...</screen> <!-- Tela que barra as ações do player -->
     </body>
 </html>
 
@@ -200,6 +202,8 @@
     //Tratando um errinho chato que sempre aparece o Wait toda vez q a pagina é carregada
     echo "<script src='../Model/js/battle/isReady.js'></script>";
     if($_SESSION['battle']['ready'] == true){
+        require_once("../Controller/getPlayers.php");
+        
         echo "<script> document.querySelector('.wait-popup').classList.add('hidden'); </script>";
         $_SESSION['battle']['ready'] == false;
     }

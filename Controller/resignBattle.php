@@ -55,6 +55,29 @@
         $_SESSION['message'] = 'Erro ao "Desistir": ' . $e->getMessage();
     }
 
+    //Unset all pokemons OnField state (set the state to NULL)
+    try{
+        $unsetOnFieldStmt = $conn->prepare(
+            "UPDATE pokemon SET pokIsOnField = NULL WHERE pokCode IN (
+                SELECT teaPokCode1 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode2 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode3 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode4 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode5 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode6 FROM team WHERE teaPlaCode = :plaCode
+            );"
+        );
+        $unsetOnFieldStmt->execute([':plaCode' => $plaCode]);
+    }
+    catch(PDOException $e){
+        $_SESSION['message'] = 'Erro Unset IsOnField: ' . $e->getMessage();
+    }
+    unset($_SESSION['battle']);
     header("Location:../View/lobby.php");
     exit();
 ?>

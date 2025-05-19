@@ -91,6 +91,13 @@ if($existsRoom['rooCode'] == $battleCheck['batRooCode']){
     }
 }
 
+try{
+    $setPokemonOnFieldStmt = $conn->prepare("UPDATE pokemon SET pokIsOnField = true WHERE pokCode = (SELECT teaPokCode1 FROM team WHERE teaCode = ?)");
+    $setPokemonOnFieldStmt->execute([$teamId]);
+}
+catch(PDOException $e){
+    $_SESSION['message'] = "Erro ao setar OnField Pokemon: " . $e;
+}
 
 // Cria a Batalha na tabela Battle (APENAS PARA O USUÁRIO QUE CRIOU A SALA)
 if ($plaCode == $ownerRoom['rooPlaCode1']) {
