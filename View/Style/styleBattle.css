@@ -1,15 +1,9 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
   --pokeblue: #1EAEDB;
   --pokedark: #222222;
   --pokedark-light: #333333;
   --pokedark-dark: #111111;
-
+  
   /* Tipos de Pokémon */
   --normal: #A8A878;
   --fire: #F08030;
@@ -29,57 +23,104 @@
   --dragon: #7038F8;
   --steel: #B8B8D0;
   --fairy: #F0B6BC;
+
+  /* HP Colors */
+  --hp-high: #43CC71;
+  --hp-medium: #F8D030;
+  --hp-low: #F34444;
+  
+  /* Pokedex Colors */
+  --pokedex-red: #E61515;
+  --pokedex-red-dark: #8B0000;
+  --pokedex-blue: #0075BE;
+  --pokedex-blue-dark: #00437A;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--pokedark-light);
+  background-color: var(--pokedark-dark);
   color: white;
   font-family: Arial, sans-serif;
   min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--pokedark);
+  border-bottom: 1px solid rgba(30, 174, 219, 0.2);
+  padding: 1rem 0;
+  z-index: 100;
+}
+
+.navbar .container {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  display: flex;
-}
-
-.container{
-  border-color: red;
-  border-style: solid;
-  display: flex;
   justify-content: space-between;
-  height: 100vh;
-  width: 100vw;
-  position: relative;
 }
 
-.screen {
-    background-color: #cadc9f; /* Cor da tela do Gameboy */
-    border: 5px solid #0f380f;
-    border-radius: 10px;
-    width: 45%;
-    height: 35%;
-    top: 10%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.logo {
+  color: var(--pokeblue);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-.screen h1 {
-    font-size: 1.5rem;
-    margin: 0;
+.nav-links {
+  display: flex;
+  gap: 2rem;
 }
 
-.screen img {
-    width: 20%;
-    height: auto;
-    margin: 10px 0;
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
 }
 
-.screen p {
-    font-size: 1rem;
-    margin: 5px 0;
+.nav-links a:hover {
+  color: var(--pokeblue);
+}
+
+.nav-links a.active {
+  background-color: var(--pokeblue);
+  color: white;
+}
+
+.search-bar input {
+  background-color: var(--pokedark-light);
+  border: 1px solid rgba(30, 174, 219, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  min-width: 200px;
+}
+
+/* Main Content */
+main {
+  margin-top: 5rem;
+  padding: 2rem 0;
+}
+
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: white;
 }
 
 .wait-popup {
@@ -98,42 +139,381 @@ body {
   display: flex;
 }
 
-/*
-  .player1{
-    border-color: blue;
-    border-style: solid;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left:0%;
-    height: 100%;
-    width: 49vw;
-  }
+.battle-scene {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
 
-  .player2{
-    border-color: yellow;
-    border-style: solid;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    right:0%;
-    height: 100%;
-    width: 49vw;
-  }
+.pokedex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+}
 
-  .pokemon-screen-player1{
-    border-color: purple;
-    border-style: solid;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top:5vh;
-    height: 40vh;
-    width: 30vw;
-  }*/
+.pokedex {
+  width: 100%;
+  height: 650px;
+  max-width: 380px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.pokedex:hover {
+  transform: translateY(-5px);
+}
+
+.pokedex.player {
+  background-color: var(--pokedex-red);
+  border: 2px solid var(--pokedex-red-dark);
+}
+
+.pokedex.enemy {
+  background-color: var(--pokedex-blue);
+  border: 2px solid var(--pokedex-blue-dark);
+}
+
+.pokedex-top {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pokedex-lights {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.main-light {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.small-lights {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.small-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+.pokedex.player .small-light:nth-child(1) {
+  background-color: #F34444;
+}
+
+.pokedex.player .small-light:nth-child(2) {
+  background-color: #F8D030;
+}
+
+.pokedex.player .small-light:nth-child(3) {
+  background-color: #43CC71;
+}
+
+.pokedex.enemy .small-light:nth-child(1) {
+  background-color: #43CC71;
+}
+
+.pokedex.enemy .small-light:nth-child(2) {
+  background-color: #F8D030;
+}
+
+.pokedex.enemy .small-light:nth-child(3) {
+  background-color: #F34444;
+}
+
+.pokedex-screen-container {
+  padding: 0 1rem 1rem;
+}
+
+.pokedex-screen {
+  background-color: #98CB98;
+  border: 3px solid #111;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+}
+
+.pokemon-sprite {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.pokemon-sprite img {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+  transform-origin: bottom center;
+  animation: float 3s infinite ease-in-out;
+}
+
+.pokemon-info {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.pokemon-name {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.pokemon-level {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.hp-container {
+  margin-top: 0.5rem;
+}
+
+.hp-label {
+  font-size: 0.8rem;
+}
+
+.hp-bar {
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.25rem 0;
+}
+
+.hp-fill {
+  height: 100%;
+  background-color: var(--hp-high);
+  transition: width 0.5s ease;
+}
+
+.hp-values {
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.pokedex-bottom {
+  flex: 1; 
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pokedex.enemy .pokedex-bottom {
+  justify-content: flex-start; 
+}
+
+
+.pokedex.player .pokedex-bottom {
+  justify-content: space-between; 
+}
+
+.battle-status-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18rem;
+}
+
+.battle-status {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  background-color: var(--pokedark);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid var(--pokeblue);
+  box-shadow: 0 0 15px var(--pokeblue);
+}
+
+.team-pokeballs {
+  margin-bottom: 1rem;
+}
+
+.pokeballs-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.pokeball {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #f85858 0%, #f85858 50%, #fff 50%, #fff 100%);
+  position: relative;
+  border: 2px solid #333;
+  opacity: 0.6;
+}
+
+.pokeball::before {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #333;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pokeball.active {
+  opacity: 1;
+}
+
+.moves-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.move-btn {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.move-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.battle-log {
+  background-color: var(--pokedark);
+  border: 1px solid rgba(30, 174, 219, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.log-header {
+  background-color: var(--pokedark-light);
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid rgba(30, 174, 219, 0.2);
+}
+
+.log-content {
+  padding: 1rem;
+  height: 100px;
+  overflow-y: auto;
+}
+
+.log-content p {
+  margin-bottom: 0.5rem;
+}
+
+.battle-controls {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+  align-self:center;
+}
+
+.battle-option-btn {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  box-align:center;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--pokedark);
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(30, 174, 219, 0.2);
+}
+
+.battle-option-btn:hover {
+  background-color: var(--pokeblue);
+}
+
+/* Move type colors - keep these from existing CSS */
+.move-btn.normal {
+  border-left: 4px solid var(--normal);
+}
+
+.move-btn.fire {
+  border-left: 4px solid var(--fire);
+}
+
+.move-btn.water {
+  border-left: 4px solid var(--water);
+}
+
+.move-btn.grass {
+  border-left: 4px solid var(--grass);
+}
+
+.move-btn.electric {
+  border-left: 4px solid var(--electric);
+}
+
+.move-btn.ice {
+  border-left: 4px solid var(--ice);
+}
+
+.move-btn.fighting {
+  border-left: 4px solid var(--fighting);
+}
+
+.surrender-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.surrender-btn {
+  background-color: var(--pokedex-red-dark);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.surrender-btn:hover {
+  background-color: #c20000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.place-holder {
+    min-width: 200px;
+    visibility: hidden;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+
+  }
