@@ -46,8 +46,6 @@
                 <?php showPokemon(); ?>
             </div>
 
-            
-
         </main>
 
         <form method="POST" action="../Controller/resignBattle.php">

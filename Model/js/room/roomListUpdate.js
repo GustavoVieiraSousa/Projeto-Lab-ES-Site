@@ -41,4 +41,3 @@ function fetchRoomList() {
 }
 
 setInterval(fetchRoomList, 1000);
-fetchRoomList();

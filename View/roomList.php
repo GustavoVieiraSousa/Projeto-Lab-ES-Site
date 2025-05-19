@@ -12,7 +12,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             fetchRoomList();
         });
-</script>
+    </script>
     <?php
         session_start();
 
