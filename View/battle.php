@@ -29,8 +29,10 @@
             }
 
             // VERIFICA SE O PLAYER É VITORIOSO OU NAO
-            if(isset($_SESSION['battle']['win'])){
-                // Ação da tela de vitoria ou derrota;
+            if(isset($_SESSION['end']) == 1){
+                unset($_SESSION['end']);
+                header("Location: lobby\zx.php");
+                exit();
             }
         ?>
 
