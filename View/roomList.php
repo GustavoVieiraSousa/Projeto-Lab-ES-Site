@@ -31,12 +31,14 @@
             exit();
         }
 
-        $roomCode = (isset($_SESSION['roomCode'])) ? $_SESSION['roomCode'] : "Nenhuma Sala";
+        $roomCode = (isset($_SESSION['roomCode'])) ? $_SESSION['roomCode'] : "Nenhuma Sala encontrada";
         $plaCode = (isset($_SESSION['plaCode'])) ? $_SESSION['plaCode'] : "Sem Player 1";
         $plaCode2 = (isset($_SESSION['plaCode2'])) ? $_SESSION['plaCode2'] : "Sem Player 2";
 
         $roomList = (isset($_SESSION['roomList'])) ? $_SESSION['roomList'] : null;
         $roomListCount = (isset($_SESSION['roomList'])) ? count($roomList) : 0;
+
+        
     ?>
 
     <div id="app">
@@ -68,6 +70,8 @@
                 <input type="text" class="search-bar" name="roomCode" placeholder="ID da Sala" required></input>
                 <input type="submit" class="search-bar-button" name="editRoom" value="Entrar"/>
             </form>
+
+            <?php var_dump($_SESSION['roomCode']); ?>
 
             <updatelist>
                 <form method="POST" action="../Controller/addRoom.php">

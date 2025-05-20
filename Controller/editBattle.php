@@ -144,7 +144,7 @@ else if($plaCode == $ownerRoom['rooPlaCode2']){
 }
 else{
     $_SESSION['message'] = 'Como você conseguiu chegar neste erro???';
-    header("Location: ../View/roomList.php");
+    header("Location: ../View/lobby.php");
     exit();
 }
 ?>

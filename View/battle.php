@@ -203,7 +203,7 @@
     echo "<script src='../Model/js/battle/isReady.js'></script>";
     if($_SESSION['battle']['ready'] == true){
         require_once("../Controller/getPlayers.php");
-        
+        // echo "<script src='../Model/js/battle/updateBattle.js'></script>";
         echo "<script> document.querySelector('.wait-popup').classList.add('hidden'); </script>";
         $_SESSION['battle']['ready'] == false;
     }
