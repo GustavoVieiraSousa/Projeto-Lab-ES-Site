@@ -1,11 +1,13 @@
 <?php
+    header('Content-Type: application/json');
     require_once("connection.php");
     session_start();
 
     if(isset($_SESSION['end'])){
         $_SESSION['message'] = "Batalha finalizada.";
-        header("lobby.php");
-        exit();
+        // header("lobby.php");
+        echo json_encode(['result' => true]);
+exit();
     }
 
     $plaCode = $_SESSION['plaCode'];
@@ -13,18 +15,27 @@
     $player2 = $_SESSION['battle']['player2'];
     $roomCode = $_SESSION['roomCode'];
     $teamId = $_SESSION['battle']['teamId'];
+    // $_SESSION['battle']['round'] = 0;
 
     //Pega todas as informacoes da tabela Battle
     function getBattle(){
+        global $conn, $player1, $player2;
         require_once("connection.php");
+        $round = $_SESSION['battle']['round'];
+        $roomCode = $_SESSION['roomCode'];
         try{
             $getBattleStmt = $conn->prepare("SELECT * FROM battle WHERE batRooCode = ?");
             $getBattleStmt->execute([$roomCode]);
             $getBattle = $getBattleStmt->fetch(PDO::FETCH_ASSOC);
-        }
+
+            // $setRound = $conn->prepare("UPDATE battle SET batRound = ? WHERE batRooCode = ?");
+            // $setRound->execute([$round, $roomCode]);
+            // $_SESSION['battle']['round'] = $round + 1;
+        }   
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao pegar as informações da Battle: " . $e;
-            exit();
+            echo json_encode(['result' => true]);
+exit();
         }
 
         return $getBattle;
@@ -37,12 +48,13 @@
     }
 
     function getPokemonPlayer1(){
+        global $conn, $player1;
         require_once("connection.php");
         //Pegar as informações do Pokemon OnField do Player 1 e Player 2
         try{
             //Stats do Pokemon do Player 1
             $getStatsPlayer1Stmt = $conn->prepare(
-            "SELECT * FROM pokemon WHERE pokIsOnField = true AND pokCode IN 
+            "SELECT * FROM pokemon WHERE pokIsOnField = 1 AND pokCode IN 
                 (SELECT teaPokCode1 FROM team WHERE teaPlaCode = :plaCode
                 UNION ALL
                 SELECT teaPokCode2 FROM team WHERE teaPlaCode = :plaCode
@@ -63,16 +75,18 @@
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Buscar Player1: " . $e;
-            exit();
+            echo json_encode(['result' => true]);
+exit();
         }
     }
     
     function getPokemonPlayer2(){
+        global $conn, $player2;
         require_once("connection.php");
         try{
         //Stats do Pokemon do Player 2
         $getStatsPlayer2Stmt = $conn->prepare(
-            "SELECT * FROM pokemon WHERE pokIsOnField = true AND pokCode IN 
+            "SELECT * FROM pokemon WHERE pokIsOnField = 1 AND pokCode IN 
                 (SELECT teaPokCode1 FROM team WHERE teaPlaCode = :plaCode
                 UNION ALL
                 SELECT teaPokCode2 FROM team WHERE teaPlaCode = :plaCode
@@ -93,7 +107,8 @@
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Buscar Player2: " . $e;
-            exit();
+            echo json_encode(['result' => true]);
+exit();
         }
     }
     
@@ -101,30 +116,33 @@
     $getStatsPlayer2 = getPokemonPlayer2();
 
     //Armazenar os dados coletados do Pokemon OnField do Player1
-    $pokemonIdPlayer1DB = $getStatsPlayer1['pokId'];
+    $pokemonIdPlayer1DB = $getStatsPlayer1['pokCode'];
     $basicAttackPlayer1DB = $getStatsPlayer1['pokBasicAttack'];
     $basicDefensePlayer1DB = $getStatsPlayer1['pokBasicDefense'];
     $speedPlayer1DB = $getStatsPlayer1['pokSpeed'];
     $hpPlayer1DB = $getStatsPlayer1['pokHp'];
 
     //Armazenar os dados coletados do Pokemon OnField do Player1
-    $pokemonIdPlayer2DB = $getStatsPlayer2['pokId'];
+    $pokemonIdPlayer2DB = $getStatsPlayer2['pokCode'];
     $basicAttackPlayer2DB = $getStatsPlayer2['pokBasicAttack'];
     $basicDefensePlayer2DB = $getStatsPlayer2['pokBasicDefense'];
     $speedPlayer2DB = $getStatsPlayer2['pokSpeed'];
     $hpPlayer2DB = $getStatsPlayer2['pokHp'];
 
     //Separando o HP para nao precisar atualizar o hp no Banco de Dados
-    if(!isset($_SESSION['battle']['hpPlayer1']) && $_SESSION['battle']['hpPlayer2']){
-        $_SESSION['battle']['hpPlayer1'] = $hpPlayer1 = $hpPlayer1DB;
-        $_SESSION['battle']['hpPlayer2'] = $hpPlayer2 = $hpPlayer2DB;
+    if (!isset($_SESSION['battle']['hpPlayer1'])) {
+        $_SESSION['battle']['hpPlayer1'] = $hpPlayer1DB;
     }
-    else{
-        $hpPlayer1 = $hpPlayer1DB;
-        $hpPlayer2 = $hpPlayer2DB;
+    if (!isset($_SESSION['battle']['hpPlayer2'])) {
+        $_SESSION['battle']['hpPlayer2'] = $hpPlayer2DB;
     }
+    $hpPlayer1 = $hpPlayer1DB;
+    $hpPlayer2 = $hpPlayer2DB;
 
     //Verificar qual pokemon age primeiro
+    global $pokemonIdPlayer1DB, $basicAttackPlayer1DB, $basicDefensePlayer1DB, $speedPlayer1DB, $hpPlayer1DB;
+    global $pokemonIdPlayer2DB, $basicAttackPlayer2DB, $basicDefensePlayer2DB, $speedPlayer2DB, $hpPlayer2DB;
+
     if($speedPlayer1DB >= $speedPlayer2DB){
         $hpPlayer2 = attackPlayer1($hpPlayer2);
         updateHp($hpPlayer2, $pokemonIdPlayer2DB);
@@ -143,6 +161,7 @@
             }
         }
         
+        // echo json_encode(['result' => true]);
         return;
     }
 
@@ -153,46 +172,54 @@
         if(isDead($hpPlayer1)){
             setIsDeadPokemonPlayer1($pokemonIdPlayer1DB);
             changePokemon($pokemonIdPlayer1DB, $player1);
-            return;
         }
         else{
             $hpPlayer2 = attackPlayer1($hpPlayer2);
             updateHp($hpPlayer2, $pokemonIdPlayer2DB);
 
             if(isDead($hpPlayer2)){
+                
                 setIsDeadPokemonPlayer2($pokemonIdPlayer2DB);
                 changePokemon($pokemonIdPlayer2DB, $player2);
             }
         }
 
+        // echo json_encode(['result' => true]);
         return;
     }
 
     //Pega o dano do BD e faz o calculo para tirar a vida do pokemon Player1
     function attackPlayer1($hp){
+        global $conn, $player1, $player2;
         require_once("connection.php");
         $getBattle = getBattle();
 
         $damageDealtByPlayer1 = $getBattle['batDmgCounterPlayer1'];
 
-        $hp = $damageDealtByPlayer1 - $hp;
+        $hp = $hp - $damageDealtByPlayer1;
 
         return $hp;
     }
 
     //Pega o dano do BD e faz o calculo para tirar a vida do pokemon Player2
     function attackPlayer2($hp){
+        global $conn, $player1, $player2;
         require_once("connection.php");
         $getBattle = getBattle();
         $damageDealtByPlayer2 = $getBattle['batDmgCounterPlayer2'];
             
-        $hp = $damageDealtByPlayer2 - $hp;
+        $hp = $hp - $damageDealtByPlayer2 ;
 
         return $hp;
     }
 
 
-    function isDead($hpPlayer){ return $hpPlayer <= 0; }
+    function isDead($hpPlayer){ 
+        if($hpPlayer <= 0){
+            return TRUE;
+        }
+        return FALSE;
+     }
 
     //Troca o pokemon que morreu em batalha
     function changePokemon($pokemon, $player){
@@ -204,6 +231,8 @@
             endBattle();
         }
         else if($resultLastPokemon == $pokemon+1){
+            var_dump($_SESSION['battle']);
+            global $conn, $player1, $player2;
             require_once("connection.php");
             $unsetIsOnFieldStmt = $conn->prepare("UPDATE pokemon SET pokIsOnField = NULL WHERE pokCode = ?");
             $setIsOnFieldStmt = $conn->prepare("UPDATE pokemon SET pokIsOnField = 1 WHERE pokCode = ?");
@@ -213,14 +242,16 @@
         }
         else{
             $_SESSION['message'] = "GRANDE ERRO | isTheLastPokemon() retornou FALSE:";
-            exit();
+            echo json_encode(['result' => true]);
+exit();
         }
     }
 
     //Seta IsDead na tabela Pokemon pro Player1
     function setIsDeadPokemonPlayer1($pokemon){
-        require_once("connection.php");
+        global $conn;
         $hpPlayer1 = $_SESSION['battle']['hpPlayer1'];
+        require_once("connection.php");
 
         try{
             $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
@@ -228,15 +259,16 @@
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer1: ".$e;
-            exit();
+            echo json_encode(['result' => true]);
+exit();
         }
         
     }
 
     //Seta IsDead na tabela Pokemon pro Player2
     function setIsDeadPokemonPlayer2($pokemon){
+        global $conn, $hpPlayer2;
         require_once("connection.php");
-        $hpPlayer2 = $_SESSION['battle']['hpPlayer2'];
 
         try{
             $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
@@ -244,16 +276,18 @@
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPLayer2: ".$e;
-            exit();
+            echo json_encode(['result' => true]);
+exit();
         }
         
     }
 
     //Verifica se todos os pokemons da equipe estão mortos
     function isTheLastPokemon($player){
+        global $conn;
+        require_once("connection.php");
         try{
-            require_once("connection.php");
-            $lastPokemonStmt = $conn->prepare("SELECT pokId FROM pokemon WHERE pokIsDead = 1 AND pokCode IN 
+            $lastPokemonStmt = $conn->prepare("SELECT pokCode FROM pokemon WHERE pokIsDead = 1 AND pokCode IN 
                 (SELECT teaPokCode1 FROM team WHERE teaPlaCode = :plaCode
                 UNION ALL
                 SELECT teaPokCode2 FROM team WHERE teaPlaCode = :plaCode
@@ -267,33 +301,36 @@
                 SELECT teaPokCode6 FROM team WHERE teaPlaCode = :plaCode
             )");
             $lastPokemonStmt->execute([':plaCode' => $player]);
-            $lastPokemon = $lastPokemonStmt->fetch(PDO::FETCH_ASSOC);
+            $pokemonDead = [];
+            $lastPokemon = true;
+            $i = 0;
+            while ($lastPokemon) {
+                $pokemonDead[] = $lastPokemon;
+                $lastPokemon = $lastPokemonStmt->fetch(PDO::FETCH_ASSOC);
+                $i++;
+            }
+            var_dump($pokemonDead, $i);
+            //Caso nao retorne nada (teoricamente impossivel pois pokIsDead é setado para o primeiro pokemon antes de passar aqui)
+            if($lastPokemon == NULL){
+                return false;
+            }
+
+            if(sizeof($pokemonDead) == 7){
+                return true; //Todos os pokemons da equipe estao mortos
+            }
+            $pokemonNotDead = $pokemonDead[$i];
+            return $pokemonNotDead+1; //Volta o proximo pokemon do time
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao buscar pokemons IsDead: ".$e;
+            echo json_encode(['result' => true]);
             exit();
         }
-        
-        //Caso nao retorne nada (teoricamente impossivel pois pokIsDead é setado para o primeiro pokemon antes de passar aqui)
-        if($lastPokemon == NULL){
-            return false;
-        }
-
-        $i = 0;
-        while ($lastPokemon){
-            $pokemonDead[$i] = $lastPokemon;
-            $i++;
-        }
-        if(sizeof($pokemonDead) == 6){
-            return true; //Todos os pokemons da equipe estao mortos
-        }
-
-        $pokemonNotDead = $pokemonDead[$i-1];
-        return $pokemonNotDead+1; //Volta o proximo pokemon do time
     }
 
     //Atualiza o HP do Pokemon OnField no BD
     function updateHp($hp, $pokemon){
+        global $conn, $player1, $player2;
         require_once("connection.php");
         try{
             $updateHpStmt = $conn->prepare("UPDATE pokemon SET pokHp = ? WHERE pokCode = ?");
@@ -301,6 +338,7 @@
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Atualizar HP." . $e;
+            echo json_encode(['result' => true]);
             exit();
         }
         
@@ -308,6 +346,7 @@
 
     //Derrota para o player que nao possui mais pokemons na batalha
     function defeat($player){
+        global $conn, $player1, $player2;
         require_once("connection.php");
         $roomCode = $_SESSION['roomCode'];
 
@@ -338,7 +377,8 @@
                     }
                     catch(PDOException $e){
                         $_SESSION['message'] = "Erro ao setar Derrotado: ".$e;
-                        exit();
+                        echo json_encode(['result' => true]);
+exit();
                     }
 
                 } elseif ($teamDefeated['player_position'] === 'player_is_batTeaCode2') {
@@ -349,17 +389,20 @@
                     }
                     catch(PDOException $e){
                         $_SESSION['message'] = "Erro ao setar Derrotado: ".$e;
-                        exit();
+                        echo json_encode(['result' => true]);
+exit();
                     }
                 } else {
                     $_SESSION['message'] = "Erro ao setar teamDefeat: ".$e;
-                    exit();
+                    echo json_encode(['result' => true]);
+exit();
                 }
             }       
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao buscar Player: ".$e;
-            exit();
+            echo json_encode(['result' => true]);
+exit();
         }
     }
 
@@ -378,11 +421,10 @@
         }
         $_SESSION['end'] = 1;
 
-        //===========================================================
-        //==================  CHAMAR O AJAX AQUI ====================
-        //===========================================================
+        echo json_encode(['result' => true]); //AJAX
 
         unset($_SESSION['battle']);
         return;
     }
+
 ?>

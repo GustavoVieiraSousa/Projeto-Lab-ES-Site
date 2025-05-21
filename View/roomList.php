@@ -71,8 +71,6 @@
                 <input type="submit" class="search-bar-button" name="editRoom" value="Entrar"/>
             </form>
 
-            <?php var_dump($_SESSION['roomCode']); ?>
-
             <updatelist>
                 <form method="POST" action="../Controller/addRoom.php">
                     <input type="submit" onclick="togglePopup()" name="addRoom" value="Criar Sala"/>

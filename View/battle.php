@@ -57,7 +57,7 @@
 
       <main class="container">
         <h2 class="page-title">Batalha Pokémon</h2>
-        
+
         <div class="battle-scene">
           <div class="pokedex-container">
             <div class="pokedex enemy">
@@ -159,10 +159,10 @@
                 </div>
                 
                 <div class="moves-container">
-                  <button class="move-btn electric">Thunderbolt</button>
-                  <button class="move-btn normal">Quick Attack</button>
-                  <button class="move-btn electric">Thunder</button>
-                  <button class="move-btn normal">Double Team</button>
+                  <button class="move-btn electric" data-attack="thunderbolt">Thunderbolt</button>
+                  <button class="move-btn normal" data-attack="quick_attack">Quick Attack</button>
+                  <button class="move-btn electric" data-attack="thunder">Thunder</button>
+                  <button class="move-btn normal" data-attack="double_team">Double Team</button>
                 </div>
                 
                
@@ -184,8 +184,6 @@
             </div>
           </div>
 
-          <?php var_dump($_SESSION['battle']);
-          var_dump($_SESSION['plaCode']); ?>
           <div class="battle-controls">
             <form method="POST" action="../Controller/resignBattle.php">
                 <button type="resign" name="resign" class="battle-option-btn">Desistir</button>
@@ -199,14 +197,44 @@
     </body>
 </html>
 
+<script>
+document.querySelectorAll('.move-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const attack = this.getAttribute('data-attack');
+        fetch('../Controller/attackBattle.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ attack })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                // Atualiza o log de batalha
+                const logContent = document.querySelector('.log-content');
+                const p = document.createElement('p');
+                p.textContent = `Você usou ${this.textContent}! (Dano: ${data.damage})`;
+                logContent.appendChild(p);
+
+                // (Opcional) Scroll automático para o fim do log
+                logContent.scrollTop = logContent.scrollHeight;
+            } else {
+                alert('Erro ao atacar: ' + (data.error || ''));
+            }
+        });
+    });
+});
+</script>
+
 <!-- Atualiza a Pagina para pesquisar se o segundo player está Pronto ou nao | Libera a pagina ou nao -->
 <?php 
     //Tratando um errinho chato que sempre aparece o Wait toda vez q a pagina é carregada
     echo "<script src='../Model/js/battle/isReady.js'></script>";
+    
     if($_SESSION['battle']['ready'] == true){
         require_once("../Controller/getPlayers.php");
-        // echo "<script src='../Model/js/battle/updateBattle.js'></script>";
         echo "<script> document.querySelector('.wait-popup').classList.add('hidden'); </script>";
+        echo "<script src='../Model/js/battle/updateBattle.js'></script>";
         $_SESSION['battle']['ready'] == false;
     }
 ?>

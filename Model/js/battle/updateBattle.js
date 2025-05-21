@@ -3,13 +3,14 @@ function fetchUpdateBattle() {
         .then(response => response.json())
         .then(data => {
             if (data.result) {
-                //caso o player ganhe, perca, etc...
-            } else {
-                console.log('Waiting for the second player...');
+                // Hide the wait popup if the second player is ready
+                document.querySelector('.wait-popup').classList.remove('hidden');
+                // alert("Acabou a batalha");
+                clearInterval(interval);
             }
         })
         .catch(error => console.error('Error fetching readiness status:', error));
 }
 
 // Call fetchIsReady every 10s
-setInterval(fetchUpdateBattle, 10000);
+const interval = setInterval(fetchUpdateBattle, 10000);
