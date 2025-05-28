@@ -19,7 +19,7 @@
     }
 
     //Armazena os players em sessoes para serem usados depois
-    
+
     $_SESSION['battle']['player1'] = $getPlayers['rooPlaCode1'];
     $_SESSION['battle']['player2'] = $getPlayers['rooPlaCode2'];
     return;

@@ -13,4 +13,4 @@ function fetchUpdateBattle() {
 }
 
 // Call fetchIsReady every 10s
-const interval = setInterval(fetchUpdateBattle, 10000);
+const interval = setInterval(fetchUpdateBattle, 3000);

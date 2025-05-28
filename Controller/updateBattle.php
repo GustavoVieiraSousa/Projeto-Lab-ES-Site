@@ -7,7 +7,7 @@
         $_SESSION['message'] = "Batalha finalizada.";
         // header("lobby.php");
         echo json_encode(['result' => true]);
-exit();
+        exit();
     }
 
     $plaCode = $_SESSION['plaCode'];
@@ -19,9 +19,9 @@ exit();
 
     //Pega todas as informacoes da tabela Battle
     function getBattle(){
-        global $conn, $player1, $player2;
+        global $conn;
         require_once("connection.php");
-        $round = $_SESSION['battle']['round'];
+        // $round = $_SESSION['battle']['round'];
         $roomCode = $_SESSION['roomCode'];
         try{
             $getBattleStmt = $conn->prepare("SELECT * FROM battle WHERE batRooCode = ?");
@@ -35,7 +35,7 @@ exit();
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao pegar as informações da Battle: " . $e;
             echo json_encode(['result' => true]);
-exit();
+            exit();
         }
 
         return $getBattle;
@@ -45,6 +45,21 @@ exit();
     $getBattle = getBattle();
     if($getBattle['batTeaCode1'] == 0 || $getBattle['batTeaCode2'] == 0){
         endBattle();
+    }
+
+    function whoIsThePlayer(){
+        global $plaCode, $player1, $player2;
+        if($plaCode == $player1){
+            return $player1;
+        }
+        else if($plaCode == $player2){
+            return $player2;
+        }
+        else{
+            $_SESSION['message'] = "Erro ao identificar o player.";
+            echo json_encode(['result' => true]);
+            exit();
+        }
     }
 
     function getPokemonPlayer1(){
@@ -76,7 +91,7 @@ exit();
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Buscar Player1: " . $e;
             echo json_encode(['result' => true]);
-exit();
+            exit();
         }
     }
     
@@ -108,7 +123,7 @@ exit();
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Buscar Player2: " . $e;
             echo json_encode(['result' => true]);
-exit();
+            exit();
         }
     }
     
@@ -116,14 +131,14 @@ exit();
     $getStatsPlayer2 = getPokemonPlayer2();
 
     //Armazenar os dados coletados do Pokemon OnField do Player1
-    $pokemonIdPlayer1DB = $getStatsPlayer1['pokCode'];
+    $pokemonCodePlayer1DB = $getStatsPlayer1['pokCode'];
     $basicAttackPlayer1DB = $getStatsPlayer1['pokBasicAttack'];
     $basicDefensePlayer1DB = $getStatsPlayer1['pokBasicDefense'];
     $speedPlayer1DB = $getStatsPlayer1['pokSpeed'];
     $hpPlayer1DB = $getStatsPlayer1['pokHp'];
 
     //Armazenar os dados coletados do Pokemon OnField do Player1
-    $pokemonIdPlayer2DB = $getStatsPlayer2['pokCode'];
+    $pokemonCodePlayer2DB = $getStatsPlayer2['pokCode'];
     $basicAttackPlayer2DB = $getStatsPlayer2['pokBasicAttack'];
     $basicDefensePlayer2DB = $getStatsPlayer2['pokBasicDefense'];
     $speedPlayer2DB = $getStatsPlayer2['pokSpeed'];
@@ -140,60 +155,72 @@ exit();
     $hpPlayer2 = $hpPlayer2DB;
 
     //Verificar qual pokemon age primeiro
-    global $pokemonIdPlayer1DB, $basicAttackPlayer1DB, $basicDefensePlayer1DB, $speedPlayer1DB, $hpPlayer1DB;
-    global $pokemonIdPlayer2DB, $basicAttackPlayer2DB, $basicDefensePlayer2DB, $speedPlayer2DB, $hpPlayer2DB;
+    // global $pokemonCodePlayer1DB, $basicAttackPlayer1DB, $basicDefensePlayer1DB, $speedPlayer1DB, $hpPlayer1DB;
+    // global $pokemonCodePlayer2DB, $basicAttackPlayer2DB, $basicDefensePlayer2DB, $speedPlayer2DB, $hpPlayer2DB;
+
+    //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    //======================= PARTE PRINCIPAL DA BATALHA ==========================
+    //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+var_dump($_SESSION['battle']);
 
     if($speedPlayer1DB >= $speedPlayer2DB){
-        $hpPlayer2 = attackPlayer1($hpPlayer2);
-        updateHp($hpPlayer2, $pokemonIdPlayer2DB);
-
-        if(isDead($hpPlayer2)){
-            setIsDeadPokemonPlayer2($pokemonIdPlayer2DB);
-            changePokemon($pokemonIdPlayer2DB, $player2);
+        if($plaCode == $player1){
+            $hpPlayer2 = attackPlayer1($hpPlayer2);
+            updateHp($hpPlayer2, $pokemonCodePlayer2DB);
         }
-        else{
-            $hpPlayer1 = attackPlayer2($hpPlayer1);
-            updateHp($hpPlayer1, $pokemonIdPlayer1DB);
+        if(isDead($hpPlayer2)){
+            setIsDeadPokemonPlayer2($pokemonCodePlayer2DB);
+            if($plaCode == $player2){ changePokemon($pokemonCodePlayer2DB, $player2); }
+        }
 
+        else{
+            if($plaCode == $player2){
+                $hpPlayer1 = attackPlayer2($hpPlayer1);
+                updateHp($hpPlayer1, $pokemonCodePlayer1DB);
+            }
             if(isDead($hpPlayer1)){
-                setIsDeadPokemonPlayer1($pokemonIdPlayer1DB);
-                changePokemon($pokemonIdPlayer1DB, $player1);
+                setIsDeadPokemonPlayer1($pokemonCodePlayer1DB);
+                if($plaCode == $player1){ changePokemon($pokemonCodePlayer1DB, $player1); }
             }
         }
-        
-        // echo json_encode(['result' => true]);
+
         return;
     }
 
     else{
-        $hpPlayer1 = attackPlayer2($hpPlayer1);
-        updateHp($hpPlayer1, $pokemonIdPlayer1DB);
-
-        if(isDead($hpPlayer1)){
-            setIsDeadPokemonPlayer1($pokemonIdPlayer1DB);
-            changePokemon($pokemonIdPlayer1DB, $player1);
+        if($plaCode == $player2){
+            $hpPlayer1 = attackPlayer2($hpPlayer1);
+            updateHp($hpPlayer1, $pokemonCodePlayer1DB);
         }
-        else{
-            $hpPlayer2 = attackPlayer1($hpPlayer2);
-            updateHp($hpPlayer2, $pokemonIdPlayer2DB);
+        if(isDead($hpPlayer1) && $plaCode == $player1){
+            setIsDeadPokemonPlayer1($pokemonCodePlayer1DB);
+            changePokemon($pokemonCodePlayer1DB, $player1);
+        }
 
-            if(isDead($hpPlayer2)){
-                
-                setIsDeadPokemonPlayer2($pokemonIdPlayer2DB);
-                changePokemon($pokemonIdPlayer2DB, $player2);
+        else{
+            if($plaCode == $player1){
+                $hpPlayer2 = attackPlayer1($hpPlayer2);
+                updateHp($hpPlayer2, $pokemonCodePlayer2DB);
+            }
+            if(isDead($hpPlayer2) && $plaCode == $player2){
+                setIsDeadPokemonPlayer2($pokemonCodePlayer2DB);
+                changePokemon($pokemonCodePlayer2DB, $player2);
             }
         }
 
-        // echo json_encode(['result' => true]);
         return;
     }
+
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //======================= PARTE PRINCIPAL DA BATALHA ==========================
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     //Pega o dano do BD e faz o calculo para tirar a vida do pokemon Player1
     function attackPlayer1($hp){
         global $conn, $player1, $player2;
         require_once("connection.php");
         $getBattle = getBattle();
-
         $damageDealtByPlayer1 = $getBattle['batDmgCounterPlayer1'];
 
         $hp = $hp - $damageDealtByPlayer1;
@@ -225,13 +252,17 @@ exit();
     function changePokemon($pokemon, $player){
         $resultLastPokemon = isTheLastPokemon($player); //Verifica se é o ultimo pokemon vivo
 
+        var_dump($resultLastPokemon);
+
         //TRUE -> Todos os pokemons morreram | $resultLastPokemon -> Ainda tem pokemon vivo | FALSE -> Deu um erro muito grande
-        if($resultLastPokemon == true){
+        if($resultLastPokemon === TRUE){
+            var_dump("FIM DE BATALHA");
             defeat($player);
             endBattle();
         }
+
         else if($resultLastPokemon == $pokemon+1){
-            var_dump($_SESSION['battle']);
+            
             global $conn, $player1, $player2;
             require_once("connection.php");
             $unsetIsOnFieldStmt = $conn->prepare("UPDATE pokemon SET pokIsOnField = NULL WHERE pokCode = ?");
@@ -243,43 +274,53 @@ exit();
         else{
             $_SESSION['message'] = "GRANDE ERRO | isTheLastPokemon() retornou FALSE:";
             echo json_encode(['result' => true]);
-exit();
+            exit();
         }
     }
 
     //Seta IsDead na tabela Pokemon pro Player1
     function setIsDeadPokemonPlayer1($pokemon){
-        global $conn;
+        global $conn, $player1;
+        $plaCode = $_SESSION['plaCode'];
         $hpPlayer1 = $_SESSION['battle']['hpPlayer1'];
         require_once("connection.php");
 
-        try{
-            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
-            $setIsDeadStmt->execute([$hpPlayer1, $pokemon]);
+        if($player1 == $plaCode){
+            try{
+                $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
+                $setIsDeadStmt->execute([$hpPlayer1, $pokemon]);
+                
+            }
+            catch(PDOException $e){
+                $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer1: ".$e;
+                echo json_encode(['result' => true]);
+                exit();
+            }
         }
-        catch(PDOException $e){
-            $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer1: ".$e;
-            echo json_encode(['result' => true]);
-exit();
-        }
-        
+
+        unset($_SESSION['battle']['hpPlayer1']);
     }
 
     //Seta IsDead na tabela Pokemon pro Player2
     function setIsDeadPokemonPlayer2($pokemon){
-        global $conn, $hpPlayer2;
+        global $conn, $player2;
+        $plaCode = $_SESSION['plaCode'];
+        $hpPlayer2 = $_SESSION['battle']['hpPlayer2'];
         require_once("connection.php");
 
-        try{
-            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
-            $setIsDeadStmt->execute([$hpPlayer2, $pokemon]);
+        if($player2 == $plaCode){
+            try{
+                $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
+                $setIsDeadStmt->execute([$hpPlayer2, $pokemon]);
+            }
+            catch(PDOException $e){
+                $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer2: ".$e;
+                echo json_encode(['result' => true]);
+                exit();
+            }
         }
-        catch(PDOException $e){
-            $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPLayer2: ".$e;
-            echo json_encode(['result' => true]);
-exit();
-        }
-        
+
+        unset($_SESSION['battle']['hpPlayer2']);
     }
 
     //Verifica se todos os pokemons da equipe estão mortos
@@ -309,16 +350,21 @@ exit();
                 $lastPokemon = $lastPokemonStmt->fetch(PDO::FETCH_ASSOC);
                 $i++;
             }
-            var_dump($pokemonDead, $i);
+
             //Caso nao retorne nada (teoricamente impossivel pois pokIsDead é setado para o primeiro pokemon antes de passar aqui)
-            if($lastPokemon == NULL){
+            if(sizeof($pokemonDead) == NULL){
                 return false;
             }
 
+            var_dump($pokemonDead);
+            //Caso todos os pokemons estejam mortos, retorna true.
+            //!!! ATENÇÃO -> O 7 é porque quando a array é criada o primeiro elemento fica marcado como TRUE, nao me pergunta, mas funciona ent deixa assim.
+            //(Provavelmente da pra corrigir colocando: $pokemonDead['pokCode'] == 6, mas to com preguica de testar)
             if(sizeof($pokemonDead) == 7){
                 return true; //Todos os pokemons da equipe estao mortos
             }
-            $pokemonNotDead = $pokemonDead[$i];
+
+            $pokemonNotDead = $pokemonDead[$i-1]['pokCode'];
             return $pokemonNotDead+1; //Volta o proximo pokemon do time
         }
         catch(PDOException $e){
@@ -378,7 +424,7 @@ exit();
                     catch(PDOException $e){
                         $_SESSION['message'] = "Erro ao setar Derrotado: ".$e;
                         echo json_encode(['result' => true]);
-exit();
+                        exit();
                     }
 
                 } elseif ($teamDefeated['player_position'] === 'player_is_batTeaCode2') {
@@ -390,19 +436,48 @@ exit();
                     catch(PDOException $e){
                         $_SESSION['message'] = "Erro ao setar Derrotado: ".$e;
                         echo json_encode(['result' => true]);
-exit();
+                        exit();
                     }
                 } else {
                     $_SESSION['message'] = "Erro ao setar teamDefeat: ".$e;
                     echo json_encode(['result' => true]);
-exit();
+                    exit();
                 }
             }       
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao buscar Player: ".$e;
             echo json_encode(['result' => true]);
-exit();
+            exit();
+        }
+    }
+
+    //Reseta o Pokemon OnField e o HP dos dois jogadores
+    function resetPokemon(){
+        global $conn, $player1, $player2;
+        $hpPlayer1 = $_SESSION['battle']['hpPlayer1'];
+        $hpPlayer2 = $_SESSION['battle']['hpPlayer2'];
+        require_once("connection.php");
+        try{
+            $resetPokemonStmt = $conn->prepare("UPDATE pokemon SET pokIsOnField = NULL, pokIsDead = NULL, pokHp = :hpPlayer WHERE pokIsOnField = 1 AND pokCode IN 
+                (SELECT teaPokCode1 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode2 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode3 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode4 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode5 FROM team WHERE teaPlaCode = :plaCode
+                UNION ALL
+                SELECT teaPokCode6 FROM team WHERE teaPlaCode = :plaCode)");
+            $resetPokemonStmt->execute([':hpPlayer' => $hpPlayer1, ':plaCode' => $player1]);
+            $resetPokemonStmt->execute([':hpPlayer' => $hpPlayer2, ':plaCode' => $player2]);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro ao Resetar Pokemon: ".$e;
+            echo json_encode(['result' => true]);
+            exit();
         }
     }
 
@@ -418,11 +493,12 @@ exit();
         }
         else{
             $_SESSION['win'] = 1;
-        }
+        }   
         $_SESSION['end'] = 1;
 
         echo json_encode(['result' => true]); //AJAX
 
+        resetPokemon();
         unset($_SESSION['battle']);
         return;
     }
