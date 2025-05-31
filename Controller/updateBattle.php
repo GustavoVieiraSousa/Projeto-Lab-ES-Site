@@ -164,45 +164,76 @@
 
 var_dump($_SESSION['battle']);
 
+    //Pokemon do PLayer 1 é mais rapido
     if($speedPlayer1DB >= $speedPlayer2DB){
-        if($plaCode == $player1){
+        //Caso seja o Player 2, vai verificar o dano que o player 1 deu e descontar no proprio pokemon
+        if($plaCode == $player2){
             $hpPlayer2 = attackPlayer1($hpPlayer2);
             updateHp($hpPlayer2, $pokemonCodePlayer2DB);
-        }
-        if(isDead($hpPlayer2)){
-            setIsDeadPokemonPlayer2($pokemonCodePlayer2DB);
-            if($plaCode == $player2){ changePokemon($pokemonCodePlayer2DB, $player2); }
+            clearAttackPlayer1(); // Zera o dano do player 1 na tabela pois o player 2 já usou neste round
         }
 
+        //Verifica se o pokemon do Player 2 morreu, se nao, continua jogo
+        if(isDead($hpPlayer2) && $plaCode == $player2){
+            setIsDeadPokemonPlayer2($pokemonCodePlayer2DB);
+            changePokemon($pokemonCodePlayer2DB, $player2);
+        }
         else{
-            if($plaCode == $player2){
+            if($plaCode == $player1){
+                $checkIsDead = checkIsDeadPokemon2($pokemonCodePlayer2DB);
+                if($checkIsDead === true){
+                    clearAttackPlayer2();
+                    return;
+                } // Zera o dano do player 2 na tabela, pokemon dele morreu
+                else if($checkIsDead === 'unknown'){
+                    //dorme o sistema por 0.5 segundos (pra nao ficar um spam de pesquisa)
+                    usleep(200000);
+                    checkIsDeadPokemon2($pokemonCodePlayer2DB);
+                }
+
                 $hpPlayer1 = attackPlayer2($hpPlayer1);
                 updateHp($hpPlayer1, $pokemonCodePlayer1DB);
+                clearAttackPlayer2(); // Zera o dano do player 2 na tabela pois o player 1 já usou neste round
             }
-            if(isDead($hpPlayer1)){
+            if(isDead($hpPlayer1) && $plaCode == $player1){
                 setIsDeadPokemonPlayer1($pokemonCodePlayer1DB);
-                if($plaCode == $player1){ changePokemon($pokemonCodePlayer1DB, $player1); }
+                changePokemon($pokemonCodePlayer1DB, $player1);
             }
         }
 
         return;
     }
 
+    //Pokemon do Player 2 é mais rapido. O resto dos comentarios é igual o de cima, so q com os players invertidos
     else{
-        if($plaCode == $player2){
+        if($plaCode == $player1){
             $hpPlayer1 = attackPlayer2($hpPlayer1);
             updateHp($hpPlayer1, $pokemonCodePlayer1DB);
+            clearAttackPlayer2(); // Zera o dano do player 2 na tabela pois o player 1 já usou neste round
         }
+        
         if(isDead($hpPlayer1) && $plaCode == $player1){
             setIsDeadPokemonPlayer1($pokemonCodePlayer1DB);
             changePokemon($pokemonCodePlayer1DB, $player1);
         }
-
         else{
-            if($plaCode == $player1){
+            if($plaCode == $player2){
+                $checkIsDead = checkIsDeadPokemon1($pokemonCodePlayer1DB);
+                if($checkIsDead === true){
+                    clearAttackPlayer1();
+                    return;
+                } // Zera o dano do player 2 na tabela, pokemon dele morreu
+                else if($checkIsDead === 'unknown'){
+                    //dorme o sistema por 0.5 segundos (pra nao ficar um spam de pesquisa)
+                    usleep(200000);
+                    checkIsDeadPokemon1($pokemonCodePlayer1DB);
+                }
+                
                 $hpPlayer2 = attackPlayer1($hpPlayer2);
                 updateHp($hpPlayer2, $pokemonCodePlayer2DB);
+                clearAttackPlayer1();
             }
+
             if(isDead($hpPlayer2) && $plaCode == $player2){
                 setIsDeadPokemonPlayer2($pokemonCodePlayer2DB);
                 changePokemon($pokemonCodePlayer2DB, $player2);
@@ -238,6 +269,20 @@ var_dump($_SESSION['battle']);
         $hp = $hp - $damageDealtByPlayer2 ;
 
         return $hp;
+    }
+
+
+    //Zera o ataque quando for usado pelos players
+    function clearAttackPlayer1(){
+        global $conn, $roomCode;
+        $clearDmgStmt = $conn->prepare("UPDATE battle SET batDmgCounterPlayer1 = NULL WHERE batRooCode = ?");
+        $clearDmgStmt->execute([$roomCode]);
+    }
+
+    function clearAttackPlayer2(){
+        global $conn, $roomCode;
+        $clearDmgStmt = $conn->prepare("UPDATE battle SET batDmgCounterPlayer2 = NULL WHERE batRooCode = ?");
+        $clearDmgStmt->execute([$roomCode]);
     }
 
 
@@ -280,22 +325,19 @@ var_dump($_SESSION['battle']);
 
     //Seta IsDead na tabela Pokemon pro Player1
     function setIsDeadPokemonPlayer1($pokemon){
-        global $conn, $player1;
-        $plaCode = $_SESSION['plaCode'];
+        global $conn;
         $hpPlayer1 = $_SESSION['battle']['hpPlayer1'];
         require_once("connection.php");
 
-        if($player1 == $plaCode){
-            try{
-                $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
-                $setIsDeadStmt->execute([$hpPlayer1, $pokemon]);
-                
-            }
-            catch(PDOException $e){
-                $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer1: ".$e;
-                echo json_encode(['result' => true]);
-                exit();
-            }
+        try{
+            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
+            $setIsDeadStmt->execute([$hpPlayer1, $pokemon]);
+            
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer1: ".$e;
+            echo json_encode(['result' => true]);
+            exit();
         }
 
         unset($_SESSION['battle']['hpPlayer1']);
@@ -303,21 +345,18 @@ var_dump($_SESSION['battle']);
 
     //Seta IsDead na tabela Pokemon pro Player2
     function setIsDeadPokemonPlayer2($pokemon){
-        global $conn, $player2;
-        $plaCode = $_SESSION['plaCode'];
+        global $conn;
         $hpPlayer2 = $_SESSION['battle']['hpPlayer2'];
         require_once("connection.php");
 
-        if($player2 == $plaCode){
-            try{
-                $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
-                $setIsDeadStmt->execute([$hpPlayer2, $pokemon]);
-            }
-            catch(PDOException $e){
-                $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer2: ".$e;
-                echo json_encode(['result' => true]);
-                exit();
-            }
+        try{
+            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
+            $setIsDeadStmt->execute([$hpPlayer2, $pokemon]);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer2: ".$e;
+            echo json_encode(['result' => true]);
+            exit();
         }
 
         unset($_SESSION['battle']['hpPlayer2']);
@@ -388,6 +427,80 @@ var_dump($_SESSION['battle']);
             exit();
         }
         
+    }
+
+    //Verifica se o pokemon está morto pro cliente que nao tem visao do outro. Caso o outro ainda nao tenha agido, ele repete a pesquisa 
+    function checkIsDeadPokemon1($pokemon){
+        global $conn, $roomCode, $pokemonCodePlayer1DB;
+        try{
+            $checkIsDeadStmt = $conn->prepare("SELECT pokIsDead FROM pokemon WHERE pokCode = ?");
+            $checkIsDeadStmt->execute([$pokemon]);
+            $checkIsDead = $checkIsDeadStmt->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro CheckIsDeadPokemon1.: " . $e;
+            echo json_encode(['result' => true]);
+            exit();
+        }
+
+        //verifica se morreu ou n
+        if($checkIsDead == 1){
+            return true;
+        }
+
+        try{
+            $checkDmgStmt = $conn->prepare("SELECT batDmgCounterPlayer2 FROM battle WHERE batRooCode = ?");
+            $checkDmgStmt->execute([$roomCode]);
+            $checkDmg = $checkDmgStmt->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro na CONDICAO CheckIsDeadPokemon1: " . $e;
+            echo json_encode(['result' => true]);
+            exit();
+        }
+
+        if($checkDmg['batDmgCounterPlayer2'] == NULL){
+            return false;
+        }
+        
+        return 'unknown';
+    }
+
+
+    function checkIsDeadPokemon2($pokemon){
+        global $conn, $roomCode, $pokemonCodePlayer2DB;
+        try{
+            $checkIsDeadStmt = $conn->prepare("SELECT pokIsDead FROM pokemon WHERE pokCode = ?");
+            $checkIsDeadStmt->execute([$pokemon]);
+            $checkIsDead = $checkIsDeadStmt->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro CheckIsDeadPokemon2.: " . $e;
+            echo json_encode(['result' => true]);
+            exit();
+        }
+
+        //verifica se morreu ou n
+        if($checkIsDead == 1){
+            return true;
+        }
+
+        try{
+            $checkDmgStmt = $conn->prepare("SELECT batDmgCounterPlayer1 FROM battle WHERE batRooCode = ?");
+            $checkDmgStmt->execute([$roomCode]);
+            $checkDmg = $checkDmgStmt->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro na CONDICAO CheckIsDeadPokemon2: " . $e;
+            echo json_encode(['result' => true]);
+            exit();
+        }
+
+        if($checkDmg['batDmgCounterPlayer1'] == NULL){
+            return false;
+        }
+        
+        return 'unknown';
     }
 
     //Derrota para o player que nao possui mais pokemons na batalha
@@ -481,11 +594,44 @@ var_dump($_SESSION['battle']);
         }
     }
 
+    //SO PARA O VENCEDOR: deleta a battle para comecar outra
+    function deleteBattleRoom(){
+        global $conn, $roomCode;
+
+        try{
+            $deleteBattle = $conn->prepare("DELETE FROM battle WHERE batRooCode = ?");
+            $deleteBattle->execute([$roomCode]);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro apagar Battle: ".$e;
+            error_log($e);
+            exit();
+        }
+    }
+
+    //Tira os dois players do estado "Pronto"
+    function setIsReadyNull(){
+        global $conn, $roomCode;
+        try{
+            $isReadyNullStmt = $conn->prepare("UPDATE room SET rooIsReadyPlayer1 = NULL, rooIsReadyPlayer2 = NULL WHERE rooCode = ?");
+            $isReadyNullStmt->execute([$roomCode]);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro Set Is Ready Null: ".$e;
+            error_log($e);
+            exit();
+        }
+    }
+
     //Finaliza a batalha
     function endBattle(){
         
         $plaCode = $_SESSION['plaCode'];
         $player = $_SESSION['battle']['defeat'];
+
+        //Pro outro cliente nao ficar em um loop infinito de espera;
+        clearAttackPlayer1();
+        clearAttackPlayer2();
 
         //Se o jogador for o perdedor, marca na sessao
         if($plaCode == $player){
@@ -493,13 +639,15 @@ var_dump($_SESSION['battle']);
         }
         else{
             $_SESSION['win'] = 1;
+            deleteBattleRoom();
         }   
         $_SESSION['end'] = 1;
 
-        echo json_encode(['result' => true]); //AJAX
-
         resetPokemon();
+        setIsReadyNull();
+
         unset($_SESSION['battle']);
+        echo json_encode(['result' => true]); //AJAX
         return;
     }
 

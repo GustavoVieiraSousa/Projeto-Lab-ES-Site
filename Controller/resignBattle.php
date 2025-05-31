@@ -27,6 +27,33 @@
     $plaCode = $_SESSION['plaCode'];
     $roomCode = $_SESSION['roomCode'];
 
+    //Zera o ataque para o cliente que NAO desistiu, nao fique preso em um loop infinito
+    function clearAttackPlayer1(){
+        global $conn, $roomCode;
+        $clearDmgStmt = $conn->prepare("UPDATE battle SET batDmgCounterPlayer1 = NULL WHERE batRooCode = ?");
+        $clearDmgStmt->execute([$roomCode]);
+    }
+
+    function clearAttackPlayer2(){
+        global $conn, $roomCode;
+        $clearDmgStmt = $conn->prepare("UPDATE battle SET batDmgCounterPlayer2 = NULL WHERE batRooCode = ?");
+        $clearDmgStmt->execute([$roomCode]);
+    }
+
+    //Tira os dois players do estado "Pronto"
+    function setIsReadyNull(){
+        global $conn, $roomCode;
+        try{
+            $isReadyNullStmt = $conn->prepare("UPDATE room SET rooIsReadyPlayer1 = NULL, rooIsReadyPlayer2 = NULL WHERE rooCode = ?");
+            $isReadyNullStmt->execute([$roomCode]);
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro Set Is Ready Null: ".$e;
+            error_log($e);
+            exit();
+        }
+    }
+
     // Pesquisa quem é o dono da sala (tratamento)
     try{
         $ownerRoom = $conn->prepare("SELECT * FROM room WHERE rooCode = ?");
@@ -77,6 +104,14 @@
     catch(PDOException $e){
         $_SESSION['message'] = 'Erro Unset IsOnField: ' . $e->getMessage();
     }
+
+    //Zera o ataque para o cliente que NAO desistiu, nao fique preso em um loop infinito
+    clearAttackPlayer1(); 
+    clearAttackPlayer2();
+    
+    //Tira os dois players do estado "Pronto"
+    setIsReadyNull();
+
     unset($_SESSION['battle']);
     header("Location:../View/lobby.php");
     exit();
