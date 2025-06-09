@@ -10,7 +10,6 @@
     <body>
         <?php
             session_start();
-            //require_once '../Controller/waitBattle.php';
             require_once '../Controller/TeamController.php';
 
             if (!isset($_SESSION['user']) || !$_SESSION['user']) {
@@ -22,6 +21,11 @@
                 header('Location: roomList.php');
                 exit();
             }
+
+            if (!isset($_SESSION['battle']['teamId'])){
+              header('Location: lobby.php');
+              exit();
+            }
             
             if (isset($_SESSION['message'])) {
                 echo "<script>alert('" . $_SESSION['message'] . "');</script>";
@@ -31,7 +35,8 @@
             // VERIFICA SE O PLAYER É VITORIOSO OU NAO
             if(isset($_SESSION['end']) == 1){
                 unset($_SESSION['end']);
-                header("Location: lobby\zx.php");
+                $_SESSION['message'] = 'você venceu :D';
+                header("Location: lobby.php");
                 exit();
             }
         ?>
@@ -158,11 +163,12 @@
                   </div>
                 </div>
                 
+                <!-- Ataques -->
                 <div class="moves-container">
-                  <button class="move-btn electric" data-attack="thunderbolt">Thunderbolt</button>
-                  <button class="move-btn normal" data-attack="quick_attack">Quick Attack</button>
-                  <button class="move-btn electric" data-attack="thunder">Thunder</button>
-                  <button class="move-btn normal" data-attack="double_team">Double Team</button>
+                  <button class="move-btn electric" data-attack="1">Ataque 1</button>
+                  <button class="move-btn normal" data-attack="2">Ataque 2</button>
+                  <button class="move-btn electric" data-attack="3">Ataque 3</button>
+                  <button class="move-btn normal" data-attack="4">Ataque 4</button>
                 </div>
                 
                
@@ -211,9 +217,20 @@ document.querySelectorAll('.move-btn').forEach(btn => {
         .then(data => {
             if(data.success) {
                 // Atualiza o log de batalha
+
+                $atkName1 = isset($_SESSION['battle'][$activePlayer]['atkName1']) ? $_SESSION['battle'][$activePlayer]['atkName1'] : NULL;
+                $atkName2 = isset($_SESSION['battle'][$activePlayer]['atkName2']) ? $_SESSION['battle'][$activePlayer]['atkName2'] : NULL;
+                $atkName3 = isset($_SESSION['battle'][$activePlayer]['atkName3']) ? $_SESSION['battle'][$activePlayer]['atkName3'] : NULL;
+                $atkName4 = isset($_SESSION['battle'][$activePlayer]['atkName4']) ? $_SESSION['battle'][$activePlayer]['atkName4'] : NULL;
+
+                if (data2.attack == '1') { $atkName = $atkName1 };
+                if (data2.attack == '2') { $atkName = $atkName2 };
+                if (data2.attack == '3') { $atkName = $atkName3 };
+                if (data2.attack == '4') { $atkName = $atkName4 };
+
                 const logContent = document.querySelector('.log-content');
                 const p = document.createElement('p');
-                p.textContent = `Você usou ${this.textContent}! (Dano: ${data.damage})`;
+                p.textContent = `Você usou ${$this.textContent}! (Dano: ${data.damage})`;
                 logContent.appendChild(p);
 
                 // (Opcional) Scroll automático para o fim do log
@@ -230,6 +247,7 @@ document.querySelectorAll('.move-btn').forEach(btn => {
 <?php 
     //Tratando um errinho chato que sempre aparece o Wait toda vez q a pagina é carregada
     echo "<script src='../Model/js/battle/isReady.js'></script>";
+
     
     if($_SESSION['battle']['ready'] == true){
         require_once("../Controller/getPlayers.php");

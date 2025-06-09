@@ -15,7 +15,6 @@
     $player2 = $_SESSION['battle']['player2'];
     $roomCode = $_SESSION['roomCode'];
     $teamId = $_SESSION['battle']['teamId'];
-    // $_SESSION['battle']['round'] = 0;
 
     //Pega todas as informacoes da tabela Battle
     function getBattle(){
@@ -27,10 +26,6 @@
             $getBattleStmt = $conn->prepare("SELECT * FROM battle WHERE batRooCode = ?");
             $getBattleStmt->execute([$roomCode]);
             $getBattle = $getBattleStmt->fetch(PDO::FETCH_ASSOC);
-
-            // $setRound = $conn->prepare("UPDATE battle SET batRound = ? WHERE batRooCode = ?");
-            // $setRound->execute([$round, $roomCode]);
-            // $_SESSION['battle']['round'] = $round + 1;
         }   
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao pegar as informações da Battle: " . $e;
@@ -45,6 +40,23 @@
     $getBattle = getBattle();
     if($getBattle['batTeaCode1'] == 0 || $getBattle['batTeaCode2'] == 0){
         endBattle();
+    }
+
+    function roundCount(){
+        global $conn, $roomCode;
+        //rounds
+        if(!isset($_SESSION['battle']['round'])) { $round = $_SESSION['battle']['round'] = 0; }
+        $round = $_SESSION['battle']['round'];
+        try{
+            $setRound = $conn->prepare("UPDATE battle SET batRound = ? WHERE batRooCode = ?");
+            $setRound->execute([$round, $roomCode]);
+            $_SESSION['battle']['round'] = $round + 1;
+        }
+        catch(PDOException $e){
+            $_SESSION['message'] = "Erro ao rodar roundCount: " . $e;
+            echo json_encode(['result' => true]);
+            exit();
+        }
     }
 
     function whoIsThePlayer(){
@@ -186,7 +198,7 @@ var_dump($_SESSION['battle']);
                     return;
                 } // Zera o dano do player 2 na tabela, pokemon dele morreu
                 else if($checkIsDead === 'unknown'){
-                    //dorme o sistema por 0.5 segundos (pra nao ficar um spam de pesquisa)
+                    //dorme o sistema por 0.2 segundos (pra nao ficar um spam de pesquisa)
                     usleep(200000);
                     checkIsDeadPokemon2($pokemonCodePlayer2DB);
                 }

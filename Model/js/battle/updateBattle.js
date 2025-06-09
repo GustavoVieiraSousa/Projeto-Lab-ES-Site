@@ -12,5 +12,26 @@ function fetchUpdateBattle() {
         .catch(error => console.error('Error fetching readiness status:', error));
 }
 
-// Call fetchIsReady every 10s
-const interval = setInterval(fetchUpdateBattle, 3000);
+function fetchTeamCheck(){
+    fetch('../Controller/teamCheck.php')
+        .then(response => response.json())
+        .then(data2 => {
+            if(data2.res){
+                //alterar os pokemons na tela e os ataques AQUI
+                //TODO: FAZER ALTERAR OS VISUAIS
+                
+            }
+            else{
+
+            }
+        })
+        .catch(error => console.error('Error fetching readiness status:', error));
+}
+
+function fetchAllFunctions(){
+    fetchUpdateBattle();
+    fetchTeamCheck();
+}
+
+// Call all the functions every 10s
+const interval = setInterval(fetchAllFunctions, 10000);

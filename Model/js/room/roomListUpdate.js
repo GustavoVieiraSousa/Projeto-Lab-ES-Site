@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", function fetchRoomList() {});
+
 function fetchRoomList() {
     fetch('../Controller/roomListUpdate.php')
         .then(response => response.json())

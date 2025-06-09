@@ -57,10 +57,13 @@
         </nav>
     </div>
 
+    
+
     <br><br><br><br>
 
     <div class="content-search">
         <h1>Escolha seu time:</h1>
+        <p>Sala: <?php echo $_SESSION['roomCode'] ?></p>
         <updatelist>
             <!-- BOTÃO QUE ENVIA O USUARIO PARA A TELA DE TIMES PARA CRIAR SEU TIME -->
             <div class="create-team">
