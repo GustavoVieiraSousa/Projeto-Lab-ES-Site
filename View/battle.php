@@ -228,7 +228,9 @@ document.querySelectorAll('.move-btn').forEach(btn => {
                 if (data.attack == '3') { $atkName = $atkName3 };
                 if (data.attack == '4') { $atkName = $atkName4 };
 
+const atkName = "<?php echo $atkName ?>";
                 const logContent = document.querySelector('.log-content');
+console.log(logContent);
                 const p = document.createElement('p');
                 p.textContent = `Você usou ${$atkName}! (Dano: ${data.damage})`;
                 logContent.appendChild(p);
