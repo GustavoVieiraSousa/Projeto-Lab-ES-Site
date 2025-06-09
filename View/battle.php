@@ -223,14 +223,14 @@ document.querySelectorAll('.move-btn').forEach(btn => {
                 $atkName3 = isset($_SESSION['battle'][$activePlayer]['atkName3']) ? $_SESSION['battle'][$activePlayer]['atkName3'] : NULL;
                 $atkName4 = isset($_SESSION['battle'][$activePlayer]['atkName4']) ? $_SESSION['battle'][$activePlayer]['atkName4'] : NULL;
 
-                if (data2.attack == '1') { $atkName = $atkName1 };
-                if (data2.attack == '2') { $atkName = $atkName2 };
-                if (data2.attack == '3') { $atkName = $atkName3 };
-                if (data2.attack == '4') { $atkName = $atkName4 };
+                if (data.attack == '1') { $atkName = $atkName1 };
+                if (data.attack == '2') { $atkName = $atkName2 };
+                if (data.attack == '3') { $atkName = $atkName3 };
+                if (data.attack == '4') { $atkName = $atkName4 };
 
                 const logContent = document.querySelector('.log-content');
                 const p = document.createElement('p');
-                p.textContent = `Você usou ${$this.textContent}! (Dano: ${data.damage})`;
+                p.textContent = `Você usou ${$atkName}! (Dano: ${data.damage})`;
                 logContent.appendChild(p);
 
                 // (Opcional) Scroll automático para o fim do log
