@@ -41,6 +41,7 @@
             }
 
             $player1 = $_SESSION['battle']['player1'];
+            $plaCode = $_SESSION['plaCode'];
             $activePlayer = ($plaCode == $player1) ? "pokemon1" : "pokemon2";
 
         ?>
@@ -246,16 +247,30 @@ document.querySelectorAll('.move-btn').forEach(btn => {
     //Tratando um errinho chato que sempre aparece o Wait toda vez q a pagina é carregada
     echo "<script src='../Model/js/battle/isReady.js'></script>";
 
-    if(!isset($_SESSION['battle']['ready'])){
-      $_SESSION['battle']['ready'] = false;
-    }
+    // Adiciona o código JavaScript para esperar o evento
+    echo "
+        <script>
+            document.addEventListener('isReadyComplete', function() {
+                // Executa os scripts subsequentes após isReady.js terminar
+                document.querySelector('.wait-popup').classList.add('hidden');
+                const script = document.createElement('script');
+                script.src = '../Model/js/battle/updateBattle.js';
+                document.body.appendChild(script);
+            });
+        </script>
+    ";
+
+    // if(!isset($_SESSION['battle']['ready'])){
+    //   $_SESSION['battle']['ready'] = false;
+    // }
     
-    if($_SESSION['battle']['ready'] == true){
-        require_once("../Controller/getPlayers.php");
-        echo "<script> document.querySelector('.wait-popup').classList.add('hidden'); </script>";
-        echo "<script src='../Model/js/battle/updateBattle.js'></script>";
-        $_SESSION['battle']['ready'] == false;
-    }
+    // if($_SESSION['battle']['ready'] == true){
+    //     require_once("../Controller/getPlayers.php");
+    //     // require_once("../Controller/setPokemonMaxHp.php");
+    //     echo "<script> document.querySelector('.wait-popup').classList.add('hidden'); </script>";
+    //     echo "<script src='../Model/js/battle/updateBattle.js'></script>";
+    //     $_SESSION['battle']['ready'] == false;
+    // }
 ?>
 
 <?php

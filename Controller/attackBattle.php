@@ -36,7 +36,7 @@ if ($attack == '4') { $power = $_SESSION['battle'][$activePlayer]['power4']; };
 srand(time());
 
 $level = 100;
-$crit = rand(1,10) == 10 ? 2 : 1; // 10% de chance de crit
+$crit = rand(1,16) == 16 ? 2 : 1; // 6,25% de chance de crit
 $elementMultiplier = 1; //Special Attack ou Normal Attack, nao vou mexer com isso pois nao sei se tenho esses dados, ent deixa ai
 $random = rand(217, 255)/255;
 $STAB = 1; //TODO: Multiplicador se o tipo do ataque é o mesmo do tipo do pokemon, se SIM = 1.5x, se NAO = 1;

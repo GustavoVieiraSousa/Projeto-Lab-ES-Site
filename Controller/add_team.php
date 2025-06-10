@@ -31,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insere cada Pokémon na tabela `pokemon` com os novos atributos
         $pokemonSql = "INSERT INTO pokemon (
             pokId, pokAtk1, pokAtk2, pokAtk3, pokAtk4,
-            pokBasicAttack, pokSpecialAttack, pokBasicDefense, pokSpecialDefense, pokHp, pokSpeed
+            pokBasicAttack, pokSpecialAttack, pokBasicDefense, pokSpecialDefense, pokHp, pokSpeed, pokMaxHp
         ) VALUES (
             :pokId, :pokAtk1, :pokAtk2, :pokAtk3, :pokAtk4,
-            :pokBasicAttack, :pokSpecialAttack, :pokBasicDefense, :pokSpecialDefense, :pokHp, :pokSpeed
+            :pokBasicAttack, :pokSpecialAttack, :pokBasicDefense, :pokSpecialDefense, :pokHp, :pokSpeed, :pokMaxHp
         )";
         $pokemonStmt = $conn->prepare($pokemonSql);
 
@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':pokBasicDefense' => $pokemon['pokBasicDefense'],
                 ':pokSpecialDefense' => $pokemon['pokSpecialDefense'],
                 ':pokHp' => $pokemon['pokHp'],
+                ':pokMaxHp' => $pokemon['pokHp'],
                 ':pokSpeed' => $pokemon['pokSpeed'],
             ]);
             $pokCodes[] = $conn->lastInsertId();

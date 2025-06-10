@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/05/2025 às 16:59
+-- Tempo de geração: 10/06/2025 às 17:32
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -36,13 +36,6 @@ CREATE TABLE `battle` (
   `batDmgCounterPlayer1` int(4) DEFAULT NULL,
   `batDmgCounterPlayer2` int(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `battle`
---
-
-INSERT INTO `battle` (`batCode`, `batRooCode`, `batTeaCode1`, `batTeaCode2`, `batRound`, `batDmgCounterPlayer1`, `batDmgCounterPlayer2`) VALUES
-(60, 161, 4, 8, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -101,50 +94,27 @@ CREATE TABLE `pokemon` (
   `pokSpecialDefense` int(4) DEFAULT NULL,
   `pokSpeed` int(3) DEFAULT NULL,
   `pokHp` int(4) DEFAULT NULL,
-  `pokIsDead` tinyint(1) DEFAULT NULL
+  `pokIsDead` tinyint(1) DEFAULT NULL,
+  `pokMaxHp` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `pokemon`
 --
 
-INSERT INTO `pokemon` (`pokCode`, `pokId`, `pokAtk1`, `pokAtk2`, `pokAtk3`, `pokAtk4`, `pokIsBurned`, `pokIsPoisoned`, `pokIsSleeping`, `pokIsFreezed`, `pokIsConfused`, `pokIsParalized`, `pokIsOnField`, `pokBasicAttack`, `pokSpecialAttack`, `pokBasicDefense`, `pokSpecialDefense`, `pokSpeed`, `pokHp`, `pokIsDead`) VALUES
-(13, 11, 106, 334, 81, 527, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(14, 10, 173, 450, 33, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(15, 4, 53, 44, 68, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(16, 5, 36, 38, 69, 99, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(17, 5, 52, 82, 115, 91, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(18, 5, 126, 83, 174, 157, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(19, 11, 81, 106, 334, 450, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(20, 2, 34, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(21, 11, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(22, 14, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 13, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(24, 16, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(25, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(26, 2, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 3, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(29, 3, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(30, 4, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(31, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(32, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(33, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(34, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(35, 2, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(36, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(38, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(39, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(40, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(41, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(42, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(43, 1, 22, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(44, 2, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(45, 3, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(46, 1, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(47, 2, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(48, 3, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `pokemon` (`pokCode`, `pokId`, `pokAtk1`, `pokAtk2`, `pokAtk3`, `pokAtk4`, `pokIsBurned`, `pokIsPoisoned`, `pokIsSleeping`, `pokIsFreezed`, `pokIsConfused`, `pokIsParalized`, `pokIsOnField`, `pokBasicAttack`, `pokSpecialAttack`, `pokBasicDefense`, `pokSpecialDefense`, `pokSpeed`, `pokHp`, `pokIsDead`, `pokMaxHp`) VALUES
+(49, 1, 22, 13, 33, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 197, 229, 197, 229, 189, 294, NULL, 294),
+(50, 2, 72, 111, 75, 79, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 223, 259, 225, 259, 219, 324, NULL, 324),
+(51, 3, 76, 202, 235, 173, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 263, 299, 265, 299, 259, 364, NULL, 364),
+(52, 4, 7, 5, 44, 46, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 203, 219, 185, 199, 229, 282, NULL, 282),
+(53, 5, 53, 52, 82, 108, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 227, 259, 215, 229, 259, 320, NULL, 320),
+(54, 6, 117, 89, 210, 68, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 267, 317, 255, 269, 299, 360, NULL, 360),
+(55, 7, 58, 69, 93, 44, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 195, 199, 229, 227, 185, 292, NULL, 292),
+(56, 10, 527, 33, 81, 450, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 159, 139, 169, 139, 189, 294, NULL, 294),
+(57, 12, 76, 78, 72, 60, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 189, 279, 199, 259, 239, 324, NULL, 324),
+(58, 15, 41, 40, 116, 188, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 279, 189, 179, 259, 249, 334, NULL, 334),
+(59, 16, 16, 19, 143, 119, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 189, 169, 179, 169, 211, 284, NULL, 284),
+(60, 8, 8, 68, 61, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 225, 229, 259, 259, 215, 322, NULL, 322);
 
 -- --------------------------------------------------------
 
@@ -165,7 +135,7 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`rooCode`, `rooPlaCode1`, `rooPlaCode2`, `rooIsReadyPlayer1`, `rooIsReadyPlayer2`) VALUES
-(161, 2, 1, 1, 1);
+(164, 2, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -190,12 +160,8 @@ CREATE TABLE `team` (
 --
 
 INSERT INTO `team` (`teaCode`, `teaName`, `teaPlaCode`, `teaPokCode1`, `teaPokCode2`, `teaPokCode3`, `teaPokCode4`, `teaPokCode5`, `teaPokCode6`) VALUES
-(3, 'AI MEU 50/50 :(', 2, 13, 14, 15, 16, 17, 18),
-(4, 'PERDI 3 50/50, AFE', 2, 19, 20, 21, 22, 23, 24),
-(5, 'asd', 23, 25, 26, 27, 28, 29, 30),
-(6, ' vcxxcv', 23, 31, 32, 33, 34, 35, 36),
-(7, 'cvb', 24, 37, 38, 39, 40, 41, 42),
-(8, 'a', 1, 43, 44, 45, 46, 47, 48);
+(9, 'swadesad', 1, 49, 50, 51, 52, 53, 54),
+(10, 'leg', 2, 55, 56, 57, 58, 59, 60);
 
 --
 -- Índices para tabelas despejadas
@@ -250,7 +216,7 @@ ALTER TABLE `team`
 -- AUTO_INCREMENT de tabela `battle`
 --
 ALTER TABLE `battle`
-  MODIFY `batCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `batCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT de tabela `player`
@@ -262,19 +228,19 @@ ALTER TABLE `player`
 -- AUTO_INCREMENT de tabela `pokemon`
 --
 ALTER TABLE `pokemon`
-  MODIFY `pokCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `pokCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT de tabela `room`
 --
 ALTER TABLE `room`
-  MODIFY `rooCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `rooCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT de tabela `team`
 --
 ALTER TABLE `team`
-  MODIFY `teaCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `teaCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restrições para tabelas despejadas

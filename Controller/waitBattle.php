@@ -17,6 +17,8 @@ try {
 
     if ($isReady['rooIsReadyPlayer2'] != false || $isReady['rooIsReadyPlayer2'] != null) {
         $_SESSION['battle']['ready'] = true;
+        $_SESSION['battle']['player1'] = $isReady['rooPlaCode1'];
+        $_SESSION['battle']['player2'] = $isReady['rooPlaCode2'];
         echo json_encode(['ready' => true]);
         
     } else {

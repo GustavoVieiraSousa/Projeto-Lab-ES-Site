@@ -542,19 +542,22 @@ var_dump($_SESSION['battle']);
             if ($teamDefeated) {
                 if ($teamDefeated['player_position'] === 'player_is_batTeaCode1') {
                     try{
-                        $defeatStmt = $conn->prepare("UPDATE battle SET batTeaCode1 = 0 WHERE roomCode = ?");
+                        $defeatStmt = $conn->prepare("UPDATE battle SET batTeaCode1 = 0 WHERE batRooCode = ?");
                         $defeatStmt->execute([$roomCode]);
                         $_SESSION['battle']['defeat'] = $player;
                     }
                     catch(PDOException $e){
                         $_SESSION['message'] = "Erro ao setar Derrotado: ".$e;
-                        echo json_encode(['result' => true]);
+                        
+                        //TODO: ARRUMAR O BATTLE
+
+                        echo json_encode(['result' => false]);
                         exit();
                     }
 
                 } elseif ($teamDefeated['player_position'] === 'player_is_batTeaCode2') {
                     try{
-                        $defeatStmt = $conn->prepare("UPDATE battle SET batTeaCode1 = 0 WHERE roomCode = ?");
+                        $defeatStmt = $conn->prepare("UPDATE battle SET batTeaCode1 = 0 WHERE batRooCode = ?");
                         $defeatStmt->execute([$roomCode]);
                         $_SESSION['battle']['defeat'] = $player;
                     }
@@ -584,7 +587,7 @@ var_dump($_SESSION['battle']);
         $hpPlayer2 = $_SESSION['battle']['hpPlayer2'];
         require_once("connection.php");
         try{
-            $resetPokemonStmt = $conn->prepare("UPDATE pokemon SET pokIsOnField = NULL, pokIsDead = NULL, pokHp = :hpPlayer WHERE pokIsOnField = 1 AND pokCode IN 
+            $resetPokemonStmt = $conn->prepare("UPDATE pokemon SET pokIsOnField = NULL, pokIsDead = NULL, pokHp = pokMaxHp WHERE pokCode IN 
                 (SELECT teaPokCode1 FROM team WHERE teaPlaCode = :plaCode
                 UNION ALL
                 SELECT teaPokCode2 FROM team WHERE teaPlaCode = :plaCode
@@ -596,8 +599,8 @@ var_dump($_SESSION['battle']);
                 SELECT teaPokCode5 FROM team WHERE teaPlaCode = :plaCode
                 UNION ALL
                 SELECT teaPokCode6 FROM team WHERE teaPlaCode = :plaCode)");
-            $resetPokemonStmt->execute([':hpPlayer' => $hpPlayer1, ':plaCode' => $player1]);
-            $resetPokemonStmt->execute([':hpPlayer' => $hpPlayer2, ':plaCode' => $player2]);
+            $resetPokemonStmt->execute([':plaCode' => $player1]);
+            $resetPokemonStmt->execute([':plaCode' => $player2]);
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Resetar Pokemon: ".$e;
@@ -660,7 +663,7 @@ var_dump($_SESSION['battle']);
 
         unset($_SESSION['battle']);
         echo json_encode(['result' => true]); //AJAX
-        return;
+        exit();
     }
 
 ?>
