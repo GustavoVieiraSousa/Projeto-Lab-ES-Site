@@ -12,8 +12,8 @@ function fetchUpdateBattle() {
         .catch(error => console.error('Error fetching readiness status:', error));
 }
 
-function fetchTeamCheck(){
-    fetch('../Controller/teamCheck.php')
+function fetchGetPokemonParams(){
+    fetch('../Controller/getPokemonParams.php')
         .then(response => response.json())
         .then(data2 => {
             if(data2.res){
@@ -30,8 +30,9 @@ function fetchTeamCheck(){
 
 function fetchAllFunctions(){
     fetchUpdateBattle();
-    fetchTeamCheck();
+    fetchGetPokemonParams();
 }
 
+fetchGetPokemonParams();
 // Call all the functions every 10s
 const interval = setInterval(fetchAllFunctions, 10000);

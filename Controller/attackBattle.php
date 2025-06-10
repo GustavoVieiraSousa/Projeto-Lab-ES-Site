@@ -50,7 +50,7 @@ else{ $damage = 0; }
 try {
     $stmt = $conn->prepare("UPDATE battle SET $dmgField = ? WHERE batRooCode = ?");
     $stmt->execute([$damage, $roomCode]);
-    echo json_encode(['success' => true, 'damage' => $damage, 'attack' => $attack]);
+    echo json_encode(['success' => true, 'damage' => (int) $damage, 'attack' => $attack, 'crit' => $crit]);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }

@@ -39,6 +39,10 @@
                 header("Location: lobby.php");
                 exit();
             }
+
+            $player1 = $_SESSION['battle']['player1'];
+            $activePlayer = ($plaCode == $player1) ? "pokemon1" : "pokemon2";
+
         ?>
 
          <div id="app">
@@ -96,8 +100,7 @@
                 </div>
               </div>
 
-              
-              
+              <!-- Card Blue - Player 1 -->
               <div class="pokedex-bottom">
                 <div class="team-pokeballs">
                   <div class="pokeballs-container">
@@ -109,11 +112,23 @@
                     <div class="pokeball"></div>
                   </div>
                 </div>
+
+                <!-- Ataques -->
+                <div class="moves-container">
+                  <button class="move-btn electric" data-attack="1">Ataque 1</button> <!-- TODO: Travar o botao quando for clicado e nao destravar até atualizar o round -->
+                  <button class="move-btn normal" data-attack="2">Ataque 2</button>
+                  <button class="move-btn electric" data-attack="3">Ataque 3</button>
+                  <button class="move-btn normal" data-attack="4">Ataque 4</button>
+                </div>
+
+                <div class="surrender-container">
+                    <form method="POST" action="../Controller/resignBattle.php">
+                    <button type="resign" name="resign" class="surrender-btn">Trocar Pokémon</button> 
+                    </form>
+                </div>
               </div>
             </div>
-
            
-
             <!-- Center battle status -->
             <div class="battle-status-container">
               <div class="battle-status">VS</div>
@@ -161,32 +176,18 @@
                     <div class="pokeball"></div>
                     <div class="pokeball"></div>
                   </div>
-                </div>
-                
-                <!-- Ataques -->
-                <div class="moves-container">
-                  <button class="move-btn electric" data-attack="1">Ataque 1</button>
-                  <button class="move-btn normal" data-attack="2">Ataque 2</button>
-                  <button class="move-btn electric" data-attack="3">Ataque 3</button>
-                  <button class="move-btn normal" data-attack="4">Ataque 4</button>
-                </div>
-                
-               
-                <div class="surrender-container">
-                    <form method="POST" action="../Controller/resignBattle.php">
-                    <button type="resign" name="resign" class="surrender-btn">Trocar Pokémon</button> 
-                    </form>
-                </div>
+                </div>               
               </div>
             </div>
           </div>
           
+          <!-- battle log -->
           <div class="battle-log">
             <div class="log-header">BATTLE LOG</div>
             <div class="log-content">
-              <p>A wild Charizard appeared!</p>
+              <!-- <p>A wild Charizard appeared!</p>
               <p>Pikachu used Thunderbolt!</p>
-              <p>It's not very effective...</p>
+              <p>It's not very effective...</p> -->
             </div>
           </div>
 
@@ -204,6 +205,15 @@
 </html>
 
 <script>
+const atkNames = {
+    1: "<?php echo isset($_SESSION['battle'][$activePlayer]['atkName1']) ? $_SESSION['battle'][$activePlayer]['atkName1'] : 'Ataque 1'; ?>",
+    2: "<?php echo isset($_SESSION['battle'][$activePlayer]['atkName2']) ? $_SESSION['battle'][$activePlayer]['atkName2'] : 'Ataque 2'; ?>",
+    3: "<?php echo isset($_SESSION['battle'][$activePlayer]['atkName3']) ? $_SESSION['battle'][$activePlayer]['atkName3'] : 'Ataque 3'; ?>",
+    4: "<?php echo isset($_SESSION['battle'][$activePlayer]['atkName4']) ? $_SESSION['battle'][$activePlayer]['atkName4'] : 'Ataque 4'; ?>"
+};
+</script>
+
+<script>
 document.querySelectorAll('.move-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.preventDefault();
@@ -216,24 +226,12 @@ document.querySelectorAll('.move-btn').forEach(btn => {
         .then(res => res.json())
         .then(data => {
             if(data.success) {
-                // Atualiza o log de batalha
-
-                $atkName1 = isset($_SESSION['battle'][$activePlayer]['atkName1']) ? $_SESSION['battle'][$activePlayer]['atkName1'] : NULL;
-                $atkName2 = isset($_SESSION['battle'][$activePlayer]['atkName2']) ? $_SESSION['battle'][$activePlayer]['atkName2'] : NULL;
-                $atkName3 = isset($_SESSION['battle'][$activePlayer]['atkName3']) ? $_SESSION['battle'][$activePlayer]['atkName3'] : NULL;
-                $atkName4 = isset($_SESSION['battle'][$activePlayer]['atkName4']) ? $_SESSION['battle'][$activePlayer]['atkName4'] : NULL;
-
-                if (data2.attack == '1') { $atkName = $atkName1 };
-                if (data2.attack == '2') { $atkName = $atkName2 };
-                if (data2.attack == '3') { $atkName = $atkName3 };
-                if (data2.attack == '4') { $atkName = $atkName4 };
-
+                const atkName = atkNames[data.attack] || "Ataque";
                 const logContent = document.querySelector('.log-content');
+                const crit = data.crit == 2 ? "Ataque CRÍTICO." : "";
                 const p = document.createElement('p');
-                p.textContent = `Você usou ${$this.textContent}! (Dano: ${data.damage})`;
+                p.textContent = `Você usou ${atkName}! (Dano: ${data.damage}). ${crit}`;
                 logContent.appendChild(p);
-
-                // (Opcional) Scroll automático para o fim do log
                 logContent.scrollTop = logContent.scrollHeight;
             } else {
                 alert('Erro ao atacar: ' + (data.error || ''));
@@ -248,6 +246,9 @@ document.querySelectorAll('.move-btn').forEach(btn => {
     //Tratando um errinho chato que sempre aparece o Wait toda vez q a pagina é carregada
     echo "<script src='../Model/js/battle/isReady.js'></script>";
 
+    if(!isset($_SESSION['battle']['ready'])){
+      $_SESSION['battle']['ready'] = false;
+    }
     
     if($_SESSION['battle']['ready'] == true){
         require_once("../Controller/getPlayers.php");
@@ -265,3 +266,4 @@ document.querySelectorAll('.move-btn').forEach(btn => {
         }
     }
 ?>
+
