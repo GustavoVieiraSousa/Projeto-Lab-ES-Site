@@ -11,6 +11,7 @@
         <?php
             session_start();
             require_once '../Controller/TeamController.php';
+            require_once '../Controller/getPlayers.php';
 
             if (!isset($_SESSION['user']) || !$_SESSION['user']) {
                 header('Location: login.php');
@@ -39,6 +40,9 @@
                 header("Location: lobby.php");
                 exit();
             }
+
+            $pokemon1Sprite = "./Images/pokemon-default.png";
+            $pokemon2Sprite = "./Images/pokemon-default.png";
 
             $player1 = $_SESSION['battle']['player1'];
             $plaCode = $_SESSION['plaCode'];
@@ -85,17 +89,17 @@
               <div class="pokedex-screen-container">
                 <div class="pokedex-screen">
                   <div class="pokemon-sprite">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Charizard">
+                    <img class="img-pokemon-sprite1" src="<?php echo $pokemon1Sprite ?>" alt="Pokemon 1">
                   </div>
                   <div class="pokemon-info">
-                    <div class="pokemon-name">Charizard</div>
-                    <div class="pokemon-level">Nv. 50</div>
+                    <div class="pokemon-name pokName1">Pokemon 1</div>
+                    <div class="pokemon-level">Nv. 100</div>
                     <div class="hp-container">
                       <div class="hp-label">HP:</div>
                       <div class="hp-bar">
-                        <div class="hp-fill" style="width: 60%;"></div>
+                        <div class="hp-fill percHpP1"></div>
                       </div>
-                      <div class="hp-values">120/200</div>
+                      <div class="hp-values hpP1">??/??</div>
                     </div>
                   </div>
                 </div>
@@ -116,15 +120,15 @@
 
                 <!-- Ataques -->
                 <div class="moves-container">
-                  <button class="move-btn electric" data-attack="1">Ataque 1</button> <!-- TODO: Travar o botao quando for clicado e nao destravar até atualizar o round -->
-                  <button class="move-btn normal" data-attack="2">Ataque 2</button>
-                  <button class="move-btn electric" data-attack="3">Ataque 3</button>
-                  <button class="move-btn normal" data-attack="4">Ataque 4</button>
+                  <button class="move-btn atk1 electric" data-attack="1">Ataque 1</button> <!-- TODO: Travar o botao quando for clicado e nao destravar até atualizar o round -->
+                  <button class="move-btn atk2 normal" data-attack="2">Ataque 2</button>
+                  <button class="move-btn atk3 electric" data-attack="3">Ataque 3</button>
+                  <button class="move-btn atk4 normal" data-attack="4">Ataque 4</button>
                 </div>
 
                 <div class="surrender-container">
                     <form method="POST" action="../Controller/resignBattle.php">
-                    <button type="resign" name="resign" class="surrender-btn">Trocar Pokémon</button> 
+                    <button type="resign" name="resign" class="surrender-btn">Desistir</button> 
                     </form>
                 </div>
               </div>
@@ -151,17 +155,17 @@
               <div class="pokedex-screen-container">
                 <div class="pokedex-screen">
                   <div class="pokemon-sprite">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" alt="Pikachu">
+                    <img class="img-pokemon-sprite2" src="<?php echo $pokemon2Sprite ?>" alt="Pokemon 2">
                   </div>
                   <div class="pokemon-info">
-                    <div class="pokemon-name">Pikachu</div>
-                    <div class="pokemon-level">Nv. 50</div>
+                    <div class="pokemon-name pokName2">Pokemon 2</div>
+                    <div class="pokemon-level">Nv. 100</div>
                     <div class="hp-container">
                       <div class="hp-label">HP:</div>
                       <div class="hp-bar">
-                        <div class="hp-fill" style="width: 85%;"></div>
+                        <div class="hp-fill percHpP2"></div>
                       </div>
-                      <div class="hp-values">85/100</div>
+                      <div class="hp-values hpP2">??/??</div>
                     </div>
                   </div>
                 </div>

@@ -338,12 +338,11 @@ var_dump($_SESSION['battle']);
     //Seta IsDead na tabela Pokemon pro Player1
     function setIsDeadPokemonPlayer1($pokemon){
         global $conn;
-        $hpPlayer1 = $_SESSION['battle']['hpPlayer1'];
         require_once("connection.php");
 
         try{
-            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
-            $setIsDeadStmt->execute([$hpPlayer1, $pokemon]);
+            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = pokMaxHp WHERE pokCode = ?");
+            $setIsDeadStmt->execute([$pokemon]);
             
         }
         catch(PDOException $e){
@@ -358,12 +357,11 @@ var_dump($_SESSION['battle']);
     //Seta IsDead na tabela Pokemon pro Player2
     function setIsDeadPokemonPlayer2($pokemon){
         global $conn;
-        $hpPlayer2 = $_SESSION['battle']['hpPlayer2'];
         require_once("connection.php");
 
         try{
-            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = ? WHERE pokCode = ?");
-            $setIsDeadStmt->execute([$hpPlayer2, $pokemon]);
+            $setIsDeadStmt = $conn->prepare("UPDATE pokemon SET pokIsDead = 1, pokHp = pokMaxHp WHERE pokCode = ?");
+            $setIsDeadStmt->execute([$pokemon]);
         }
         catch(PDOException $e){
             $_SESSION['message'] = "Erro ao Setar IsDeadPokemonPlayer2: ".$e;
