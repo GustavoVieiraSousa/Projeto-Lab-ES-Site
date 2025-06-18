@@ -58,6 +58,46 @@ button:hover {
     background-color: #0056b3;
 }
 
+.btn-salvar {
+    display: block;
+    margin: 30px auto 0 auto; /* centraliza e dá espaço acima */
+    background-color: var(--pokeblue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 10px 40px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    max-width: 250px;
+    min-width: 180px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.btn-salvar:hover {
+    background-color: #1799c2;
+}
+
+/* Agrupa o campo de senha e o botão lado a lado */
+.senha-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.senha-group input[type="password"] {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.senha-group button {
+    margin-bottom: 0;
+    height: 40px; /* Ajuste para alinhar com o input */
+    padding: 0 15px;
+    font-size: 15px;
+}
+
 .error-message {
     color: #d9534f;
     font-size: 14px;
@@ -123,4 +163,90 @@ button:hover {
 }
 .profile-popup:not(.hidden){
     display: flex;
+}
+
+
+/* Popup de upload de imagem de perfil */
+.profile-popup {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+.profile-popup:not(.hidden) {
+    display: flex;
+}
+.popup-upload-form {
+    background: #333;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    border-style: solid;
+    border-color: #1799c2;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;      /* Garante coluna */
+    align-items: center;
+    min-width: 300px;
+    gap: 1.2rem;                 /* Espaço entre os elementos */
+}
+.popup-upload-form h3 {
+    margin-bottom: 1rem;
+    color: var(--pokeblue);
+}
+.popup-upload-form input[type="file"] {
+    margin-bottom: 0;            /* Remove margem extra */
+}
+.popup-buttons {
+    display: flex;
+    flex-direction: row;         /* Botões lado a lado */
+    gap: 1rem;
+}
+.btn-salvar {
+    background-color: var(--pokeblue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 8px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-salvar:hover {
+    background-color: #1799c2;
+}
+.btn-cancelar {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 8px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    max-width: 250px;
+    min-width: 180px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: block;
+    margin: 0 auto;
+}
+.btn-cancelar:hover {
+    background-color: #c0392b;
+}
+
+.popup-buttons .btn-salvar,
+.popup-buttons .btn-cancelar {
+    min-width: 180px;
+    max-width: 250px;
+    width: 180px;
+    padding: 12px 0;
+    font-size: 1em;
+    box-sizing: border-box;
+    display: block;
+    margin: 0;
+    height: 44px;
 }

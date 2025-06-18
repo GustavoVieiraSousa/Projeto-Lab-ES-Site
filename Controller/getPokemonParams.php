@@ -97,11 +97,19 @@ if($isSetPokemon1 && $pokCodeP1 == $_SESSION['battle']['pokemonCodeP1']){
   $atkName2P1 = $_SESSION['battle']['pokemon1']['atkName2'];
   $atkName3P1 = $_SESSION['battle']['pokemon1']['atkName3'];
   $atkName4P1 = $_SESSION['battle']['pokemon1']['atkName4'];
+  $moveType1P1 = $_SESSION['battle']['pokemon1']['atkType1'];
+  $moveType2P1 = $_SESSION['battle']['pokemon1']['atkType2'];
+  $moveType3P1 = $_SESSION['battle']['pokemon1']['atkType3'];
+  $moveType4P1 = $_SESSION['battle']['pokemon1']['atkType4'];
   $moveClass1P1 = $_SESSION['battle']['pokemon1']['atkClass1'];
   $moveClass2P1 = $_SESSION['battle']['pokemon1']['atkClass2'];
   $moveClass3P1 = $_SESSION['battle']['pokemon1']['atkClass3'];
   $moveClass4P1 = $_SESSION['battle']['pokemon1']['atkClass4'];
   $pokName1 = $_SESSION['battle']['pokemon1']['pokName'];
+  $pok1Slot1 = $_SESSION['battle']['pokemon1']['type1'];
+  $pok1Slot2 = $_SESSION['battle']['pokemon1']['type2'];
+  $pok1Slot1DamageRelations = $_SESSION['battle']['pokemon1']['damageRelations1'];
+  $pok1Slot2DamageRelations = $_SESSION['battle']['pokemon1']['damageRelations2'];
 }
 else{
     // Busca os dados do ataque na PokéAPI - Pokemon do Player 1
@@ -132,20 +140,40 @@ else{
     $power1P1 = $moveData1P1['power'] ?? null; //se retornar sem valor, seta para null
     $atkName1P1 = $moveData1P1['name'] ?? null;
     $moveClass1P1 = $moveData1P1['damage_class']['name'] ?? null;
+    $moveType1P1 = $moveData1P1['type'] ?? null;
 
     $power2P1 = $moveData2P1['power'] ?? null;
     $atkName2P1 = $moveData2P1['name'] ?? null;
     $moveClass2P1 = $moveData2P1['damage_class']['name'] ?? null;
+    $moveType2P1 = $moveData2P1['type'] ?? null;
 
     $power3P1 = $moveData3P1['power'] ?? null;
     $atkName3P1 = $moveData3P1['name'] ?? null;
     $moveClass3P1 = $moveData3P1['damage_class']['name'] ?? null;
+    $moveType3P1 = $moveData3P1['type'] ?? null;
 
     $power4P1 = $moveData4P1['power'] ?? null;
     $atkName4P1 = $moveData4P1['name'] ?? null;
     $moveClass4P1 = $moveData4P1['damage_class']['name'] ?? null;
+    $moveType4P1 = $moveData4P1['type'] ?? null;
 
     $pokName1 = $pokemonDataP1['name'] ?? null;
+    $pok1Slot1 = $pokemonDataP1['types'][0]['type']['name'] ?? null;
+    $pok1Slot2 = $pokemonDataP1['types'][1]['type']['name'] ?? null;
+
+    //-----------------------------------------------------------------------------
+
+    //Pesquisa do Type (sim, o codigo tem que estar aqui)
+    $pokeApi1TypeP1 = "https://pokeapi.co/api/v2/type/$pok1Slot1";
+    $type1JsonP1 = file_get_contents($pokeApi1TypeP1);
+    $type1DataP1 = json_decode($type1JsonP1, true);
+
+    $pokeApi2TypeP1 = "https://pokeapi.co/api/v2/type/$pok1Slot2";
+    $type2JsonP1 = file_get_contents($pokeApi2TypeP1);
+    $type2DataP1 = json_decode($type2JsonP1, true);
+
+    $pok1Slot1DamageRelations = $type1DataP1['damage_relations'] ?? null;
+    $pok1Slot2DamageRelations = $type2DataP1['damage_relations'] ?? null;
 }
 
 if($isSetPokemon2 && $pokCodeP2 == $_SESSION['battle']['pokemonCodeP2']){
@@ -157,11 +185,19 @@ if($isSetPokemon2 && $pokCodeP2 == $_SESSION['battle']['pokemonCodeP2']){
   $atkName2P2 = $_SESSION['battle']['pokemon2']['atkName2'];
   $atkName3P2 = $_SESSION['battle']['pokemon2']['atkName3'];
   $atkName4P2 = $_SESSION['battle']['pokemon2']['atkName4'];
+  $moveType1P2 = $_SESSION['battle']['pokemon2']['atkType1'];
+  $moveType2P2 = $_SESSION['battle']['pokemon2']['atkType2'];
+  $moveType3P2 = $_SESSION['battle']['pokemon2']['atkType3'];
+  $moveType4P2 = $_SESSION['battle']['pokemon2']['atkType4'];
   $moveClass1P2 = $_SESSION['battle']['pokemon2']['atkClass1'];
   $moveClass2P2 = $_SESSION['battle']['pokemon2']['atkClass2'];
   $moveClass3P2 = $_SESSION['battle']['pokemon2']['atkClass3'];
   $moveClass4P2 = $_SESSION['battle']['pokemon2']['atkClass4'];
   $pokName2 = $_SESSION['battle']['pokemon2']['pokName'];
+  $pok2Slot1 = $_SESSION['battle']['pokemon2']['type1'];
+  $pok2Slot2 = $_SESSION['battle']['pokemon2']['type2'];
+  $pok2Slot1DamageRelations = $_SESSION['battle']['pokemon2']['damageRelations1'];
+  $pok2Slot2DamageRelations = $_SESSION['battle']['pokemon2']['damageRelations2'];
 }
 else{
     // Busca os dados do ataque na PokéAPI - Pokemon do Player 2
@@ -192,20 +228,40 @@ else{
     $power1P2 = $moveData1P2['power'] ?? null; //se retornar sem valor, seta para null
     $atkName1P2 = $moveData1P2['name'] ?? null;
     $moveClass1P2 = $moveData1P2['damage_class']['name'] ?? null;
+    $moveType1P2 = $moveData1P2['type'] ?? null;
 
     $power2P2 = $moveData2P2['power'] ?? null;
     $atkName2P2 = $moveData2P2['name'] ?? null;
     $moveClass2P2 = $moveData2P2['damage_class']['name'] ?? null;
+    $moveType2P2 = $moveData2P2['type'] ?? null;
 
     $power3P2 = $moveData3P2['power'] ?? null;
     $atkName3P2 = $moveData3P2['name'] ?? null;
     $moveClass3P2 = $moveData3P2['damage_class']['name'] ?? null;
+    $moveType3P2 = $moveData3P2['type'] ?? null;
 
     $power4P2 = $moveData4P2['power'] ?? null;
     $atkName4P2 = $moveData4P2['name'] ?? null;
     $moveClass4P2 = $moveData4P2['damage_class']['name'] ?? null;
+    $moveType4P2 = $moveData4P2['type'] ?? null;
 
     $pokName2 = $pokemonDataP2['name'] ?? null;
+    $pok2Slot1 = $pokemonDataP2['types'][0]['type']['name'] ?? null; //Tipo 1 do pokemon
+    $pok2Slot2 = $pokemonDataP2['types'][1]['type']['name'] ?? null; //Tipo 2 do pokemon
+
+    //-----------------------------------------------------------------------------
+
+    //Pesquisa do Type Player 2 (sim, o codigo tem que estar aqui)
+    $pokeApi1TypeP2 = "https://pokeapi.co/api/v2/type/$pok2Slot1";
+    $type1JsonP2 = file_get_contents($pokeApi1TypeP2);
+    $type1DataP2 = json_decode($type1JsonP2, true);
+
+    $pokeApi2TypeP2 = "https://pokeapi.co/api/v2/type/$pok2Slot2";
+    $type2JsonP2 = file_get_contents($pokeApi2TypeP2);
+    $type2DataP2 = json_decode($type2JsonP2, true);
+
+    $pok2Slot1DamageRelations = $type1DataP2['damage_relations'] ?? null;
+    $pok2Slot2DamageRelations = $type2DataP2['damage_relations'] ?? null;
 }
 
 //-----------------------------------------------------------------------------
@@ -226,12 +282,20 @@ $_SESSION['battle']['pokemon1']['atkName1'] = $atkName1P1;
 $_SESSION['battle']['pokemon1']['atkName2'] = $atkName2P1;
 $_SESSION['battle']['pokemon1']['atkName3'] = $atkName3P1;
 $_SESSION['battle']['pokemon1']['atkName4'] = $atkName4P1;
+$_SESSION['battle']['pokemon1']['atkType1'] = $moveType1P1;
+$_SESSION['battle']['pokemon1']['atkType2'] = $moveType2P1;
+$_SESSION['battle']['pokemon1']['atkType3'] = $moveType3P1;
+$_SESSION['battle']['pokemon1']['atkType4'] = $moveType4P1;
 $_SESSION['battle']['pokemon1']['atkClass1'] = $moveClass1P1;
 $_SESSION['battle']['pokemon1']['atkClass2'] = $moveClass2P1;
 $_SESSION['battle']['pokemon1']['atkClass3'] = $moveClass3P1;
 $_SESSION['battle']['pokemon1']['atkClass4'] = $moveClass4P1;
 
 $_SESSION['battle']['pokemon1']['pokName'] = $pokName1;
+$_SESSION['battle']['pokemon1']['type1'] = $pok1Slot1;
+$_SESSION['battle']['pokemon1']['type2'] = $pok1Slot2;
+$_SESSION['battle']['pokemon1']['damageRelations1'] = $pok1Slot1DamageRelations;
+$_SESSION['battle']['pokemon1']['damageRelations2'] = $pok1Slot2DamageRelations;
 
 $_SESSION['battle']['pokemon1']['pokPhysicalAttack'] = $pokPhysicalAttack1;
 $_SESSION['battle']['pokemon1']['pokPhysicalDefense'] = $pokPhysicalDefense1;
@@ -249,17 +313,25 @@ $_SESSION['battle']['pokemon2']['atkName1'] = $atkName1P2;
 $_SESSION['battle']['pokemon2']['atkName2'] = $atkName2P2;
 $_SESSION['battle']['pokemon2']['atkName3'] = $atkName3P2;
 $_SESSION['battle']['pokemon2']['atkName4'] = $atkName4P2;
+$_SESSION['battle']['pokemon2']['atkType1'] = $moveType1P2;
+$_SESSION['battle']['pokemon2']['atkType2'] = $moveType2P2;
+$_SESSION['battle']['pokemon2']['atkType3'] = $moveType3P2;
+$_SESSION['battle']['pokemon2']['atkType4'] = $moveType4P2;
 $_SESSION['battle']['pokemon2']['atkClass1'] = $moveClass1P2;
 $_SESSION['battle']['pokemon2']['atkClass2'] = $moveClass2P2;
 $_SESSION['battle']['pokemon2']['atkClass3'] = $moveClass3P2;
 $_SESSION['battle']['pokemon2']['atkClass4'] = $moveClass4P2;
 
+$_SESSION['battle']['pokemon2']['pokName'] = $pokName2;
+$_SESSION['battle']['pokemon2']['type1'] = $pok2Slot1;
+$_SESSION['battle']['pokemon2']['type2'] = $pok2Slot2;
+$_SESSION['battle']['pokemon2']['damageRelations1'] = $pok2Slot1DamageRelations;
+$_SESSION['battle']['pokemon2']['damageRelations2'] = $pok2Slot2DamageRelations;
+
 $_SESSION['battle']['pokemon2']['pokPhysicalAttack'] = $pokPhysicalAttack2;
 $_SESSION['battle']['pokemon2']['pokPhysicalDefense'] = $pokPhysicalDefense2;
 $_SESSION['battle']['pokemon2']['pokSpecialAttack'] = $pokSpecialAttack2;
 $_SESSION['battle']['pokemon2']['pokSpecialDefense'] = $pokSpecialDefense2;
-
-$_SESSION['battle']['pokemon2']['pokName'] = $pokName2;
 
 echo json_encode(['res' => true,
     'power1P1' => $power1P1,
@@ -272,6 +344,10 @@ echo json_encode(['res' => true,
     'atkName4P1' => $atkName4P1,
     'pokIdP1' => $pokIdP1,
     'pokName1' => $pokName1,
+    'pok1Slot1' => $pok1Slot1,
+    'pok1Slot2' => $pok1Slot2,
+    'pok1Slot1DamageRelations' => $pok1Slot1DamageRelations,
+    'pok1Slot2DamageRelations' => $pok1Slot2DamageRelations,
     'player1' => $player1,
     'maxHpP1' => $maxHpPokemon1,
     'hpP1' => $hpPokemon1,
@@ -286,6 +362,10 @@ echo json_encode(['res' => true,
     'atkName4P2' => $atkName4P2,
     'pokIdP2' => $pokIdP2,
     'pokName2' => $pokName2,
+    'pok2Slot1' => $pok2Slot1,
+    'pok2Slot2' => $pok2Slot2,
+    'pok2Slot1DamageRelations' => $pok2Slot1DamageRelations,
+    'pok2Slot2DamageRelations' => $pok2Slot2DamageRelations,
     'player2' => $player2,
     'maxHpP2' => $maxHpPokemon2,
     'hpP2' => $hpPokemon2,

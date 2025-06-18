@@ -5,7 +5,45 @@ function fetchUpdateBattle() {
             if (data.result) {
                 // Hide the wait popup if the second player is ready
                 document.querySelector('.wait-popup').classList.remove('hidden');
-                // alert("Acabou a batalha");
+                // Mostra mensagem de vitória ou derrota e botão para lobby
+                const waitPopup = document.querySelector('.wait-popup');
+                let win = false;
+                try {
+                    win = sessionStorage.getItem('win') === '1';
+                } catch (e) {}
+
+                // Tenta pegar do PHP via variável global, se quiser mais precisão pode passar pelo backend
+                let message = "Batalha finalizada.";
+                if (typeof data.win !== "undefined") {
+                    message = data.win == 1 ? "Você ganhou :D" : "Você perdeu :(";
+                } else if (typeof window.win !== "undefined") {
+                    message = window.win == 1 ? "Você ganhou :D" : "Você perdeu :(";
+                }
+
+                waitPopup.innerHTML = `
+                    <div style="text-align:center; padding: 30px;">
+                        <h2>${message}</h2>
+                        <a href="lobby.php" style="text-decoration:none;">
+                            <button 
+                                style="
+                                    margin-top:20px;
+                                    font-size:1.2em;
+                                    padding:10px 30px;
+                                    background-color: var(--pokeblue);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 8px;
+                                    font-weight: bold;
+                                    cursor: pointer;
+                                    transition: background-color 0.2s;
+                                "
+                                onmouseover="this.style.backgroundColor='#1799c2'"
+                                onmouseout="this.style.backgroundColor='var(--pokeblue)'"
+                            >Voltar para o Lobby</button>
+                        </a>
+                    </div>
+                `;
+                waitPopup.classList.remove('hidden');
                 clearInterval(interval);
             }
         })
@@ -16,6 +54,7 @@ function fetchGetPokemonParams(){
     fetch('../Controller/getPokemonParams.php')
         .then(response => response.json())
         .then(data2 => {
+            document.querySelectorAll('.move-btn').forEach(b => b.disabled = false);
             if(data2.res){
                 if(data2.player1 == data2.plaCode){
                     //change Img
@@ -43,21 +82,33 @@ function fetchGetPokemonParams(){
                     //change %hp
                     const percHpP1Set = (hpP1*100) / maxHpP1
                     percHpP1 = Math.round(percHpP1Set);
-                    document.querySelector('.percHpP1').style.width = percHpP1 + "%"
-
                     //TODO: Arrumar bug que quando o pokemon morre, a barra de vida trava na cor que ele morreu
-
-                    if(percHpP1 > 50){ document.querySelector('.percHpP1').style.backgroundColor = "lime-green"; }
-                    if(percHpP1 > 10 && percHpP1 <= 50){ document.querySelector('.percHpP1').style.backgroundColor = "yellow"; }
-                    if((percHpP1 <= 10)){ document.querySelector('.percHpP1').style.backgroundColor = "red"; }
+                    const barP1 = document.querySelector('.percHpP1');
+                    barP1.style.width = percHpP1 + "%";
+                    // Reset color first (opcional, mas seguro)
+                    barP1.style.backgroundColor = "";
+                    if (percHpP1 > 50) {
+                        barP1.style.backgroundColor = "limegreen";
+                    } else if (percHpP1 > 15 && percHpP1 <= 50) {
+                        barP1.style.backgroundColor = "yellow";
+                    } else if (percHpP1 <= 15) {
+                        barP1.style.backgroundColor = "red";
+                    }
 
                     const percHpP2Set = (hpP2*100) / maxHpP2
                     percHpP2 = Math.round(percHpP2Set);
-                    document.querySelector('.percHpP2').style.width = percHpP2 + "%"
-                    
-                    if(percHpP2 > 50){ document.querySelector('.percHpP2').style.backgroundColor = "lime-green"; }
-                    if(percHpP2 > 10 && percHpP2 <= 50){ document.querySelector('.percHpP2').style.backgroundColor = "yellow"; }
-                    if((percHpP2 <= 10)){ document.querySelector('.percHpP2').style.backgroundColor = "red"; }
+                  
+                    const barP2 = document.querySelector('.percHpP2');
+                    barP2.style.width = percHpP2 + "%";
+                    // Reset color first (opcional, mas seguro)
+                    barP2.style.backgroundColor = "";
+                    if (percHpP2 > 50) {
+                        barP2.style.backgroundColor = "limegreen";
+                    } else if (percHpP2 > 15 && percHpP2 <= 50) {
+                        barP2.style.backgroundColor = "yellow";
+                    } else if (percHpP2 <= 15) {
+                        barP2.style.backgroundColor = "red";
+                    }
                 }
                 if(data2.player2 == data2.plaCode){
                     document.querySelector('.img-pokemon-sprite2').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data2.pokIdP1}.png`;
@@ -84,19 +135,33 @@ function fetchGetPokemonParams(){
                     //change %hp
                     const percHpP2Set = (hpP2*100) / maxHpP2
                     percHpP2 = Math.round(percHpP2Set);
-                    document.querySelector('.percHpP2').style.width = percHpP2 + "%"
-
-                    if(percHpP2 > 50){ document.querySelector('.percHpP2').style.backgroundColor = "lime-green"; }
-                    if(percHpP2 > 10 && percHpP2 <= 50){ document.querySelector('.percHpP2').style.backgroundColor = "yellow"; }
-                    if((percHpP2 <= 10)){ document.querySelector('.percHpP2').style.backgroundColor = "red"; }
+                  
+                    const barP2 = document.querySelector('.percHpP2');
+                    barP2.style.width = percHpP2 + "%";
+                    // Reset color first (opcional, mas seguro)
+                    barP2.style.backgroundColor = "";
+                    if (percHpP2 > 50) {
+                        barP2.style.backgroundColor = "limegreen";
+                    } else if (percHpP2 > 15 && percHpP2 <= 50) {
+                        barP2.style.backgroundColor = "yellow";
+                    } else if (percHpP2 <= 15) {
+                        barP2.style.backgroundColor = "red";
+                    }
 
                     const percHpP1Set = (hpP1*100) / maxHpP1
                     percHpP1 = Math.round(percHpP1Set);
-                    document.querySelector('.percHpP1').style.width = percHpP1 + "%"
-
-                    if(percHpP1 > 50){ document.querySelector('.percHpP1').style.backgroundColor = "lime-green"; }
-                    if(percHpP1 > 10 && percHpP1 <= 50){ document.querySelector('.percHpP1').style.backgroundColor = "yellow"; }
-                    if((percHpP1 <= 10)){ document.querySelector('.percHpP1').style.backgroundColor = "red"; }
+                    //TODO: Arrumar bug que quando o pokemon morre, a barra de vida trava na cor que ele morreu
+                    const barP1 = document.querySelector('.percHpP1');
+                    barP1.style.width = percHpP1 + "%";
+                    // Reset color first (opcional, mas seguro)
+                    barP1.style.backgroundColor = "";
+                    if (percHpP1 > 50) {
+                        barP1.style.backgroundColor = "limegreen";
+                    } else if (percHpP1 > 15 && percHpP1 <= 50) {
+                        barP1.style.backgroundColor = "yellow";
+                    } else if (percHpP1 <= 15) {
+                        barP1.style.backgroundColor = "red";
+                    }
                 }
             }
             else{

@@ -222,6 +222,11 @@ const atkNames = {
 document.querySelectorAll('.move-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.preventDefault();
+
+        // Desabilita todos os botões de ataque
+        document.querySelectorAll('.move-btn').forEach(btn => { btn.setAttribute('data-original', btn.textContent); });
+        document.querySelectorAll('.move-btn').forEach(b => { b.disabled = true; b.textContent = "Aguarde..."; } );
+
         const attack = this.getAttribute('data-attack');
         fetch('../Controller/attackBattle.php', {
             method: 'POST',
@@ -235,7 +240,8 @@ document.querySelectorAll('.move-btn').forEach(btn => {
                 const logContent = document.querySelector('.log-content');
                 const crit = data.crit == 2 ? "Ataque CRÍTICO." : "";
                 const p = document.createElement('p');
-                p.textContent = `Você usou ${atkName}! (Dano: ${data.damage}). ${crit}`;
+                if(data.damage == 0){ p.textContent = `Você usou ${atkName}! O ataque não causou dano.` }
+                else{ p.textContent = `Você usou ${atkName}! (Dano: ${data.damage}). ${crit}`; }
                 logContent.appendChild(p);
                 logContent.scrollTop = logContent.scrollHeight;
             } else {
@@ -263,26 +269,5 @@ document.querySelectorAll('.move-btn').forEach(btn => {
             });
         </script>
     ";
-
-    // if(!isset($_SESSION['battle']['ready'])){
-    //   $_SESSION['battle']['ready'] = false;
-    // }
-    
-    // if($_SESSION['battle']['ready'] == true){
-    //     require_once("../Controller/getPlayers.php");
-    //     // require_once("../Controller/setPokemonMaxHp.php");
-    //     echo "<script> document.querySelector('.wait-popup').classList.add('hidden'); </script>";
-    //     echo "<script src='../Model/js/battle/updateBattle.js'></script>";
-    //     $_SESSION['battle']['ready'] == false;
-    // }
-?>
-
-<?php
-    function showPokemon(){
-        echo "<h1>Pokémon Battle</h1>";
-        for ($i = 0; $i < 5; $i++) {
-            echo "<img src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$i.png' alt='Pokémon $i' class='pokemon-image'>";
-        }
-    }
 ?>
 

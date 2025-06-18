@@ -236,7 +236,7 @@ var_dump($_SESSION['battle']);
                     return;
                 } // Zera o dano do player 2 na tabela, pokemon dele morreu
                 else if($checkIsDead === 'unknown'){
-                    //dorme o sistema por 0.5 segundos (pra nao ficar um spam de pesquisa)
+                    //dorme o sistema por 0.2 segundos (pra nao ficar um spam de pesquisa)
                     usleep(200000);
                     checkIsDeadPokemon1($pokemonCodePlayer1DB);
                 }
@@ -660,7 +660,7 @@ var_dump($_SESSION['battle']);
         setIsReadyNull();
 
         unset($_SESSION['battle']);
-        echo json_encode(['result' => true]); //AJAX
+        echo json_encode(['result' => true, 'win' => $_SESSION['win']]); //AJAX
         exit();
     }
 
