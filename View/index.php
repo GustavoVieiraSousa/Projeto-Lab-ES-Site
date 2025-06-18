@@ -14,6 +14,7 @@
             <a href="index.php" class="active">Home</a>
             <a href="pokedex.php">Pokédex</a> 
             <a href="teams.php">Times</a>
+            <a href="roomList.php">Salas</a>
             <!-- <a href="battle.php">Batalha</a> -->
             <a href="profile.php">Perfil</a>
           </div>

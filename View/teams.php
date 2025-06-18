@@ -26,21 +26,23 @@ $teams = $teamController->getTeams($plaCode);
 
 <body>
     <div id="app">
-        <nav class="navbar">
-            <div class="container">
-                <a href="/" class="logo">PokéParty</a>
-                <div class="nav-links">
-                    <a href="index.php">Home</a> 
-                    <a href="pokedex.php">Pokédex</a>
-                    <a href="teams.php" class="active">Times</a>
-                    <!-- <a href="battle.php">Batalha</a> -->
-                    <a href="profile.php">Perfil</a>
-                </div>
-                <div class="place-holder">
-                    <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">
-                </div>
-            </div>
-        </nav>
+         <nav class="navbar">
+        <div class="container">
+          <a href="/" class="logo">PokéParty</a>
+          <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="pokedex.php">Pokédex</a>
+            <a href="teams.php"class="active">Times</a>
+            <a href="roomList.php">Salas</a>
+            <!-- <a href="battle.php">Batalha</a> -->
+            <a href="profile.php">Perfil</a>
+          </div>
+          <div class="place-holder">
+            <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">
+          </div>
+        </div>
+      </nav>
+
     </div>
 
     <br><br><br><br>
@@ -131,7 +133,7 @@ $teams = $teamController->getTeams($plaCode);
             <span class="close-popup">&times;</span>
             <h2>Selecione um Pokémon</h2>
             <div id="pokemon-list" class="scrollable-list">
-                <!-- A lista de Pokémon será carregada dinamicamente -->
+                
             </div>
         </div>
     </div>
@@ -142,7 +144,7 @@ $teams = $teamController->getTeams($plaCode);
             <span class="close-popup">&times;</span>
             <h2>Selecione um Ataque</h2>
             <div id="attack-list" class="scrollable-list">
-                <!-- A lista de ataques será carregada dinamicamente -->
+                
             </div>
         </div>
     </div>

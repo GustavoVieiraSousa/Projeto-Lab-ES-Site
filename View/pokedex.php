@@ -29,6 +29,7 @@
             <a href="index.php">Home</a> 
             <a href="pokedex.php" class="active">Pokédex</a>
             <a href="teams.php">Times</a>
+            <a href="roomList.php">Salas</a>
             <!-- <a href="battle.php">Batalha</a> -->
             <a href="profile.php">Perfil</a>
           </div>
@@ -38,8 +39,9 @@
         </div>
       </nav>
 
+      <br><br><br><br>    
+
       <main class="container">
-        <h2 class="page-title">Pokédex</h2>
         <div class="pokemon-grid" id="pokemon-list2">
           <!-- Pokémon cards serão inseridos aqui via JavaScript -->
           <div class="loading">Carregando Pokémon...</div>
@@ -50,19 +52,6 @@
       </main>
     </div>
 
-    <!-- Destroys the session created -->
-    <form method="POST" action="../Controller/loginServer.php" class="login-form">
-      <button  type="sair" value="sair" name="sair">
-        Sair da Conta 
-        <?php 
-          if(isset($_POST['sair'])){
-            session_destroy(); 
-            header ("location: login.php");
-          }
-        ?>
-      </button>
-    </form>
-    
     <script src="../Model/js/api.js"></script>
     <script src="../Model/js/pokedex.js"></script>
   </body>

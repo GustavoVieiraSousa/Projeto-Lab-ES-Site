@@ -47,27 +47,67 @@
                     <a href="index.php">Home</a> 
                     <a href="pokedex.php">Pokédex</a>
                     <a href="teams.php">Times</a>
+                    <a href="roomList.php">Salas</a>
                     <!-- <a href="battle.php">Batalha</a> -->
                     <a href="profile.php" class="active">Perfil</a>
                 </div>
-                <div class="search-bar">
+                <div class="place-holder">
                     <input type="search" id="pokemon-search" placeholder="Buscar Pokémon...">
                 </div>
             </div>
         </nav>
         <br><br>
+
+        <!-- Destroys the session created -->
+        <div style="text-align: right; margin-top: 10px;">
+            <form method="POST" action="../Controller/loginServer.php" class="login-form" style="display: inline;">
+                <button 
+                    type="submit" 
+                    value="sair" 
+                    name="sair"
+                    style="
+                        background-color: var(--pokeblue);
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        font-weight: bold;
+                        font-size: 1em;
+                        padding: 10px 30px;
+                        cursor: pointer;
+                        transition: background-color 0.2s;
+                    "
+                    onmouseover="this.style.backgroundColor='#1799c2'"
+                    onmouseout="this.style.backgroundColor='var(--pokeblue)'"
+                >
+                    Sair da Conta
+                </button>
+            </form>
+        </div>
+
         <!-- Imagem de perfil -->
         <form enctype="multipart/form-data" action="../Controller/uploadPhoto.php" method="post">
             <input type="hidden" name="MAX_FILE_SIZE" value="999999999"/>
 
             <div class="profile-image">
-                <a onmouseover="" class="img-button"><img name="imagemCorreta" data-tooltip="Editar Foto de Perfil" src="data:<?php echo $fileType ?>;base64,<?php echo $profilePicture; ?>" alt="Imagem" class="profile-image"></a> <!-- Perfil Usuario -->
-                <div class="profile-popup hidden">sadzxc</div> <!-- div oculta para o botão de upload -->
+                <a class="img-button">
+                    <img name="imagemCorreta" data-tooltip="Editar Foto de Perfil" src="data:<?php echo $fileType ?>;base64,<?php echo $profilePicture; ?>" alt="Imagem" class="profile-image">
+                </a>
             </div>
-
-            <div><input name="imagem" type="file" src="data:<?php echo $fileType ?>;base64,<?php echo $profilePicture; ?>" alt="Imagem"/></div>
-            <div><input type="submit" value="Salvar"/></div>
         </form>
+
+        <div class="profile-popup hidden">
+                    <form enctype="multipart/form-data" action="../Controller/uploadPhoto.php" method="post" class="popup-upload-form">
+                        <h3>Alterar Foto de Perfil</h3>
+                        <input type="hidden" name="MAX_FILE_SIZE" value="999999999"/>
+                        <input name="imagem" type="file" accept="image/*" required>
+                        <div class="popup-buttons">
+                            <button type="submit" class="btn-salvar">Salvar Imagem</button>
+                            <button type="button" class="btn-cancelar" onclick="closeProfilePopup()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+        <br><br>
             
         <!-- Formulário de edição de perfil -->
         <form action="../Controller/updateProfileServer.php" method="post">
@@ -78,13 +118,18 @@
             <input readonly="true" type="email" id="email" value="<?php echo $email ?>" name="email">
             <br>
             <label for="senha">Senha:</label>
-            <input type="password" id="senha" oninput="inputDetect()" placeholder="Digite AQUI caso queira alterar a sua senha." name="senha">
-            <button type="button" onclick="showPassword()">Ver Senha</button>
+            <div class="senha-group">
+                <input type="password" id="senha" oninput="inputDetect()" placeholder="Digite neste campo para alterar a sua senha." name="senha">
+                <button type="button" onclick="showPassword()">Ver Senha</button>
+            </div>
             <br>
             <label id="confirmar-senha" style="display: none" for="confirmar-senha">Confirmar Senha:</label>
-            <input id="confirmar-senha-input" style="display: none" type="password" placeholder="Confirme sua nova senha." name="confirmarSenha">
+            <div class="senha-group">
+                <input id="confirmar-senha-input" style="display: none" type="password" placeholder="Confirme sua nova senha." name="confirmarSenha">
+                <button id="confirmar-senha-button" type="button" style="display: none" onclick="showPassword()">Ver Senha</button>
+            </div>
             <br>
-            <button type="submit" name="updateButton">Salvar Alterações</button>
+            <button type="submit" name="updateButton" class="btn-salvar">Salvar Alterações</button>
         </form>
     </div>
 </body>
@@ -106,16 +151,22 @@
         if(text == ""){
             document.getElementById("confirmar-senha").style.display = "none";
             document.getElementById("confirmar-senha-input").style.display = "none";
+            document.getElementById("confirmar-senha-button").style.display = "none";
         } else {
             document.getElementById("confirmar-senha").style.display = "block";
             document.getElementById("confirmar-senha-input").style.display = "block";
+            document.getElementById("confirmar-senha-button").style.display = "block";
         }
     }
 
-    //faz surgir o popup que vai ser utilizado para o envio da imagem
-    document.querySelector('.profile-image').addEventListener('click', function() {
-        document.querySelector('.profile-popup').classList.toggle('hidden');
+
+    document.querySelector('.img-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector('.profile-popup').classList.remove('hidden');
     });
+    function closeProfilePopup() {
+        document.querySelector('.profile-popup').classList.add('hidden');
+    }
 
     //conserta a imagem Default de perfil
     document.addEventListener('DOMContentLoaded', function() {

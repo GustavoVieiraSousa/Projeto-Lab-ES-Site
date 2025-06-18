@@ -1,0 +1,420 @@
+:root {
+    --pokeblue: #1EAEDB;
+    --pokedark: #222222;
+    --pokedark-light: #333333;
+    --pokedark-dark: #111111;
+    
+    /* Tipos de Pokémon */
+    --normal: #A8A878;
+    --fire: #F08030;
+    --water: #6890F0;
+    --grass: #78C850;
+    --electric: #F8D030;
+    --ice: #98D8D8;
+    --fighting: #C03028;
+    --poison: #A040A0;
+    --ground: #E0C068;
+    --flying: #A890F0;
+    --psychic: #F85888;
+    --bug: #A8B820;
+    --rock: #B8A038;
+    --ghost: #705898;
+    --dark: #705848;
+    --dragon: #7038F8;
+    --steel: #B8B8D0;
+    --fairy: #F0B6BC;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--pokedark-dark);
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--pokedark);
+    border-bottom: 1px solid rgba(30, 174, 219, 0.2);
+    padding: 1rem 0;
+    z-index: 100;
+    width: 100vw; 
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 20px;
+}
+
+.logo {
+    color: var(--pokeblue);
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* barra de navegação aqui */
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.nav-links a:hover {
+    cursor: pointer;
+    color: var(--pokeblue);
+}
+
+.nav-links a.active {
+    background-color: var(--pokeblue);
+    color: white;
+}
+
+.place-holder {
+    min-width: 200px;
+    visibility: hidden;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.search-bar input {
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    min-width: 200px;
+}
+
+/* ============================ */
+/* Inicio do Conteudo Principal */
+/* ============================ */
+content{
+    display: inline-block;
+    margin-left: 10%;
+    width: 100%;
+    max-width: 80%;
+    margin-top: 7rem; /* Para evitar que o conteúdo fique atrás da navbar */
+    padding: 2rem;
+    border-color: var(--pokeblue);
+    border-style: solid;
+    border-radius: 0.75rem;
+    border-width: 1px;
+}
+
+/* Conteudo 1 - Título | Barra de pesquisa de ID */
+.content-search{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:80%;
+    margin-left: 10%;
+}
+.content-search input{ /* Barra onde coloca o ID para entrar na sala */
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: white;
+    width: 100px;
+    
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    min-width: 50px;
+}
+.content-search h1{
+    color: var(--pokeblue);
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    width: 100%;
+    display: flex;
+}
+.content-search form{
+    display: flex;
+    margin-left: 55%;
+    flex-direction: column;
+
+    color: var(--pokeblue);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+.content-search form input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    
+    color: var(--pokeblue);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+.content-search form input.search-bar{
+    color:white;
+    background-color: var(--pokedark-light);
+}
+.content-search form input:hover{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    
+    transition: background-color 0.150s ease;
+
+    color: white;
+    background-color: var(--pokeblue);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+.content-search form input.search-bar:hover{
+    color: white;
+    background-color: var(--pokedark-light);
+}
+.content-search form.search-id{
+    display: flex;
+    margin: 0.25rem 0;
+    margin-bottom: 0.25rem;
+    align-items: center;
+    width: 40%;
+    max-width: max-content;
+    gap: 1rem;
+}
+.content-search form.search-id input{
+    display: flex;
+    margin: 0.25rem 0;
+    align-items: center;
+    width: 60%;
+    gap: 1rem;
+}
+.content-search form input.search-bar:hover{
+    color: white;
+    background-color: var(--pokedark-light);
+}
+.content-search form.search-id input::placeholder{
+    text-align: center;
+}
+
+.content-search updatelist{
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 1%;
+    flex-direction: column;
+}
+.content-search updatelist .create-team{
+    display: flex;
+    position: relative;
+    margin-left:50%;
+    max-width: 40%;
+    flex-direction: column;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+.content-search updatelist form.create-team .exit{
+    display: flex;
+    margin-left: 25%;
+}
+.content-search updatelist .create-team .exit:hover{
+    color: white;
+    background-color: var(--fighting);
+}
+.content-search updatelist .create-team a{
+    display: flex;
+    margin-right: 10%;
+    margin-left: 10%;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: var(--pokeblue);
+    text-decoration: none;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    min-width: 50px;
+}
+.content-search updatelist a:hover{
+    cursor: pointer;
+    background-color: var(--pokeblue);
+    color: white;
+    transition: background-color 0.150s ease;
+}
+
+
+.content-search input.search-bar-button{ /* botao da barra onde coloca o ID para entrar na sala */
+    background-color: var(--pokedark-light);
+    border: 1px solid rgba(30, 174, 219, 0.2);
+    color: white;
+    width: 95%;
+    border-radius: 0.25rem;
+    min-width: 50px;
+}
+
+/* Content 2 - Lista de Salas */
+.content-list{
+    padding: 2rem;
+    border-top: var(--pokeblue);
+    border-top-style: solid;
+    border-width: 1px;
+    display: flex;
+    flex-direction: column;
+}
+table.room-list-header{
+    width: 100%;
+    background-color: var(--pokedark-light);
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    border-style: solid;
+    border-radius: 0.25rem;
+    border-color: var(--pokeblue);
+    border-width: 1px;
+}
+table.room-list-header th{
+    width: 25%;
+    color: var(--pokeblue);
+    font-weight: bold;
+    padding: 0.5rem;
+}
+table.room-list-content{
+    width: 100%;
+    color: white;
+    font-weight: lighter;
+}
+table.room-list-content tr{
+    display: flex;
+    background-color: var(--pokedark-light);
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+table.room-list-content th{
+    border-color: var(--pokeblue);
+    width: 25%;
+    font-weight: lighter;
+    padding: 0.5rem;
+}
+table.room-list-content input{
+    width: 50%;
+    color: white;
+    border-color: var(--pokedark-light);
+    border-style: solid;
+    border-radius: 0.25rem;
+    background-color: var(--pokedark-dark);
+    font-weight: lighter;
+    border-color: var(--pokedark);
+    border-width: 1px;
+}
+table.room-list-content input:hover{
+    cursor: pointer;
+    border-color: var(--pokeblue);
+    background-color: var(--pokedark-light);
+    font-weight: lighter;
+}
+
+
+/* ============================= */
+/* ========    Lobby    ======== */
+/* ============================= */
+lobby{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+lobby main{
+    display: inline-flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    height: 60%;
+
+    background-color: var(--pokedark-light);
+    border-style: solid;
+    border-radius: 0.25rem;
+    border-width: 1px;
+    border-color: var(--pokeblue);
+    justify-content: space-between;
+}
+lobby main h1{
+    display: flex;
+    color: var(--pokeblue);
+    justify-content: center;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+    text-align: center;
+    width: 100%;
+
+    border-style: solid;
+    border-radius: 0.25rem;
+    border-width: 1px;
+    border-color: green;
+}
+lobby main info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    width: 100%;
+    height: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-style: solid;
+    border-color: red;
+}
+lobby main info.info-room{
+    display: flex;
+    position: relative;
+    flex-direction: linear;
+    border-style: solid;
+    border-radius: 0.25rem;
+    border-width: 1px;
+    border-color: purple;
+    justify-content: center;
+}
+lobby main info.info-player1{
+    margin-right: 2rem;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+lobby main info.info-player2{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+

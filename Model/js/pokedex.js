@@ -2,16 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const pokemonList = document.getElementById('pokemon-list2');
     const searchInput = document.getElementById('pokemon-search');
     
-    const totalPokemon = 151; // Limitando aos 151 originais
+    const totalPokemon = 151; 
     
-    /**
-     * Renderiza a lista completa de Pokémon
-     */
+    // Renderiza a lista completa de pokemons
+    
     async function renderPokemonList() {
       pokemonList.innerHTML = '<div class="loading">Carregando Pokémon...</div>';
       
       try {
-        // Busca todos os 151 Pokémon de uma vez
+        // Busca todos os 151 pokemons de uma vez
         const data = await pokeApi.getPokemonList(totalPokemon, 0);
         
         pokemonList.innerHTML = '';
@@ -27,8 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    /**
-     * Cria um card de Pokémon*/
+    //Cria um card de pokemon
     
     function createPokemonCard(pokemon) {
       const card = document.createElement('div');
@@ -48,15 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = `pokemon.php?id=${pokemon.id}`;
       });
       
-      // Carregar detalhes do Pokémon em segundo plano
+      // Carregar detalhes do pokemon em segundo plano
 
       loadPokemonDetails(pokemon.id, card);
       
       return card;
     }
     
-    /**
-     * Carrega detalhes adicionais de um Pokémon*/
+    //Carrega detalhes adicionais de um Pokémon
 
     async function loadPokemonDetails(pokemonId, card) {
       try {
@@ -74,14 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    /**
-     * Filtra a lista de Pokémon com base no termo de busca*/
+    
+     // Filtra a lista de pokemon com base no termo de busca
 
     async function searchPokemon(searchTerm) {
       pokemonList.innerHTML = '<div class="loading">Buscando Pokémon...</div>';
       
       try {
-        // Busca todos os Pokémon e filtra no cliente
 
         const data = await pokeApi.getPokemonList(totalPokemon, 0);
         
@@ -118,6 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
-    // Inicializar a página com todos os Pokémon
+    // Inicializar a página com todos os pokemon
     renderPokemonList();
   });
